@@ -1,0 +1,577 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="System.Xml.Schema.XmlSchemaObject" Collapsed="true">
+    <Position X="58.5" Y="2" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchema">
+    <Position X="72.5" Y="4.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="System.Xml.Schema.XmlSchemaObject" FixedToPoint="true">
+      <Path>
+        <Point X="59.25" Y="2.562" />
+        <Point X="59.25" Y="2.937" />
+        <Point X="69.135" Y="2.937" Type="JumpStart" />
+        <Point X="69.302" Y="2.937" Type="JumpEnd" />
+        <Point X="72.938" Y="2.937" />
+        <Point X="72.938" Y="4.25" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="Elements" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="73.25" Y="4.25" />
+        <Point X="73.25" Y="0.577" />
+        <Point X="59.188" Y="0.577" />
+        <Point X="59.188" Y="2" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.33" Y="1.164" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Attributes" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="73.25" Y="4.25" />
+        <Point X="73.25" Y="0.553" />
+        <Point X="59.188" Y="0.553" />
+        <Point X="59.188" Y="2" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.303" Y="1.331" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Groups" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="73.25" Y="4.25" />
+        <Point X="73.25" Y="0.498" />
+        <Point X="59.188" Y="0.498" />
+        <Point X="59.188" Y="2" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.425" Y="1.535" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="AttributeGroups" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="73.25" Y="4.25" />
+        <Point X="73.25" Y="0.497" />
+        <Point X="59.188" Y="0.497" />
+        <Point X="59.188" Y="2" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.111" Y="1.729" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Items" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="73.219" Y="4.25" />
+        <Point X="73.219" Y="0.566" />
+        <Point X="59.25" Y="0.566" />
+        <Point X="59.25" Y="2" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.596" Y="0.596" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Includes" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="73.188" Y="4.25" />
+        <Point X="73.188" Y="0.539" />
+        <Point X="59.25" Y="0.539" />
+        <Point X="59.25" Y="2" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.451" Y="0.793" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="SchemaTypes" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="73.188" Y="4.25" />
+        <Point X="73.188" Y="0.49" />
+        <Point X="59.25" Y="0.49" />
+        <Point X="59.25" Y="2" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.359" Y="0.189" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Notations" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="73.25" Y="4.25" />
+        <Point X="73.25" Y="0.503" />
+        <Point X="59.25" Y="0.503" />
+        <Point X="59.25" Y="2" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.412" Y="0.987" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="Elements" />
+      <Property Name="Attributes" />
+      <Property Name="Groups" />
+      <Property Name="AttributeGroups" />
+      <Property Name="Items" />
+      <Property Name="Includes" />
+      <Property Name="SchemaTypes" />
+      <Property Name="UnhandledAttributes" />
+      <Property Name="Notations" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAll" Collapsed="true">
+    <Position X="19.25" Y="11" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAnnotated" Collapsed="true">
+    <Position X="61.5" Y="3.25" Width="1.75" />
+    <AssociationLine Name="Annotation" Type="System.Xml.Schema.XmlSchemaAnnotation" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="63.25" Y="3.596" />
+        <Point X="63.792" Y="3.596" Type="JumpStart" />
+        <Point X="63.958" Y="3.596" Type="JumpEnd" />
+        <Point X="67.292" Y="3.596" Type="JumpStart" />
+        <Point X="67.458" Y="3.596" Type="JumpEnd" />
+        <Point X="68.938" Y="3.596" />
+        <Point X="68.938" Y="4.25" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="UnhandledAttributes" Type="System.Xml.XmlAttribute" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="62.562" Y="3.941" />
+        <Point X="62.562" Y="6.816" />
+        <Point X="69.562" Y="6.816" />
+        <Point X="69.562" Y="6.441" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="Annotation" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="UnhandledAttributes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAnnotation" Collapsed="true">
+    <Position X="68.75" Y="4.25" Width="2" />
+    <AssociationLine Name="UnhandledAttributes" Type="System.Xml.XmlAttribute">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.637" Y="0.176" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="Items" />
+      <Property Name="UnhandledAttributes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAny" Collapsed="true">
+    <Position X="12.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAnyAttribute" Collapsed="true">
+    <Position X="65" Y="7.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAppInfo" Collapsed="true">
+    <Position X="66.5" Y="4.25" Width="1.75" />
+    <AssociationLine Name="Markup" Type="System.Xml.XmlNode" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="67.375" Y="4.941" />
+        <Point X="67.375" Y="6.062" />
+        <Point X="65.25" Y="6.062" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="Markup" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAttribute" Collapsed="true">
+    <Position X="52.75" Y="7.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAttributeGroup" Collapsed="true">
+    <Position X="55.25" Y="7.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAttributeGroupRef" Collapsed="true">
+    <Position X="62.25" Y="7.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaChoice" Collapsed="true">
+    <Position X="17" Y="11" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaComplexContent" Collapsed="true">
+    <Position X="29.75" Y="11" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaComplexContentExtension" Collapsed="true">
+    <Position X="28.75" Y="14.25" Width="2.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaComplexContentRestriction" Collapsed="true">
+    <Position X="18" Y="14.25" Width="3" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaComplexType" Collapsed="true">
+    <Position X="33" Y="11" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaContent" Collapsed="true">
+    <Position X="24" Y="12.75" Width="1.5" />
+    <InheritanceLine Type="System.Xml.Schema.XmlSchemaAnnotated" ManuallyRouted="true">
+      <Path>
+        <Point X="62.375" Y="3.941" />
+        <Point X="62.375" Y="4.235" />
+        <Point X="47.621" Y="4.235" Type="JumpStart" />
+        <Point X="47.454" Y="4.235" Type="JumpEnd" />
+        <Point X="41.677" Y="4.235" Type="JumpStart" />
+        <Point X="41.51" Y="4.235" Type="JumpEnd" />
+        <Point X="24.75" Y="4.235" />
+        <Point X="24.75" Y="12.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaContentModel" Collapsed="true">
+    <Position X="28.5" Y="9.5" Width="2" />
+    <InheritanceLine Type="System.Xml.Schema.XmlSchemaAnnotated" ManuallyRouted="true">
+      <Path>
+        <Point X="62.375" Y="3.941" />
+        <Point X="62.375" Y="4.241" />
+        <Point X="47.621" Y="4.241" Type="JumpStart" />
+        <Point X="47.454" Y="4.241" Type="JumpEnd" />
+        <Point X="41.677" Y="4.241" Type="JumpStart" />
+        <Point X="41.51" Y="4.241" Type="JumpEnd" />
+        <Point X="29.5" Y="4.241" />
+        <Point X="29.5" Y="9.5" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="Content" Type="System.Xml.Schema.XmlSchemaContent" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="28.5" Y="9.875" />
+        <Point X="25.875" Y="9.875" />
+        <Point X="25.875" Y="13.096" />
+        <Point X="25.5" Y="13.096" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.013" Y="0.553" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="Content" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaDocumentation" Collapsed="true">
+    <Position X="62.75" Y="4.25" Width="2.25" />
+    <AssociationLine Name="Markup" Type="System.Xml.XmlNode">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.288" Y="0.267" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="Markup" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaElement" Collapsed="true">
+    <Position X="9.75" Y="9.5" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaEnumerationFacet" Collapsed="true">
+    <Position X="33.75" Y="19" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaExternal" Collapsed="true">
+    <Position X="3.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaFacet" Collapsed="true">
+    <Position X="47.25" Y="17.5" Width="1.5" />
+    <InheritanceLine Type="System.Xml.Schema.XmlSchemaAnnotated" ManuallyRouted="true">
+      <Path>
+        <Point X="62.375" Y="3.941" />
+        <Point X="62.375" Y="4.236" />
+        <Point X="48" Y="4.236" />
+        <Point X="48" Y="17.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaFractionDigitsFacet" Collapsed="true">
+    <Position X="57.5" Y="20.5" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaGroup" Collapsed="true">
+    <Position X="68.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaGroupBase" Collapsed="true">
+    <Position X="16.75" Y="9.5" Width="1.75" />
+    <AssociationLine Name="Items" Type="System.Xml.Schema.XmlSchemaObject" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.5" Y="9.938" />
+        <Point X="18.875" Y="9.938" />
+        <Point X="18.875" Y="2.062" />
+        <Point X="58.5" Y="2.062" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.092" Y="0.463" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="Items" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaGroupRef" Collapsed="true">
+    <Position X="21.5" Y="9.5" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaIdentityConstraint" Collapsed="true">
+    <Position X="10" Y="4.75" Width="2.25" />
+    <InheritanceLine Type="System.Xml.Schema.XmlSchemaAnnotated" ManuallyRouted="true">
+      <Path>
+        <Point X="62.375" Y="3.941" />
+        <Point X="62.375" Y="4.256" />
+        <Point X="47.621" Y="4.256" Type="JumpStart" />
+        <Point X="47.454" Y="4.256" Type="JumpEnd" />
+        <Point X="41.677" Y="4.256" Type="JumpStart" />
+        <Point X="41.51" Y="4.256" Type="JumpEnd" />
+        <Point X="18.958" Y="4.256" Type="JumpStart" />
+        <Point X="18.792" Y="4.256" Type="JumpEnd" />
+        <Point X="11.125" Y="4.256" />
+        <Point X="11.125" Y="4.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaImport" Collapsed="true">
+    <Position X="0.75" Y="5" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaInclude" Collapsed="true">
+    <Position X="3" Y="5" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaKey" Collapsed="true">
+    <Position X="10.25" Y="6.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaKeyref" Collapsed="true">
+    <Position X="13" Y="6.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaLengthFacet" Collapsed="true">
+    <Position X="60.5" Y="20.5" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMaxExclusiveFacet" Collapsed="true">
+    <Position X="63.25" Y="19" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMaxInclusiveFacet" Collapsed="true">
+    <Position X="30.75" Y="19" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMaxLengthFacet" Collapsed="true">
+    <Position X="48.5" Y="20.5" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMinExclusiveFacet" Collapsed="true">
+    <Position X="42.5" Y="19" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMinInclusiveFacet" Collapsed="true">
+    <Position X="45.5" Y="19" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMinLengthFacet" Collapsed="true">
+    <Position X="54.5" Y="20.5" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaNotation" Collapsed="true">
+    <Position X="58" Y="7.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaNumericFacet" Collapsed="true">
+    <Position X="54.5" Y="19" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaParticle" Collapsed="true">
+    <Position X="15.75" Y="8" Width="1.5" />
+    <InheritanceLine Type="System.Xml.Schema.XmlSchemaAnnotated" ManuallyRouted="true">
+      <Path>
+        <Point X="62.375" Y="3.941" />
+        <Point X="62.375" Y="4.239" />
+        <Point X="47.621" Y="4.239" Type="JumpStart" />
+        <Point X="47.454" Y="4.239" Type="JumpEnd" />
+        <Point X="41.677" Y="4.239" Type="JumpStart" />
+        <Point X="41.51" Y="4.239" Type="JumpEnd" />
+        <Point X="18.958" Y="4.239" Type="JumpStart" />
+        <Point X="18.792" Y="4.239" Type="JumpEnd" />
+        <Point X="16.5" Y="4.239" />
+        <Point X="16.5" Y="8" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaPatternFacet" Collapsed="true">
+    <Position X="36.75" Y="19" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaRedefine" Collapsed="true">
+    <Position X="5.5" Y="5" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSequence" Collapsed="true">
+    <Position X="14.5" Y="11" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleContent" Collapsed="true">
+    <Position X="27" Y="11" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleContentExtension" Collapsed="true">
+    <Position X="21.75" Y="14.25" Width="2.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleContentRestriction" Collapsed="true">
+    <Position X="25.25" Y="14.25" Width="2.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleType" Collapsed="true">
+    <Position X="35.25" Y="11" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleTypeContent" Collapsed="true">
+    <Position X="41.75" Y="9.5" Width="2.25" />
+    <InheritanceLine Type="System.Xml.Schema.XmlSchemaAnnotated" ManuallyRouted="true">
+      <Path>
+        <Point X="62.375" Y="3.941" />
+        <Point X="62.375" Y="4.259" />
+        <Point X="47.621" Y="4.259" Type="JumpStart" />
+        <Point X="47.454" Y="4.259" Type="JumpEnd" />
+        <Point X="42.875" Y="4.259" />
+        <Point X="42.875" Y="9.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleTypeList" Collapsed="true">
+    <Position X="39" Y="11" Width="2.25" />
+    <AssociationLine Name="BaseItemType" Type="System.Xml.Schema.XmlSchemaSimpleType" FixedToPoint="true">
+      <Path>
+        <Point X="39" Y="11.562" />
+        <Point X="37.25" Y="11.562" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="BaseItemType" />
+      <Property Name="ItemType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleTypeRestriction" Collapsed="true">
+    <Position X="44.25" Y="11" Width="2.5" />
+    <AssociationLine Name="BaseType" Type="System.Xml.Schema.XmlSchemaSimpleType" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="45.5" Y="11.691" />
+        <Point X="45.5" Y="13.916" />
+        <Point X="36" Y="13.916" />
+        <Point X="36" Y="11.691" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.311" Y="0.113" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Facets" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="46.188" Y="11.691" />
+        <Point X="46.188" Y="12.899" />
+        <Point X="47.537" Y="12.899" />
+        <Point X="47.537" Y="2.438" />
+        <Point X="58.5" Y="2.438" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="BaseType" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Facets" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleTypeUnion" Collapsed="true">
+    <Position X="41.5" Y="11" Width="2.25" />
+    <AssociationLine Name="BaseMemberTypes" Type="System.Xml.Schema.XmlSchemaSimpleType" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="42.625" Y="11.691" />
+        <Point X="42.625" Y="13.686" />
+        <Point X="36.688" Y="13.686" />
+        <Point X="36.688" Y="11.691" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.626" Y="0.393" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="BaseTypes" Type="System.Xml.Schema.XmlSchemaObject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="41.594" Y="11" />
+        <Point X="41.594" Y="2.188" />
+        <Point X="58.5" Y="2.188" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="BaseMemberTypes" />
+      <Property Name="BaseTypes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaTotalDigitsFacet" Collapsed="true">
+    <Position X="51.5" Y="20.5" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaType" Collapsed="true">
+    <Position X="34.5" Y="9.5" Width="1.5" />
+    <InheritanceLine Type="System.Xml.Schema.XmlSchemaAnnotated" ManuallyRouted="true">
+      <Path>
+        <Point X="62.375" Y="3.941" />
+        <Point X="62.375" Y="4.258" />
+        <Point X="47.621" Y="4.258" Type="JumpStart" />
+        <Point X="47.454" Y="4.258" Type="JumpEnd" />
+        <Point X="41.677" Y="4.258" Type="JumpStart" />
+        <Point X="41.51" Y="4.258" Type="JumpEnd" />
+        <Point X="35.25" Y="4.258" />
+        <Point X="35.25" Y="9.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaUnique" Collapsed="true">
+    <Position X="7.5" Y="6.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaWhiteSpaceFacet" Collapsed="true">
+    <Position X="39.5" Y="19" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaXPath" Collapsed="true">
+    <Position X="60" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.XmlAttribute" Collapsed="true">
+    <Position X="69" Y="5.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.XmlNode" Collapsed="true">
+    <Position X="63.75" Y="6" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
