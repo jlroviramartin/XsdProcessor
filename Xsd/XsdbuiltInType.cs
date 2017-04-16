@@ -21,5 +21,10 @@ namespace XmlSchemaProcessor.Xsd
         {
             return true;
         }
+
+        public override XsdSimpleType GetBuiltInRootType()
+        {
+            return this;
+        }
     }
 }

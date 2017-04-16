@@ -18,9 +18,13 @@ namespace XmlSchemaTest
             XsdSchema schema = new ProcessXmlSchema(xmlSchema).GetSchema();
             //Debug.WriteLine(schema);
 
-            PlantUmlOutput plantUmlOutput = new PlantUmlOutput();
-            plantUmlOutput.Process(schema);
-            plantUmlOutput.Write();
+            //DocumentXsd documentXsd = new DocumentXsd();
+            //documentXsd.Process(schema);
+            //documentXsd.Write();
+
+            XsdToReader xsdToReader = new XsdToReader();
+            xsdToReader.Process(schema);
+            xsdToReader.Write();
         }
     }
 

@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
-using XmlSchemaProcessor.Xsd;
+using XmlSchemaProcessor.Xsd.Facets;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor.Xsd
 {
     public class ProcessXmlSchema
     {
@@ -178,17 +178,27 @@ namespace XmlSchemaTest
 
                 if (restriction.BaseType != null)
                 {
-                    XsdSimpleListType _simpleType = new XsdSimpleListType();
+                    XsdSimpleRestrictionType _simpleType = new XsdSimpleRestrictionType();
                     _simpleType.Name = name;
-                    _simpleType.ItemType = this.ProcessXmlSchemaSimpleType(restriction.BaseType);
+                    _simpleType.BaseType = this.ProcessXmlSchemaSimpleType(restriction.BaseType);
+
+                    foreach (XmlSchemaFacet facet in restriction.Facets.OfType<XmlSchemaFacet>())
+                    {
+                        _simpleType.Facets.Add(this.ProcessFacet(facet));
+                    }
 
                     return _simpleType;
                 }
                 else if (!restriction.BaseTypeName.IsEmpty)
                 {
-                    XsdSimpleListType _simpleType = new XsdSimpleListType();
+                    XsdSimpleRestrictionType _simpleType = new XsdSimpleRestrictionType();
                     _simpleType.Name = name;
-                    this.FindSimple(restriction.BaseTypeName, x => _simpleType.ItemType = x);
+                    this.FindSimple(restriction.BaseTypeName, x => _simpleType.BaseType = x);
+
+                    foreach (XmlSchemaFacet facet in restriction.Facets.OfType<XmlSchemaFacet>())
+                    {
+                        _simpleType.Facets.Add(this.ProcessFacet(facet));
+                    }
 
                     return _simpleType;
                 }
@@ -226,6 +236,62 @@ namespace XmlSchemaTest
             }
 
             throw new Exception();
+        }
+
+        private XsdFacet ProcessFacet(XmlSchemaFacet facet)
+        {
+            if (facet is XmlSchemaPatternFacet)
+            {
+                return new XsdStringFacet(FacetType.Pattern, facet.Value);
+            }
+            if (facet is XmlSchemaWhiteSpaceFacet)
+            {
+                return new XsdStringFacet(FacetType.WhiteSpace, facet.Value);
+            }
+            if (facet is XmlSchemaEnumerationFacet)
+            {
+                return new XsdStringFacet(FacetType.Enumeration, facet.Value);
+            }
+
+            if (facet is XmlSchemaMinExclusiveFacet)
+            {
+                return new XsdNumericFacet(FacetType.MinExclusive, facet.Value);
+            }
+            if (facet is XmlSchemaMaxExclusiveFacet)
+            {
+                return new XsdNumericFacet(FacetType.MaxExclusive, facet.Value);
+            }
+            if (facet is XmlSchemaMinInclusiveFacet)
+            {
+                return new XsdNumericFacet(FacetType.MinInclusive, facet.Value);
+            }
+            if (facet is XmlSchemaMaxInclusiveFacet)
+            {
+                return new XsdNumericFacet(FacetType.MaxInclusive, facet.Value);
+            }
+
+            if (facet is XmlSchemaLengthFacet)
+            {
+                return new XsdIntFacet(FacetType.Length, facet.Value);
+            }
+            if (facet is XmlSchemaMinLengthFacet)
+            {
+                return new XsdIntFacet(FacetType.MinLength, facet.Value);
+            }
+            if (facet is XmlSchemaMaxLengthFacet)
+            {
+                return new XsdIntFacet(FacetType.MaxLength, facet.Value);
+            }
+            if (facet is XmlSchemaTotalDigitsFacet)
+            {
+                return new XsdIntFacet(FacetType.TotalDigits, facet.Value);
+            }
+            if (facet is XmlSchemaFractionDigitsFacet)
+            {
+                return new XsdIntFacet(FacetType.FractionDigits, facet.Value);
+            }
+
+            throw new IndexOutOfRangeException();
         }
 
         #endregion

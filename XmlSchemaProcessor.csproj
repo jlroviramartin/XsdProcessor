@@ -44,14 +44,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
-    <Compile Include="PlantUmlOutput.cs" />
-    <Compile Include="ProcessXmlSchema.cs" />
+    <Compile Include="Path.cs" />
+    <Compile Include="XsdSimpleTypeExtensions.cs" />
+    <Compile Include="XsdToReader.cs" />
+    <Compile Include="Xsd\Facets\FacetType.cs" />
+    <Compile Include="Xsd\Facets\XsdFacet.cs" />
+    <Compile Include="Xsd\Facets\XsdIntFacet.cs" />
+    <Compile Include="Xsd\Facets\XsdNumericFacet.cs" />
+    <Compile Include="Xsd\Facets\XsdStringFacet.cs" />
+    <Compile Include="Xsd\ProcessXmlSchema.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Program2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringUtils.cs" />
     <Compile Include="TextWriterEx.cs" />
+    <Compile Include="XsdParticleExtensions.cs" />
     <Compile Include="XsdProcess.cs" />
+    <Compile Include="DocumentXsd.cs" />
     <Compile Include="Xsd\DerivationMethod.cs" />
     <Compile Include="Xsd\ParticleGroupType.cs" />
     <Compile Include="Xsd\XsdParticleGroup.cs" />
@@ -121,6 +130,7 @@
   <ItemGroup>
     <Content Include="MyXMLFile1.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

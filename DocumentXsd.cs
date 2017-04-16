@@ -12,20 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Text;
 using XmlSchemaProcessor.Xsd;
 
 namespace XmlSchemaTest
 {
-    public class PlantUmlOutput : XsdProcess
+    public class DocumentXsd : XsdProcess
     {
-        public PlantUmlOutput()
+        public DocumentXsd()
         {
             this.stringWriter = new StringWriter();
             this.buff = new TextWriterEx(this.stringWriter);
@@ -146,41 +143,41 @@ namespace XmlSchemaTest
             // Sequence [1, 1]
             //   Choice [0, *]
             //     ( Element )+
-            if (IsSequence(root, Path.Empty, 1, 1) && CountItems(root, Path.Empty) == 1
-                && IsChoice(root, new Path(0), 0, int.MaxValue)
-                && AllItemsAreElements(root, new Path(0)))
+            if (root.IsSequence(Path.Empty, 1, 1) && root.CountItems(Path.Empty) == 1
+                && root.IsChoice(new Path(0), 0, int.MaxValue)
+                && root.AllItemsAreElements(new Path(0)))
             {
-                XsdParticleGroup group = (XsdParticleGroup)Get(root, new Path(0));
-                this.buff.WriteLine("// List of " + ToStringAsList(group.Items.Cast<XsdParticleElement>().Select(x => x.Element.Name), " ; "));
+                XsdParticleGroup group = (XsdParticleGroup)root.Get(new Path(0));
+                this.buff.WriteLine("// List of " + @group.Items.Cast<XsdParticleElement>().Select(x => x.Element.Name).ToStringAsList(" ; "));
                 return;
             }
 
             // Choice [0, *] OR Choice [1, *]
             //   ( Element )+
-            if ((IsChoice(root, Path.Empty, 0, int.MaxValue) || IsChoice(root, Path.Empty, 1, int.MaxValue))
-                && AllItemsAreElements(root, Path.Empty))
+            if ((root.IsChoice(Path.Empty, 0, int.MaxValue) || root.IsChoice(Path.Empty, 1, int.MaxValue))
+                && root.AllItemsAreElements(Path.Empty))
             {
-                XsdParticleGroup group = (XsdParticleGroup)Get(root, Path.Empty);
-                this.buff.WriteLine("// List of " + ToStringAsList(group.Items.Cast<XsdParticleElement>().Select(x => x.Element.Name), " ; "));
+                XsdParticleGroup group = (XsdParticleGroup)root.Get(Path.Empty);
+                this.buff.WriteLine("// List of " + @group.Items.Cast<XsdParticleElement>().Select(x => x.Element.Name).ToStringAsList(" ; "));
                 return;
             }
 
             // Choice [1, 1]
             //   Element
-            if (IsChoice(root, Path.Empty, 1, 1) && CountItems(root, Path.Empty) == 1
-                && AllItemsAreElements(root, Path.Empty))
+            if (root.IsChoice(Path.Empty, 1, 1) && root.CountItems(Path.Empty) == 1
+                && root.AllItemsAreElements(Path.Empty))
             {
-                XsdParticleGroup group = (XsdParticleGroup)Get(root, Path.Empty);
+                XsdParticleGroup group = (XsdParticleGroup)root.Get(Path.Empty);
                 this.Write((XsdParticleElement)group.Items[0]);
                 return;
             }
 
             // Sequence [1, 1]
             //   ( Element )+
-            if (IsSequence(root, Path.Empty, 1, 1)
-                && AllItemsAreElements(root, Path.Empty))
+            if (root.IsSequence(Path.Empty, 1, 1)
+                && root.AllItemsAreElements(Path.Empty))
             {
-                XsdParticleGroup group = (XsdParticleGroup)Get(root, Path.Empty);
+                XsdParticleGroup group = (XsdParticleGroup)root.Get(Path.Empty);
                 foreach (XsdParticleElement item in group.Items.Cast<XsdParticleElement>())
                 {
                     this.Write(item);
@@ -192,11 +189,11 @@ namespace XmlSchemaTest
             //   Choice [1, 1]
             //     ( Element )+
             //   Element
-            if (IsSequence(root, Path.Empty, 1, 1) && CountItems(root, Path.Empty) == 2
-                && IsChoice(root, new Path(0), 1, 1) && AllItemsAreElements(root, new Path(0))
-                && IsElement(root, new Path(1)))
+            if (root.IsSequence(Path.Empty, 1, 1) && root.CountItems(Path.Empty) == 2
+                && root.IsChoice(new Path(0), 1, 1) && root.AllItemsAreElements(new Path(0))
+                && root.IsElement(new Path(1)))
             {
-                XsdParticleGroup group = (XsdParticleGroup)Get(root, new Path(0));
+                XsdParticleGroup group = (XsdParticleGroup)root.Get(new Path(0));
                 this.buff.WriteLine("// Choice");
                 this.buff.Indent();
                 foreach (XsdParticleElement item in group.Items.Cast<XsdParticleElement>())
@@ -204,15 +201,15 @@ namespace XmlSchemaTest
                     this.Write(item);
                 }
                 this.buff.Unindent();
-                this.Write((XsdParticleElement)Get(root, new Path(1)));
+                this.Write((XsdParticleElement)root.Get(new Path(1)));
                 return;
             }
 
             // Sequence [1, 1]
             //   ( Element OR ( ( Choice [0, *] OR Choice [1, *])
             //                      ( Element )+ ) )+
-            if (IsSequence(root, Path.Empty, 1, 1)
-                && AllItemsAreElementOrChoiceOfElements(root, Path.Empty))
+            if (root.IsSequence(Path.Empty, 1, 1)
+                && root.AllItemsAreElementOrChoiceOfElements(Path.Empty))
             {
                 XsdParticleGroup group = (XsdParticleGroup)root;
                 foreach (XsdParticle item in group.Items)
@@ -224,7 +221,7 @@ namespace XmlSchemaTest
                     else
                     {
                         XsdParticleGroup group2 = (XsdParticleGroup)item;
-                        this.buff.WriteLine("// List of " + ToStringAsList(group2.Items.Cast<XsdParticleElement>().Select(x => x.Element.Name), " ; "));
+                        this.buff.WriteLine("// List of " + group2.Items.Cast<XsdParticleElement>().Select(x => x.Element.Name).ToStringAsList(" ; "));
                     }
                 }
                 return;
@@ -235,7 +232,7 @@ namespace XmlSchemaTest
 
         public override void Process(XsdParticleGroup xsdParticle)
         {
-            this.buff.WriteLine("// {0} [{1}, {2}]", xsdParticle.GroupType, xsdParticle.MinOccurs, SafeMaxOccursToString(xsdParticle.MaxOccurs));
+            this.buff.WriteLine("// {0} {1}", xsdParticle.GroupType, xsdParticle.SafeOccursToString());
             this.buff.WriteLine("{");
             this.buff.Indent();
 
@@ -255,7 +252,7 @@ namespace XmlSchemaTest
 
         public override void Process(XsdParticleElement xsdParticle)
         {
-            this.buff.WriteLine("{0} [{1}, {2}]", xsdParticle.Element.Name, xsdParticle.MinOccurs, SafeMaxOccursToString(xsdParticle.MaxOccurs));
+            this.buff.WriteLine("{0} {1}", xsdParticle.Element.Name, xsdParticle.SafeOccursToString());
         }
 
         #endregion
@@ -306,137 +303,7 @@ namespace XmlSchemaTest
 
         #region Test particle
 
-        private static bool IsSequence(XsdParticle root, Path path, int min, int max)
-        {
-            return IsGroup(root, path, ParticleGroupType.Sequence, min, max);
-        }
-
-        private static bool IsChoice(XsdParticle root, Path path, int min, int max)
-        {
-            return IsGroup(root, path, ParticleGroupType.Choice, min, max);
-        }
-
-        private static bool IsGroup(XsdParticle root, Path path, ParticleGroupType type, int min, int max)
-        {
-            bool ret = false;
-
-            XsdParticleGroup group = root as XsdParticleGroup;
-            if (group != null)
-            {
-                if (path.IsEmpty())
-                {
-                    ret = (group.GroupType == type) && (group.MinOccurs == min) && (group.MaxOccurs == max);
-                }
-                else if (path.Head() < group.Items.Count)
-                {
-                    ret = IsGroup(group.Items[path.Head()], path.Tail(), type, min, max);
-                }
-            }
-            return ret;
-        }
-
-        private static bool AllItemsAreElements(XsdParticle root, Path path)
-        {
-            bool ret = false;
-
-            XsdParticleGroup group = Get(root, path) as XsdParticleGroup;
-            if (group != null)
-            {
-                ret = group.Items.All(x => x is XsdParticleElement);
-            }
-            return ret;
-        }
-
-        private static int CountItems(XsdParticle root, Path path)
-        {
-            int ret = 0;
-
-            XsdParticleGroup group = Get(root, path) as XsdParticleGroup;
-            if (group != null)
-            {
-                ret = group.Items.Count;
-            }
-            return ret;
-        }
-
-        private static bool IsElement(XsdParticle root, Path path)
-        {
-            return Get(root, path) is XsdParticleElement;
-        }
-
-        private static bool TestAllItems(XsdParticle root, Path path, Func<Path, bool> test)
-        {
-            bool ret = false;
-
-            XsdParticleGroup group = Get(root, path) as XsdParticleGroup;
-            if (group != null)
-            {
-                ret = true;
-                int i = 0;
-                while ((i < group.Items.Count) && ret)
-                {
-                    if (!test(path.Sub(i)))
-                    {
-                        ret = false;
-                    }
-                    i++;
-                }
-            }
-            return ret;
-        }
-
-        private static bool TestAllItems_2(XsdParticle root, Path path, Func<Path, bool> test)
-        {
-            XsdParticleGroup group = Get(root, path) as XsdParticleGroup;
-            if (group == null)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < group.Items.Count; i++)
-            {
-                if (!test(path.Sub(i)))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private static bool AllItemsAreElementOrChoiceOfElements(XsdParticle root, Path path)
-        {
-            return TestAllItems(root, path, subpath =>
-            {
-                return IsElement(root, subpath)
-                       || ((IsChoice(root, subpath, 0, int.MaxValue) || IsChoice(root, subpath, 1, int.MaxValue))
-                           && AllItemsAreElements(root, subpath));
-            });
-        }
-
         #endregion
-
-        private static XsdParticle Get(XsdParticle root, Path path)
-        {
-            XsdParticle found = null;
-
-            if (path.IsEmpty())
-            {
-                found = root;
-            }
-            else
-            {
-                XsdParticleGroup group = root as XsdParticleGroup;
-                if (group != null)
-                {
-                    if (path.Head() < group.Items.Count)
-                    {
-                        found = Get(group.Items[path.Head()], path.Tail());
-                    }
-                }
-            }
-            return found;
-        }
 
         private void Write(XsdParticleElement particle)
         {
@@ -446,68 +313,8 @@ namespace XmlSchemaTest
             }
             else
             {
-                this.buff.WriteLine("// List of {0} [{1}, {2}]", particle.Element.Name, particle.MinOccurs, SafeMaxOccursToString(particle.MaxOccurs));
+                this.buff.WriteLine("// List of {0} {1}", particle.Element.Name, particle.SafeOccursToString());
             }
-        }
-
-        private static string ToStringAsList(IEnumerable<string> enumer, string sep)
-        {
-            StringBuilder buff = new StringBuilder();
-            bool first = true;
-            foreach (string s in enumer)
-            {
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    buff.Append(sep);
-                }
-                buff.Append(s);
-            }
-            return buff.ToString();
-        }
-
-        private static string SafeMaxOccursToString(int maxOccurs)
-        {
-            if (maxOccurs == int.MaxValue)
-            {
-                return "*";
-            }
-            return maxOccurs.ToString();
-        }
-
-        private class Path
-        {
-            public static readonly Path Empty = new Path(new int[0]);
-
-            public Path(params int[] value)
-            {
-                this.value = value;
-            }
-
-            public bool IsEmpty()
-            {
-                return this.value.Length == 0;
-            }
-
-            public int Head()
-            {
-                return this.value[0];
-            }
-
-            public Path Tail()
-            {
-                return new Path(this.value.Skip(1).ToArray());
-            }
-
-            public Path Sub(int i)
-            {
-                return new Path(this.value.Concat(new[] { i }).ToArray());
-            }
-
-            private readonly int[] value;
         }
     }
 }

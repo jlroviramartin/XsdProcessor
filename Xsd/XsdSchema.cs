@@ -15,6 +15,8 @@ namespace XmlSchemaProcessor.Xsd
 
         private void Initialize()
         {
+            // XsdBuiltInType
+
             this.AddBuiltIn(XsdBuiltInType.DURATION);
             this.AddBuiltIn(XsdBuiltInType.DATETIME);
             this.AddBuiltIn(XsdBuiltInType.TIME);
@@ -30,6 +32,8 @@ namespace XmlSchemaProcessor.Xsd
             this.AddBuiltIn(XsdBuiltInType.ANY_URI);
             this.AddBuiltIn(XsdBuiltInType.QNAME);
             this.AddBuiltIn(XsdBuiltInType.NOTATION);
+
+            // XsdSimpleRestrictionType
 
             XsdSimpleRestrictionType normalizedString = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.NORMALIZED_STRING, _string);
             XsdSimpleRestrictionType token = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.TOKEN, normalizedString);
@@ -60,8 +64,10 @@ namespace XmlSchemaProcessor.Xsd
             XsdSimpleRestrictionType _short = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.SHORT, _int);
             this.AddDerivedBuiltIn(XsdSimpleRestrictionType.BYTE, _short);
 
-            this.AddListBuiltIn(XsdSimpleRestrictionType.IDREFS, id);
-            this.AddListBuiltIn(XsdSimpleRestrictionType.ENTITIES, entity);
+            // XsdSimpleListType
+
+            this.AddListBuiltIn(XsdSimpleListType.IDREFS, id);
+            this.AddListBuiltIn(XsdSimpleListType.ENTITIES, entity);
         }
 
         public void Add(XsdElement element)

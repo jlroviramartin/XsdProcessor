@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Text;
 
 namespace XmlSchemaTest
 {
@@ -26,6 +27,25 @@ namespace XmlSchemaTest
                 value = def;
             }
             return value;
+        }
+
+        public static string ToStringAsList(this IEnumerable<string> enumer, string sep)
+        {
+            StringBuilder buff = new StringBuilder();
+            bool first = true;
+            foreach (string s in enumer)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    buff.Append(sep);
+                }
+                buff.Append(s);
+            }
+            return buff.ToString();
         }
     }
 }

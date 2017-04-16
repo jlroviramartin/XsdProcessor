@@ -1,3 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
+using XmlSchemaProcessor.Xsd.Facets;
+using XmlSchemaTest;
+
 namespace XmlSchemaProcessor.Xsd
 {
     public sealed class XsdSimpleRestrictionType : XsdSimpleType
@@ -25,12 +30,16 @@ namespace XmlSchemaProcessor.Xsd
         public const string SHORT = "short";
         public const string BYTE = "byte";
 
-        public const string IDREFS = "IDREFS";
-        public const string ENTITIES = "ENTITIES";
+        public XsdSimpleRestrictionType()
+        {
+            this.Facets = new List<XsdFacet>();
+        }
 
         public XsdSimpleType BaseType { get; set; }
 
         public bool BuiltIn { get; set; }
+
+        public List<XsdFacet> Facets { get; internal set; }
 
         public override bool IsBuiltIn()
         {
@@ -42,9 +51,21 @@ namespace XmlSchemaProcessor.Xsd
             return this.BaseType;
         }
 
+        public override XsdSimpleType GetBuiltInRootType()
+        {
+            return (this.IsBuiltIn()
+                ? this
+                : (this.BaseType != null ?
+                    this.BaseType.GetBuiltInRootType()
+                    : null));
+        }
+
         public override string ToString()
         {
-            return this.Name + " Restriction of " + this.BaseType.Name;
+            return string.Format("{0} Restrictions {{ {1} }} of {2}",
+                                 this.Name,
+                                 this.Facets.Select(x => x.ToString()).ToStringAsList("; "),
+                                 this.BaseType.Name);
         }
     }
 }

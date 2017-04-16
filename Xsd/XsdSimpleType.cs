@@ -21,5 +21,10 @@ namespace XmlSchemaProcessor.Xsd
         {
             return this;
         }
+
+        public virtual XsdSimpleType GetBuiltInRootType()
+        {
+            return (this.IsBuiltIn() ? this : null);
+        }
     }
 }
