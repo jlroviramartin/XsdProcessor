@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- XmlSchemaSimpleContent -->
+  <xs:complexType name="cosa">
+    <xs:simpleContent>
+      <xs:extension base="xs:decimal">
+        <xs:attribute name="currency" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!--XmlSchemaComplexContent -->
+  <xs:complexType name="address">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="street" type="xs:string"/>
+      <xs:element name="city" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="USAddress">
+    <xs:complexContent mixed="false">
+      <xs:extension base="address">
+        <xs:sequence>
+          <xs:element name="state" type="xs:string"/>
+          <xs:element name="zipcode" type="xs:positiveInteger"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+
+  <!-- XmlSchemaAll -->
+  <xs:element name="thing1" type="xs:string"/>
+  <xs:element name="thing2" type="xs:string"/>
+  <xs:element name="thing3" type="xs:string"/>
+  <xs:element name="thing4" type="xs:string"/>
+  <xs:attribute name="myAttribute" type="xs:decimal"/>
+  <xs:complexType name="myComplexType">
+    <xs:all>
+      <xs:element ref="thing1"/>
+      <xs:element ref="thing2"/>
+      <xs:element ref="thing3"/>
+      <xs:element ref="thing4"/>
+    </xs:all>
+    <xs:attribute ref="myAttribute"/>
+  </xs:complexType>
+
+  <!-- XmlSchemaChoice -->
+  <xs:element name="selected"/>
+  <xs:element name="unselected"/>
+  <xs:element name="dimpled"/>
+  <xs:element name="perforated"/>
+
+  <xs:complexType name="chadState">
+    <xs:choice minOccurs="1" maxOccurs="1">
+      <xs:element ref="selected"/>
+      <xs:element ref="unselected"/>
+      <xs:element ref="dimpled"/>
+      <xs:element ref="perforated"/>
+    </xs:choice>
+  </xs:complexType>
+
+
+</xs:schema>

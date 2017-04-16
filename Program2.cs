@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Xml.Schema;
+﻿using System.Xml.Schema;
+using XmlSchemaProcessor.Xsd;
 
 namespace XmlSchemaTest
 {
@@ -16,55 +16,59 @@ namespace XmlSchemaTest
             schemaSet.Compile();
 
             XsdSchema schema = new ProcessXmlSchema(xmlSchema).GetSchema();
-            Debug.WriteLine(schema);
+            //Debug.WriteLine(schema);
+
+            PlantUmlOutput plantUmlOutput = new PlantUmlOutput();
+            plantUmlOutput.Process(schema);
+            plantUmlOutput.Write();
         }
     }
 
-    public struct ValueObject<T> where T : struct
-    {
-        public ValueObject(T t)
+    /*public struct ValueObject<T> where T : struct
         {
-            this.@base = t;
-        }
-
-        public static implicit operator T(ValueObject<T> vo)
-        {
-            return vo.@base;
-        }
-
-        public static implicit operator ValueObject<T>(T t)
-        {
-            return new ValueObject<T>(t);
-        }
-
-        public override bool Equals(object obj)
-        {
-            T other;
-            if (obj is T)
+            public ValueObject(T t)
             {
-                other = (T)obj;
+                this.@base = t;
             }
-            else if (obj is ValueObject<T>)
+    
+            public static implicit operator T(ValueObject<T> vo)
             {
-                other = (ValueObject<T>)obj;
+                return vo.@base;
             }
-            else
+    
+            public static implicit operator ValueObject<T>(T t)
             {
-                return false;
+                return new ValueObject<T>(t);
             }
-            return this.@base.Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return this.@base.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return this.@base.ToString();
-        }
-
-        private readonly T @base;
-    }
+    
+            public override bool Equals(object obj)
+            {
+                T other;
+                if (obj is T)
+                {
+                    other = (T)obj;
+                }
+                else if (obj is ValueObject<T>)
+                {
+                    other = (ValueObject<T>)obj;
+                }
+                else
+                {
+                    return false;
+                }
+                return this.@base.Equals(other);
+            }
+    
+            public override int GetHashCode()
+            {
+                return this.@base.GetHashCode();
+            }
+    
+            public override string ToString()
+            {
+                return this.@base.ToString();
+            }
+    
+            private readonly T @base;
+        }*/
 }

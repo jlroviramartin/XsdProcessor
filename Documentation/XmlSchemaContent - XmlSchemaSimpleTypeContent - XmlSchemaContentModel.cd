@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="System.Xml.Schema.XmlSchemaAnnotated" Collapsed="true">
+    <Position X="14.25" Y="2.25" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaObject" Collapsed="true">
+    <Position X="14.25" Y="1" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleTypeUnion" Collapsed="true">
+    <Position X="7" Y="5.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleTypeRestriction" Collapsed="true">
+    <Position X="0.75" Y="5.25" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleTypeList" Collapsed="true">
+    <Position X="4" Y="5.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleTypeContent" Collapsed="true">
+    <Position X="4" Y="3.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleContentRestriction" Collapsed="true">
+    <Position X="17.25" Y="5.25" Width="2.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleContentExtension" Collapsed="true">
+    <Position X="20.75" Y="5.25" Width="2.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleContent" Collapsed="true">
+    <Position X="27.25" Y="5.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaContentModel" Collapsed="true">
+    <Position X="25.75" Y="3.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaContent" Collapsed="true">
+    <Position X="16" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaComplexContentRestriction" Collapsed="true">
+    <Position X="13.5" Y="5.25" Width="3" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaComplexContentExtension" Collapsed="true">
+    <Position X="10" Y="5.25" Width="2.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaComplexContent" Collapsed="true">
+    <Position X="24.25" Y="5.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

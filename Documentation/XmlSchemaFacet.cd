@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="System.Xml.Schema.XmlSchemaWhiteSpaceFacet" Collapsed="true">
+    <Position X="34" Y="3.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaTotalDigitsFacet" Collapsed="true">
+    <Position X="16.25" Y="4.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaPatternFacet" Collapsed="true">
+    <Position X="31.25" Y="3.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaNumericFacet" Collapsed="true">
+    <Position X="10.5" Y="3.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMinLengthFacet" Collapsed="true">
+    <Position X="4.25" Y="4.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMinInclusiveFacet" Collapsed="true">
+    <Position X="19.25" Y="3.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMinExclusiveFacet" Collapsed="true">
+    <Position X="25.25" Y="3.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMaxLengthFacet" Collapsed="true">
+    <Position X="7.25" Y="4.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMaxInclusiveFacet" Collapsed="true">
+    <Position X="22.25" Y="3.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaMaxExclusiveFacet" Collapsed="true">
+    <Position X="28.25" Y="3.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaLengthFacet" Collapsed="true">
+    <Position X="10.25" Y="4.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaFractionDigitsFacet" Collapsed="true">
+    <Position X="13" Y="4.75" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaFacet" Collapsed="true">
+    <Position X="21" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaEnumerationFacet" Collapsed="true">
+    <Position X="37" Y="3.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

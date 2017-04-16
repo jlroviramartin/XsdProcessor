@@ -43,16 +43,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
+    <Compile Include="PlantUmlOutput.cs" />
     <Compile Include="ProcessXmlSchema.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Program2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringUtils.cs" />
-    <Compile Include="XsdObject.cs" />
-    <Compile Include="XsdSchema.cs" />
+    <Compile Include="TextWriterEx.cs" />
+    <Compile Include="XsdProcess.cs" />
+    <Compile Include="Xsd\DerivationMethod.cs" />
+    <Compile Include="Xsd\ParticleGroupType.cs" />
+    <Compile Include="Xsd\XsdParticleGroup.cs" />
+    <Compile Include="Xsd\XsdAttribute.cs" />
+    <Compile Include="Xsd\XsdAttributes.cs" />
+    <Compile Include="Xsd\XsdBuiltInType.cs" />
+    <Compile Include="Xsd\XsdComplexComplexContentType.cs" />
+    <Compile Include="Xsd\XsdComplexImplicitContentType.cs" />
+    <Compile Include="Xsd\XsdComplexSimpleContentType.cs" />
+    <Compile Include="Xsd\XsdComplexType.cs" />
+    <Compile Include="Xsd\XsdElement.cs" />
+    <Compile Include="Xsd\XsdObject.cs" />
+    <Compile Include="Xsd\XsdParticle.cs" />
+    <Compile Include="Xsd\XsdParticleAny.cs" />
+    <Compile Include="Xsd\XsdParticleElement.cs" />
+    <Compile Include="Xsd\XsdSchema.cs" />
+    <Compile Include="Xsd\XsdSimpleListType.cs" />
+    <Compile Include="Xsd\XsdSimpleRestrictionType.cs" />
+    <Compile Include="Xsd\XsdSimpleType.cs" />
+    <Compile Include="Xsd\XsdSimpleUnionType.cs" />
+    <Compile Include="Xsd\XsdType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Documentation\XmlSchemaFacet.cd" />
+    <None Include="Documentation\XmlSchemaContent - XmlSchemaSimpleTypeContent - XmlSchemaContentModel.cd" />
+    <None Include="Documentation\XmlSchemaParticle.cd" />
+    <None Include="Documentation\XmlSchemaObject - Others.cd" />
+    <None Include="Documentation\XmlSchemaObject.cd" />
     <None Include="LandXML-1.2.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -61,6 +89,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="README.md" />
     <None Include="schema-2001-1.0\datatypes.dtd" />
     <None Include="schema-2001-1.0\XMLSchema.dtd" />
     <None Include="schema-2001-1.0\XMLSchema.xsd">
@@ -84,7 +113,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="XMLSchema.cd" />
+    <None Include="Documentation\XMLSchema.cd" />
     <None Include="MyXMLSchema1.xsd">
       <SubType>Designer</SubType>
     </None>

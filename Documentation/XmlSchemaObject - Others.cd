@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="System.Xml.Schema.XmlSchema" Collapsed="true">
+    <Position X="48.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaSimpleType" Collapsed="true">
+    <Position X="19.25" Y="5.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaType" Collapsed="true">
+    <Position X="20.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAnnotated" Collapsed="true">
+    <Position X="16.75" Y="2.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaObject" Collapsed="true">
+    <Position X="26" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaComplexType" Collapsed="true">
+    <Position X="22" Y="5.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAttribute" Collapsed="true">
+    <Position X="8" Y="4.25" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaXPath" Collapsed="true">
+    <Position X="3.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaUnique" Collapsed="true">
+    <Position X="32.5" Y="5.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaRedefine" Collapsed="true">
+    <Position X="35.25" Y="4.25" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaNotation" Collapsed="true">
+    <Position X="5.5" Y="4.25" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaKeyref" Collapsed="true">
+    <Position X="27" Y="5.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaKey" Collapsed="true">
+    <Position X="29.75" Y="5.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaInclude" Collapsed="true">
+    <Position X="37.75" Y="4.25" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaImport" Collapsed="true">
+    <Position X="40.25" Y="4.25" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaIdentityConstraint" Collapsed="true">
+    <Position X="29.5" Y="4.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaGroup" Collapsed="true">
+    <Position X="1" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaFacet" Collapsed="true">
+    <Position X="24.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaExternal" Collapsed="true">
+    <Position X="37.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaDocumentation" Collapsed="true">
+    <Position X="45.5" Y="2.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAttributeGroupRef" Collapsed="true">
+    <Position X="16.25" Y="4.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAttributeGroup" Collapsed="true">
+    <Position X="13.25" Y="4.25" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAppInfo" Collapsed="true">
+    <Position X="50.75" Y="2.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAnyAttribute" Collapsed="true">
+    <Position X="10.5" Y="4.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Xml.Schema.XmlSchemaAnnotation" Collapsed="true">
+    <Position X="42.75" Y="2.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

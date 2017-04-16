@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
+using XmlSchemaProcessor.Xsd;
 
 namespace XmlSchemaTest
 {
@@ -45,60 +46,62 @@ namespace XmlSchemaTest
             }
         }
 
-        private static void Validation(object sender, ValidationEventArgs args)
-        {
-            Debug.WriteLine("Validation Error: {0}", args.Message);
-        }
+        #region private
 
-        private void Process(XmlSchema xmlSchema)
+        private bool Process(XmlSchema xmlSchema)
         {
             // The collection of XmlSchemaAnnotation, XmlSchemaAttribute, XmlSchemaAttributeGroup, XmlSchemaComplexType, XmlSchemaSimpleType, XmlSchemaElement, XmlSchemaGroup, or XmlSchemaNotation.
             // xmlSchema.Items
 
-            // Se procesan los tipos simples.
-            foreach (XmlSchemaSimpleType xmlSchemaSimpleType in xmlSchema.Items.OfType<XmlSchemaSimpleType>())
+            foreach (XmlSchemaObject schemaObject in xmlSchema.Items)
             {
-                this.schema.Add(this.ProcessXmlSchemaSimpleType(xmlSchemaSimpleType));
+                // Se procesan los tipos simples.
+                if (schemaObject is XmlSchemaSimpleType)
+                {
+                    this.schema.Add(this.ProcessXmlSchemaSimpleType((XmlSchemaSimpleType)schemaObject));
+                }
+                else if (schemaObject is XmlSchemaComplexType)
+                {
+                    // Se procesan los tipos complejos.
+                    this.schema.Add(this.ProcessXmlSchemaComplexType((XmlSchemaComplexType)schemaObject));
+                }
+                else if (schemaObject is XmlSchemaAttribute)
+                {
+                    // Se procesan los atributos.
+                    this.schema.Add(this.ProcessXmlAttribute((XmlSchemaAttribute)schemaObject));
+                }
+                else if (schemaObject is XmlSchemaAttributeGroup)
+                {
+                    // Se procesan los grupos de atributos.
+                    XsdAttributeGroup _attributeGroup = this.ProcessXmlAttributeGroup((XmlSchemaAttributeGroup)schemaObject);
+                }
+                else if (schemaObject is XmlSchemaGroup)
+                {
+                    // Se procesan los grupos.
+                    XsdGroup _group = this.ProcessXmlSchemaGroup((XmlSchemaGroup)schemaObject);
+                }
+                else if (schemaObject is XmlSchemaElement)
+                {
+                    // Se procesan los elementos.
+                    this.schema.Add(this.ProcessXmlSchemaElement((XmlSchemaElement)schemaObject));
+                }
+                else if (schemaObject is XmlSchemaNotation)
+                {
+                }
+                else if (schemaObject is XmlSchemaAnnotation)
+                {
+                }
+                else
+                {
+                    throw new Exception();
+                }
             }
 
-            // Se procesan los tipos complejos.
-            foreach (XmlSchemaComplexType xmlSchemaComplexType in xmlSchema.Items.OfType<XmlSchemaComplexType>())
-            {
-                this.schema.Add(this.ProcessXmlSchemaComplexType(xmlSchemaComplexType));
-            }
+            bool error = this.postProcess.Aggregate(false, (current, find) => current | find());
 
-            // Se procesan los atributos.
-            foreach (XmlSchemaAttribute xmlAttribute in xmlSchema.Items.OfType<XmlSchemaAttribute>())
-            {
-                this.schema.Add(this.ProcessXmlAttribute(xmlAttribute));
-            }
-
-            // Se procesan los grupos de atributos.
-            foreach (XmlSchemaAttributeGroup xmlAttributeGroup in xmlSchema.Items.OfType<XmlSchemaAttributeGroup>())
-            {
-                XsdAttributeGroup _attributeGroup = this.ProcessXmlAttributeGroup(xmlAttributeGroup);
-            }
-
-            // Se procesan los grupos.
-            foreach (XmlSchemaGroup xmlSchemaGroup in xmlSchema.Items.OfType<XmlSchemaGroup>())
-            {
-                XsdGroup _group = this.ProcessXmlSchemaGroup(xmlSchemaGroup);
-            }
-
-            // Se procesan los elementos.
-            foreach (XmlSchemaElement xmlSchemaElement in xmlSchema.Items.OfType<XmlSchemaElement>())
-            {
-                this.schema.Add(this.ProcessXmlSchemaElement(xmlSchemaElement));
-            }
-
-            Func<bool>[] aux = this.postProcess.ToArray();
             this.postProcess.Clear();
 
-            bool error = false;
-            foreach (Func<bool> find in aux)
-            {
-                error |= find();
-            }
+            return error;
         }
 
         private XsdType ProcessXmlSchemaType(XmlSchemaType xmlSchemaType)
@@ -117,35 +120,37 @@ namespace XmlSchemaTest
             }
         }
 
-        // xs:simpleType : tipos basicos
-        /*
-<simpleType
-  final = (#all | List of (list | union | restriction | extension))
-  id = ID
-  name = NCName
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (restriction | list | union))
-</simpleType>
-<restriction
-  base = QName
-  id = ID
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (simpleType?, (minExclusive | minInclusive | maxExclusive | maxInclusive | totalDigits | fractionDigits | length | minLength | maxLength | enumeration | whiteSpace | pattern | assertion | explicitTimezone | {any with namespace: ##other})*))
-</restriction>
-<list
-  id = ID
-  itemType = QName
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, simpleType?)
-</list>
-<union
-  id = ID
-  memberTypes = List of QName
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, simpleType*)
-</union>
-         */
+        #region xs:simpleType : tipos basicos
 
+        /// <summary>
+        /// <![CDATA[
+        /// <simpleType
+        ///   final = (#all | List of (list | union | restriction | extension))
+        ///   id = ID
+        ///   name = NCName
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (restriction | list | union))
+        /// </simpleType>
+        /// <restriction
+        ///   base = QName
+        ///   id = ID
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (simpleType?, (minExclusive | minInclusive | maxExclusive | maxInclusive | totalDigits | fractionDigits | length | minLength | maxLength | enumeration | whiteSpace | pattern | assertion | explicitTimezone | {any with namespace: ##other})*))
+        /// </restriction>
+        /// <list
+        ///   id = ID
+        ///   itemType = QName
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, simpleType?)
+        /// </list>
+        /// <union
+        ///   id = ID
+        ///   memberTypes = List of QName
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, simpleType*)
+        /// </union>
+        /// ]]>
+        /// </summary>
         private XsdSimpleType ProcessXmlSchemaSimpleType(XmlSchemaSimpleType xmlSchemaSimpleType)
         {
             string id = xmlSchemaSimpleType.Id;
@@ -223,65 +228,69 @@ namespace XmlSchemaTest
             throw new Exception();
         }
 
-        // xs:complexType : tipos complejos
-        /*
-<complexType
-  abstract = boolean : false
-  block = (#all | List of (extension | restriction))
-  final = (#all | List of (extension | restriction))
-  id = ID
-  mixed = boolean
-  name = NCName
-  defaultAttributesApply = boolean : true
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (simpleContent | complexContent | (openContent?, (group | all | choice | sequence)?, ((attribute | attributeGroup)*, anyAttribute?), assert*)))
-</complexType>
+        #endregion
 
-<simpleContent
-  id = ID
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (restriction | extension))
-</simpleContent>
-<restriction
-  base = QName
-  id = ID
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (simpleType?, (minExclusive | minInclusive | maxExclusive | maxInclusive | totalDigits | fractionDigits | length | minLength | maxLength | enumeration | whiteSpace | pattern | assertion | {any with namespace: ##other})*)?, ((attribute | attributeGroup)*, anyAttribute?), assert*)
-</restriction>
-<extension
-  base = QName
-  id = ID
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, ((attribute | attributeGroup)*, anyAttribute?), assert*)
-</extension>
+        #region xs:complexType : tipos complejos
 
-<complexContent
-  id = ID
-  mixed = boolean
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (restriction | extension))
-</complexContent>
-<restriction
-  base = QName
-  id = ID
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, openContent?, (group | all | choice | sequence)?, ((attribute | attributeGroup)*, anyAttribute?), assert*)
-</restriction>
-<extension
-  base = QName
-  id = ID
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, openContent?, ((group | all | choice | sequence)?, ((attribute | attributeGroup)*, anyAttribute?), assert*))
-</extension>
-
-<openContent
-  id = ID
-  mode = (none | interleave | suffix) : interleave
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, any?)
-</openContent>
-        */
-
+        /// <summary>
+        /// <![CDATA[
+        /// <complexType
+        ///   abstract = boolean : false
+        ///   block = (#all | List of (extension | restriction))
+        ///   final = (#all | List of (extension | restriction))
+        ///   id = ID
+        ///   mixed = boolean
+        ///   name = NCName
+        ///   defaultAttributesApply = boolean : true
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (simpleContent | complexContent | (openContent?, (group | all | choice | sequence)?, ((attribute | attributeGroup)*, anyAttribute?), assert*)))
+        /// </complexType>
+        /// 
+        /// <simpleContent
+        ///   id = ID
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (restriction | extension))
+        /// </simpleContent>
+        /// <restriction
+        ///   base = QName
+        ///   id = ID
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (simpleType?, (minExclusive | minInclusive | maxExclusive | maxInclusive | totalDigits | fractionDigits | length | minLength | maxLength | enumeration | whiteSpace | pattern | assertion | {any with namespace: ##other})*)?, ((attribute | attributeGroup)*, anyAttribute?), assert*)
+        /// </restriction>
+        /// <extension
+        ///   base = QName
+        ///   id = ID
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, ((attribute | attributeGroup)*, anyAttribute?), assert*)
+        /// </extension>
+        /// 
+        /// <complexContent
+        ///   id = ID
+        ///   mixed = boolean
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (restriction | extension))
+        /// </complexContent>
+        /// <restriction
+        ///   base = QName
+        ///   id = ID
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, openContent?, (group | all | choice | sequence)?, ((attribute | attributeGroup)*, anyAttribute?), assert*)
+        /// </restriction>
+        /// <extension
+        ///   base = QName
+        ///   id = ID
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, openContent?, ((group | all | choice | sequence)?, ((attribute | attributeGroup)*, anyAttribute?), assert*))
+        /// </extension>
+        /// 
+        /// <openContent
+        ///   id = ID
+        ///   mode = (none | interleave | suffix) : interleave
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, any?)
+        /// </openContent>
+        /// ]]>
+        /// </summary>
         private XsdComplexType ProcessXmlSchemaComplexType(XmlSchemaComplexType complexType)
         {
             string id = complexType.Id;
@@ -405,42 +414,43 @@ namespace XmlSchemaTest
             throw new Exception();
         }
 
-        /*
-<group
-  id = ID
-  maxOccurs = (nonNegativeInteger | unbounded)  : 1
-  minOccurs = nonNegativeInteger : 1
-  name = NCName
-  ref = QName
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (all | choice | sequence)?)
-</group>
-
-<all
-  id = ID
-  maxOccurs = (0 | 1) : 1
-  minOccurs = (0 | 1) : 1
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (element | any | group)*)
-</all>
-<choice
-  id = ID
-  maxOccurs = (nonNegativeInteger | unbounded)  : 1
-  minOccurs = nonNegativeInteger : 1
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (element | group | choice | sequence | any)*)
-</choice>
-<sequence
-  id = ID
-  maxOccurs = (nonNegativeInteger | unbounded)  : 1
-  minOccurs = nonNegativeInteger : 1
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, (element | group | choice | sequence | any)*)
-</sequence>
-
-<element ...>
-         */
-
+        /// <summary>
+        /// <![CDATA[
+        /// <group
+        ///   id = ID
+        ///   maxOccurs = (nonNegativeInteger | unbounded)  : 1
+        ///   minOccurs = nonNegativeInteger : 1
+        ///   name = NCName
+        ///   ref = QName
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (all | choice | sequence)?)
+        /// </group>
+        /// 
+        /// <all
+        ///   id = ID
+        ///   maxOccurs = (0 | 1) : 1
+        ///   minOccurs = (0 | 1) : 1
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (element | any | group)*)
+        /// </all>
+        /// <choice
+        ///   id = ID
+        ///   maxOccurs = (nonNegativeInteger | unbounded)  : 1
+        ///   minOccurs = nonNegativeInteger : 1
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (element | group | choice | sequence | any)*)
+        /// </choice>
+        /// <sequence
+        ///   id = ID
+        ///   maxOccurs = (nonNegativeInteger | unbounded)  : 1
+        ///   minOccurs = nonNegativeInteger : 1
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, (element | group | choice | sequence | any)*)
+        /// </sequence>
+        /// 
+        /// <element ...>
+        /// ]]>
+        /// </summary>
         private XsdParticle ProcessXmlSchemaParticle(XmlSchemaParticle particle)
         {
             if (particle == null)
@@ -484,14 +494,14 @@ namespace XmlSchemaTest
             {
                 XmlSchemaGroupBase group = (XmlSchemaGroupBase)particle;
 
-                XmlParticleGroup _group = new XmlParticleGroup();
+                XsdParticleGroup _group = new XsdParticleGroup();
                 _group.MinOccurs = min;
                 _group.MaxOccurs = max;
                 _group.GroupType = ((group is XmlSchemaAll)
-                                        ? ParticleGroupType.All
-                                        : ((group is XmlSchemaChoice)
-                                               ? ParticleGroupType.Choice
-                                               : ParticleGroupType.Sequence));
+                    ? ParticleGroupType.All
+                    : ((group is XmlSchemaChoice)
+                        ? ParticleGroupType.Choice
+                        : ParticleGroupType.Sequence));
 
                 foreach (XmlSchemaParticle item in group.Items.Cast<XmlSchemaParticle>())
                 {
@@ -510,39 +520,40 @@ namespace XmlSchemaTest
             throw new Exception();
         }
 
-        /*
-<attribute
-  default = string
-  fixed = string
-  form = (qualified | unqualified)
-  id = ID
-  name = NCName
-  ref = QName
-  targetNamespace = anyURI
-  type = QName
-  use = (optional | prohibited | required) : optional
-  inheritable = boolean
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, simpleType?)
-</attribute>
-<attributeGroup
-  id = ID
-  name = NCName
-  ref = QName
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, ((attribute | attributeGroup)*, anyAttribute?))
-</attributeGroup>
-<anyAttribute
-  id = ID
-  namespace = ((##any | ##other) | List of (anyURI | (##targetNamespace | ##local)) )
-  notNamespace = List of (anyURI | (##targetNamespace | ##local))
-  notQName = List of (QName | ##defined)
-  processContents = (lax | skip | strict) : strict
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?)
-</anyAttribute>
-         */
-
+        /// <summary>
+        /// <![CDATA[
+        /// <attribute
+        ///   default = string
+        ///   fixed = string
+        ///   form = (qualified | unqualified)
+        ///   id = ID
+        ///   name = NCName
+        ///   ref = QName
+        ///   targetNamespace = anyURI
+        ///   type = QName
+        ///   use = (optional | prohibited | required) : optional
+        ///   inheritable = boolean
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, simpleType?)
+        /// </attribute>
+        /// <attributeGroup
+        ///   id = ID
+        ///   name = NCName
+        ///   ref = QName
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, ((attribute | attributeGroup)*, anyAttribute?))
+        /// </attributeGroup>
+        /// <anyAttribute
+        ///   id = ID
+        ///   namespace = ((##any | ##other) | List of (anyURI | (##targetNamespace | ##local)) )
+        ///   notNamespace = List of (anyURI | (##targetNamespace | ##local))
+        ///   notQName = List of (QName | ##defined)
+        ///   processContents = (lax | skip | strict) : strict
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?)
+        /// </anyAttribute>
+        /// ]]>
+        /// </summary>
         private XsdAttributes ProcessXmlAttributes(XmlSchemaObjectCollection attributes, XmlSchemaAnyAttribute anyAttribute)
         {
             XsdAttributes _attributes = new XsdAttributes();
@@ -639,29 +650,33 @@ namespace XmlSchemaTest
             return _group;
         }
 
-        // xs:element : elementos
-        /*
-<element
-  abstract = boolean : false
-  block = (#all | List of (extension | restriction | substitution))
-  default = string
-  final = (#all | List of (extension | restriction))
-  fixed = string
-  form = (qualified | unqualified)
-  id = ID
-  maxOccurs = (nonNegativeInteger | unbounded)  : 1
-  minOccurs = nonNegativeInteger : 1
-  name = NCName
-  nillable = boolean : false
-  ref = QName
-  substitutionGroup = List of QName
-  targetNamespace = anyURI
-  type = QName
-  {any attributes with non-schema namespace . . .}>
-  Content: (annotation?, ((simpleType | complexType)?, alternative*, (unique | key | keyref)*))
-</element>
-         */
+        #endregion
 
+        #region xs:element : elementos
+
+        /// <summary>
+        /// <![CDATA[
+        /// <element
+        ///   abstract = boolean : false
+        ///   block = (#all | List of (extension | restriction | substitution))
+        ///   default = string
+        ///   final = (#all | List of (extension | restriction))
+        ///   fixed = string
+        ///   form = (qualified | unqualified)
+        ///   id = ID
+        ///   maxOccurs = (nonNegativeInteger | unbounded)  : 1
+        ///   minOccurs = nonNegativeInteger : 1
+        ///   name = NCName
+        ///   nillable = boolean : false
+        ///   ref = QName
+        ///   substitutionGroup = List of QName
+        ///   targetNamespace = anyURI
+        ///   type = QName
+        ///   {any attributes with non-schema namespace . . .}>
+        ///   Content: (annotation?, ((simpleType | complexType)?, alternative*, (unique | key | keyref)*))
+        /// </element>
+        /// ]]>
+        /// </summary>
         private XsdElement ProcessXmlSchemaElement(XmlSchemaElement xmlSchemaElement)
         {
             // XmlSchemaAnnotated
@@ -725,6 +740,8 @@ namespace XmlSchemaTest
             }
         }
 
+        #endregion
+
         private void ProcessXmlSchemaAnnotation(XmlSchemaAnnotation annotation)
         {
             return;
@@ -755,7 +772,7 @@ namespace XmlSchemaTest
             }
         }
 
-        internal void Find<T>(Func<XmlQualifiedName, T> find, XmlQualifiedName baseTypeName, Action<T> found)
+        private void Find<T>(Func<XmlQualifiedName, T> find, XmlQualifiedName baseTypeName, Action<T> found)
         {
             Func<bool> _find = () =>
             {
@@ -774,33 +791,42 @@ namespace XmlSchemaTest
             }
         }
 
-        internal void FindType(XmlQualifiedName baseTypeName, Action<XsdType> found)
+        private void FindType(XmlQualifiedName baseTypeName, Action<XsdType> found)
         {
             this.Find(this.schema.FindType, baseTypeName, found);
         }
 
-        internal void FindSimple(XmlQualifiedName baseTypeName, Action<XsdSimpleType> found)
+        private void FindSimple(XmlQualifiedName baseTypeName, Action<XsdSimpleType> found)
         {
             this.Find(this.schema.FindSimple, baseTypeName, found);
         }
 
-        internal void FindComplex(XmlQualifiedName baseTypeName, Action<XsdComplexType> found)
+        private void FindComplex(XmlQualifiedName baseTypeName, Action<XsdComplexType> found)
         {
             this.Find(this.schema.FindComplex, baseTypeName, found);
         }
 
-        internal void FindElement(XmlQualifiedName baseTypeName, Action<XsdElement> found)
+        private void FindElement(XmlQualifiedName baseTypeName, Action<XsdElement> found)
         {
             this.Find(this.schema.FindElement, baseTypeName, found);
         }
 
-        internal void FindAttribute(XmlQualifiedName baseTypeName, Action<XsdAttribute> found)
+        private void FindAttribute(XmlQualifiedName baseTypeName, Action<XsdAttribute> found)
         {
             this.Find(this.schema.FindAttribute, baseTypeName, found);
         }
 
+        private static void Validation(object sender, ValidationEventArgs args)
+        {
+            Debug.WriteLine("Validation Error: {0}", args.Message);
+        }
+
         private readonly XsdSchema schema = new XsdSchema();
         private readonly List<Func<bool>> postProcess = new List<Func<bool>>();
+
+        #endregion
+
+        #region inner classes
 
         private class XsdGroup
         {
@@ -813,5 +839,7 @@ namespace XmlSchemaTest
             public string Name { get; set; }
             public XsdAttributes Attributes { get; set; }
         }
+
+        #endregion
     }
 }

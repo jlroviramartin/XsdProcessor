@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using XmlSchemaTest;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor.Xsd
 {
     public class XsdSchema
     {
@@ -14,53 +15,53 @@ namespace XmlSchemaTest
 
         private void Initialize()
         {
-            this.AddBuiltIn("duration");
-            this.AddBuiltIn("dateTime");
-            this.AddBuiltIn("time");
-            this.AddBuiltIn("date");
-            XsdbuiltInType _string = this.AddBuiltIn("string");
-            this.AddBuiltIn("boolean");
-            this.AddBuiltIn("base64Binary");
-            this.AddBuiltIn("hexBinary");
-            this.AddBuiltIn("float");
-            this.AddBuiltIn("double");
-            XsdbuiltInType _decimal = this.AddBuiltIn("decimal");
+            this.AddBuiltIn(XsdBuiltInType.DURATION);
+            this.AddBuiltIn(XsdBuiltInType.DATETIME);
+            this.AddBuiltIn(XsdBuiltInType.TIME);
+            this.AddBuiltIn(XsdBuiltInType.DATE);
+            XsdBuiltInType _string = this.AddBuiltIn(XsdBuiltInType.STRING);
+            this.AddBuiltIn(XsdBuiltInType.BOOLEAN);
+            this.AddBuiltIn(XsdBuiltInType.BASE_64_BINARY);
+            this.AddBuiltIn(XsdBuiltInType.HEX_BINARY);
+            this.AddBuiltIn(XsdBuiltInType.FLOAT);
+            this.AddBuiltIn(XsdBuiltInType.DOUBLE);
+            XsdBuiltInType _decimal = this.AddBuiltIn(XsdBuiltInType.DECIMAL);
 
-            this.AddBuiltIn("anyURI");
-            this.AddBuiltIn("QName");
-            this.AddBuiltIn("NOTATION");
+            this.AddBuiltIn(XsdBuiltInType.ANY_URI);
+            this.AddBuiltIn(XsdBuiltInType.QNAME);
+            this.AddBuiltIn(XsdBuiltInType.NOTATION);
 
-            XsdSimpleRestrictionType normalizedString = this.AddDerivedBuiltIn("normalizedString", _string);
-            XsdSimpleRestrictionType token = this.AddDerivedBuiltIn("token", normalizedString);
-            this.AddDerivedBuiltIn("language", token);
-            XsdSimpleRestrictionType name = this.AddDerivedBuiltIn("Name", token);
-            this.AddDerivedBuiltIn("NMTOKEN", token);
+            XsdSimpleRestrictionType normalizedString = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.NORMALIZED_STRING, _string);
+            XsdSimpleRestrictionType token = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.TOKEN, normalizedString);
+            this.AddDerivedBuiltIn(XsdSimpleRestrictionType.LANGUAGE, token);
+            XsdSimpleRestrictionType name = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.NAME, token);
+            this.AddDerivedBuiltIn(XsdSimpleRestrictionType.NMTOKEN, token);
 
-            XsdSimpleRestrictionType ncName = this.AddDerivedBuiltIn("NCName", name);
-            XsdSimpleRestrictionType id = this.AddDerivedBuiltIn("ID", ncName);
-            this.AddDerivedBuiltIn("IDREF", ncName);
-            XsdSimpleRestrictionType entity = this.AddDerivedBuiltIn("ENTITY", ncName);
+            XsdSimpleRestrictionType ncName = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.NCNAME, name);
+            XsdSimpleRestrictionType id = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.ID, ncName);
+            this.AddDerivedBuiltIn(XsdSimpleRestrictionType.IDREF, ncName);
+            XsdSimpleRestrictionType entity = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.ENTITY, ncName);
 
-            XsdSimpleRestrictionType integer = this.AddDerivedBuiltIn("integer", _decimal);
+            XsdSimpleRestrictionType integer = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.INTEGER, _decimal);
 
-            XsdSimpleRestrictionType nonPositiveInteger = this.AddDerivedBuiltIn("nonPositiveInteger", integer);
-            this.AddDerivedBuiltIn("negativeInteger", nonPositiveInteger);
+            XsdSimpleRestrictionType nonPositiveInteger = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.NON_POSITIVE_INTEGER, integer);
+            this.AddDerivedBuiltIn(XsdSimpleRestrictionType.NEGATIVE_INTEGER, nonPositiveInteger);
 
-            XsdSimpleRestrictionType nonNegativeInteger = this.AddDerivedBuiltIn("nonNegativeInteger", integer);
-            this.AddDerivedBuiltIn("positiveInteger", nonNegativeInteger);
+            XsdSimpleRestrictionType nonNegativeInteger = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.NON_NEGATIVE_INTEGER, integer);
+            this.AddDerivedBuiltIn(XsdSimpleRestrictionType.POSITIVE_INTEGER, nonNegativeInteger);
 
-            XsdSimpleRestrictionType unsignedLong = this.AddDerivedBuiltIn("unsignedLong", nonNegativeInteger);
-            XsdSimpleRestrictionType unsignedInt = this.AddDerivedBuiltIn("unsignedInt", unsignedLong);
-            XsdSimpleRestrictionType unsignedShort = this.AddDerivedBuiltIn("unsignedShort", unsignedInt);
-            this.AddDerivedBuiltIn("unsignedByte", unsignedShort);
+            XsdSimpleRestrictionType unsignedLong = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.UNSIGNED_LONG, nonNegativeInteger);
+            XsdSimpleRestrictionType unsignedInt = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.UNSIGNED_INT, unsignedLong);
+            XsdSimpleRestrictionType unsignedShort = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.UNSIGNED_SHORT, unsignedInt);
+            this.AddDerivedBuiltIn(XsdSimpleRestrictionType.UNSIGNED_BYTE, unsignedShort);
 
-            XsdSimpleRestrictionType _long = this.AddDerivedBuiltIn("long", integer);
-            XsdSimpleRestrictionType _int = this.AddDerivedBuiltIn("int", _long);
-            XsdSimpleRestrictionType _short = this.AddDerivedBuiltIn("short", _int);
-            this.AddDerivedBuiltIn("byte", _short);
+            XsdSimpleRestrictionType _long = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.LONG, integer);
+            XsdSimpleRestrictionType _int = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.INT, _long);
+            XsdSimpleRestrictionType _short = this.AddDerivedBuiltIn(XsdSimpleRestrictionType.SHORT, _int);
+            this.AddDerivedBuiltIn(XsdSimpleRestrictionType.BYTE, _short);
 
-            this.AddListBuiltIn("IDREFS", id);
-            this.AddListBuiltIn("ENTITIES", entity);
+            this.AddListBuiltIn(XsdSimpleRestrictionType.IDREFS, id);
+            this.AddListBuiltIn(XsdSimpleRestrictionType.ENTITIES, entity);
         }
 
         public void Add(XsdElement element)
@@ -82,6 +83,38 @@ namespace XmlSchemaTest
             // http://www.landxml.org/schema/LandXML-1.2
             this.types.Add(type.Name, type);
         }
+
+        public IEnumerable<XsdType> Types
+        {
+            get { return this.types.Values; }
+        }
+
+        public XsdType GetType(string name)
+        {
+            return this.types.GetSafe(name);
+        }
+
+        public IEnumerable<XsdElement> Elements
+        {
+            get { return this.elements.Values; }
+        }
+
+        public XsdElement GetElement(string name)
+        {
+            return this.elements.GetSafe(name);
+        }
+
+        public IEnumerable<XsdAttribute> Attributes
+        {
+            get { return this.attributes.Values; }
+        }
+
+        public XsdAttribute GetAttribute(string name)
+        {
+            return this.attributes.GetSafe(name);
+        }
+
+        #region private
 
         internal XsdType FindType(XmlQualifiedName baseTypeName)
         {
@@ -141,9 +174,9 @@ namespace XmlSchemaTest
             return null;
         }
 
-        private XsdbuiltInType AddBuiltIn(string name)
+        private XsdBuiltInType AddBuiltIn(string name)
         {
-            XsdbuiltInType type = new XsdbuiltInType() { Name = name };
+            XsdBuiltInType type = new XsdBuiltInType() { Name = name };
             type.TopLevel = true;
             this.types.Add(type.Name, type);
             return type;
@@ -153,6 +186,7 @@ namespace XmlSchemaTest
         {
             XsdSimpleRestrictionType type = new XsdSimpleRestrictionType() { Name = name, BaseType = baseType };
             type.TopLevel = true;
+            type.BuiltIn = true;
             this.types.Add(type.Name, type);
             return type;
         }
@@ -161,6 +195,7 @@ namespace XmlSchemaTest
         {
             XsdSimpleListType type = new XsdSimpleListType() { Name = name, ItemType = itemType };
             type.TopLevel = true;
+            type.BuiltIn = true;
             this.types.Add(type.Name, type);
             return type;
         }
@@ -168,6 +203,8 @@ namespace XmlSchemaTest
         private readonly Dictionary<string, XsdType> types = new Dictionary<string, XsdType>();
         private readonly Dictionary<string, XsdElement> elements = new Dictionary<string, XsdElement>();
         private readonly Dictionary<string, XsdAttribute> attributes = new Dictionary<string, XsdAttribute>();
+
+        #endregion
 
         public override string ToString()
         {
