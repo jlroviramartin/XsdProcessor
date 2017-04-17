@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
 using XmlSchemaProcessor.Xsd;
-using XmlSchemaTest;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor
 {
     public static class XsdParticleExtensions
     {

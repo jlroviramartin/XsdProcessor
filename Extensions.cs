@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor
 {
     public static class Extensions
     {
@@ -27,6 +30,18 @@ namespace XmlSchemaTest
                 value = def;
             }
             return value;
+        }
+
+        public static void SafeAdd<TK, TV>(this IDictionary<TK, TV> dicc, TK key, TV value)
+        {
+            if (!dicc.ContainsKey(key))
+            {
+                dicc.Add(key, value);
+            }
+            else
+            {
+                dicc[key] = value;
+            }
         }
 
         public static string ToStringAsList(this IEnumerable<string> enumer, string sep)
@@ -47,5 +62,89 @@ namespace XmlSchemaTest
             }
             return buff.ToString();
         }
+
+        public static string ToFieldName(this string name)
+        {
+            return FirstLower(name);
+        }
+
+        public static string ToMethodName(this string name)
+        {
+            return FirstUpper(name);
+        }
+
+        public static string ToTypeName(this string name)
+        {
+            return FirstUpper(name);
+        }
+
+        public static string ToEnumValueName(this string name)
+        {
+            return FirstUpper(name);
+        }
+
+        public static string FirstUpper(this string name)
+        {
+            return Normalize(name, false);
+        }
+
+        public static string FirstLower(this string name)
+        {
+            return Normalize(name, true);
+        }
+
+        public static string Normalize(this string name, bool firstLower)
+        {
+            char[] separator = { ' ', '-', '+', '.' };
+
+            StringBuilder buff = new StringBuilder();
+            bool first = true;
+            foreach (string sub in name.Split(separator, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (first)
+                {
+                    first = false;
+                    if (firstLower)
+                    {
+                        buff.Append(char.ToLower(sub[0]));
+                    }
+                    else
+                    {
+                        buff.Append(char.ToUpper(sub[0]));
+                    }
+                }
+                else
+                {
+                    buff.Append(char.ToUpper(sub[0]));
+                }
+                buff.Append(sub.Substring(1));
+            }
+            string aux = buff.ToString();
+            if (restrictedNamed.Contains(aux))
+            {
+                aux = "@" + aux;
+            }
+            return aux;
+        }
+
+        public static Attribute[] GetCustomAttributes(this MemberInfo memberInfo, Type attributeType, bool inherit = true)
+        {
+            return memberInfo.GetCustomAttributes(inherit)
+                             .Where(attributeType.IsInstanceOfType)
+                             .Cast<Attribute>()
+                             .ToArray();
+        }
+
+        public static T[] GetCustomAttributes<T>(this MemberInfo memberInfo, bool inherit = true)
+        {
+            return memberInfo.GetCustomAttributes(inherit).OfType<T>().ToArray();
+        }
+
+        private static readonly HashSet<string> restrictedNamed = new HashSet<string>(new[]
+        {
+            "namespace", "using", "class", "struct", "enum", "delegate",
+            "public", "protected", "private", "internal",
+            "static" // .. complete this list :)
+        });
     }
 }

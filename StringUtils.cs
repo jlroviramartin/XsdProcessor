@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor
 {
     public static class StringUtils
     {

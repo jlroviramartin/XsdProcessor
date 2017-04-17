@@ -1,5 +1,4 @@
 using System.Text;
-using XmlSchemaTest;
 
 namespace XmlSchemaProcessor.Xsd
 {
@@ -7,6 +6,8 @@ namespace XmlSchemaProcessor.Xsd
     {
         public string Name { get; set; }
         public XsdSimpleType Type { get; set; }
+
+        public string DefValue { get; set; }
 
         public override string ToString()
         {

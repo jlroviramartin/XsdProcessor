@@ -5,7 +5,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor
 {
     class Program
     {
@@ -67,7 +67,7 @@ namespace XmlSchemaTest
             private void Add<T>(Action<T> action)
                 where T : XmlSchemaObject
             {
-                actions.Add(Tuple.Create(typeof (T), new Action<XmlSchemaObject>(x => action((T)x))));
+                this.actions.Add(Tuple.Create(typeof (T), new Action<XmlSchemaObject>(x => action((T)x))));
             }
 
             private Action<XmlSchemaObject> Find(Type type)

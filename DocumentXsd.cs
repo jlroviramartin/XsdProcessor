@@ -18,7 +18,7 @@ using System.IO;
 using System.Linq;
 using XmlSchemaProcessor.Xsd;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor
 {
     public class DocumentXsd : XsdProcess
     {

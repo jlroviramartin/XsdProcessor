@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -44,9 +44,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="LandXml\SimpleReader.cs" />
+    <Compile Include="LandXml\Test.cs" />
     <Compile Include="Path.cs" />
-    <Compile Include="XsdSimpleTypeExtensions.cs" />
-    <Compile Include="XsdToReader.cs" />
+    <Compile Include="StringValueAttribute.cs" />
+    <Compile Include="XsdConverter.cs" />
+    <Compile Include="XsdBaseObject.cs" />
+    <Compile Include="XsdTypeExtensions.cs" />
+    <Compile Include="XsdToNetReader.cs" />
     <Compile Include="Xsd\Facets\FacetType.cs" />
     <Compile Include="Xsd\Facets\XsdFacet.cs" />
     <Compile Include="Xsd\Facets\XsdIntFacet.cs" />
@@ -90,45 +95,51 @@
     <None Include="Documentation\XmlSchemaParticle.cd" />
     <None Include="Documentation\XmlSchemaObject - Others.cd" />
     <None Include="Documentation\XmlSchemaObject.cd" />
-    <None Include="LandXML-1.2.xsd">
+    <None Include="Resources\Schemas\LandXML-1.2.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="LandXML-2.0.xsd">
+    <None Include="Resources\Schemas\LandXML-2.0.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="README.md" />
-    <None Include="schema-2001-1.0\datatypes.dtd" />
-    <None Include="schema-2001-1.0\XMLSchema.dtd" />
-    <None Include="schema-2001-1.0\XMLSchema.xsd">
+    <None Include="Resources\Schemas\schema-2001-1.0\datatypes.dtd" />
+    <None Include="Resources\Schemas\schema-2001-1.0\XMLSchema.dtd" />
+    <None Include="Resources\Schemas\schema-2001-1.0\XMLSchema.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="schema-2009-1.1\datatypes.dtd" />
-    <None Include="schema-2009-1.1\datatypes.xsd">
+    <None Include="Resources\Schemas\schema-2009-1.1\datatypes.dtd" />
+    <None Include="Resources\Schemas\schema-2009-1.1\datatypes.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="schema-2009-1.1\derived.nxsd" />
-    <None Include="schema-2009-1.1\primitives.nxsd" />
-    <None Include="schema-2009-1.1\XMLSchema.dtd" />
-    <None Include="schema-2009-1.1\XMLSchema.xsd">
+    <None Include="Resources\Schemas\schema-2009-1.1\derived.nxsd" />
+    <None Include="Resources\Schemas\schema-2009-1.1\primitives.nxsd" />
+    <None Include="Resources\Schemas\schema-2009-1.1\XMLSchema.dtd" />
+    <None Include="Resources\Schemas\schema-2009-1.1\XMLSchema.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Test1.xsd">
+    <None Include="Resources\Samples\Test1.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Test2.xsd">
+    <None Include="Resources\Samples\Test2.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Documentation\XMLSchema.cd" />
-    <None Include="MyXMLSchema1.xsd">
+    <None Include="Resources\Samples\MyXMLSchema1.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MyXMLFile1.xml" />
+    <Content Include="Resources\Samples\MyXMLFile1.xml" />
+    <Content Include="Resources\Samples\MiddleCalmarRoad.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Samples\MntnRoad.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

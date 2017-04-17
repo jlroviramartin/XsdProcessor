@@ -14,7 +14,7 @@
 
 using XmlSchemaProcessor.Xsd;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor
 {
     public class XsdProcess
     {
@@ -33,7 +33,7 @@ namespace XmlSchemaTest
 
         #region XsdType
 
-        public virtual void Process(XsdType xsdType)
+        public virtual void Process(XmlSchemaProcessor.Xsd.XsdType xsdType)
         {
             if (xsdType is XsdSimpleType)
             {

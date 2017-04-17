@@ -5,6 +5,21 @@ namespace XmlSchemaProcessor.Xsd
         public const string IDREFS = "IDREFS";
         public const string ENTITIES = "ENTITIES";
 
+        public static readonly XsdSimpleListType IdRefs = new XsdSimpleListType(IDREFS, XsdSimpleRestrictionType.Id);
+        public static readonly XsdSimpleListType Entities = new XsdSimpleListType(ENTITIES, XsdSimpleRestrictionType.Entity);
+
+        public XsdSimpleListType()
+        {
+        }
+
+        private XsdSimpleListType(string name, XsdSimpleType itemType)
+        {
+            this.Name = name;
+            this.ItemType = itemType;
+            this.BuiltIn = true;
+            this.TopLevel = true;
+        }
+
         public XsdSimpleType ItemType { get; set; }
 
         public bool BuiltIn { get; set; }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using XmlSchemaProcessor.Xsd.Facets;
-using XmlSchemaTest;
 
 namespace XmlSchemaProcessor.Xsd
 {
@@ -30,9 +29,48 @@ namespace XmlSchemaProcessor.Xsd
         public const string SHORT = "short";
         public const string BYTE = "byte";
 
+        public static XsdSimpleRestrictionType NormalizedString = new XsdSimpleRestrictionType(NORMALIZED_STRING, XsdBuiltInType.String);
+        public static XsdSimpleRestrictionType Token = new XsdSimpleRestrictionType(TOKEN, NormalizedString);
+        public static XsdSimpleRestrictionType Language = new XsdSimpleRestrictionType(LANGUAGE, Token);
+        public static XsdSimpleRestrictionType _Name = new XsdSimpleRestrictionType(NAME, Token);
+        public static XsdSimpleRestrictionType NMToken = new XsdSimpleRestrictionType(NMTOKEN, Token);
+
+        public static XsdSimpleRestrictionType NCName = new XsdSimpleRestrictionType(NCNAME, _Name);
+        public static XsdSimpleRestrictionType Id = new XsdSimpleRestrictionType(ID, NCName);
+        public static XsdSimpleRestrictionType IdRef = new XsdSimpleRestrictionType(IDREF, NCName);
+        public static XsdSimpleRestrictionType Entity = new XsdSimpleRestrictionType(ENTITY, NCName);
+
+        public static XsdSimpleRestrictionType Integer = new XsdSimpleRestrictionType(INTEGER, XsdBuiltInType.Decimal);
+
+        public static XsdSimpleRestrictionType NonPositiveInteger = new XsdSimpleRestrictionType(NON_POSITIVE_INTEGER, Integer);
+        public static XsdSimpleRestrictionType NegativeInteger = new XsdSimpleRestrictionType(NEGATIVE_INTEGER, NonPositiveInteger);
+
+        public static XsdSimpleRestrictionType NonNegativeInteger = new XsdSimpleRestrictionType(NON_NEGATIVE_INTEGER, Integer);
+        public static XsdSimpleRestrictionType PositiveInteger = new XsdSimpleRestrictionType(POSITIVE_INTEGER, NonNegativeInteger);
+
+        public static XsdSimpleRestrictionType UnsignedLong = new XsdSimpleRestrictionType(UNSIGNED_LONG, NonNegativeInteger);
+        public static XsdSimpleRestrictionType UnsignedInt = new XsdSimpleRestrictionType(UNSIGNED_INT, UnsignedLong);
+        public static XsdSimpleRestrictionType UnsignedShort = new XsdSimpleRestrictionType(UNSIGNED_SHORT, UnsignedInt);
+        public static XsdSimpleRestrictionType UnsignedByte = new XsdSimpleRestrictionType(UNSIGNED_BYTE, UnsignedShort);
+
+        public static XsdSimpleRestrictionType Long = new XsdSimpleRestrictionType(LONG, Integer);
+        public static XsdSimpleRestrictionType Int = new XsdSimpleRestrictionType(INT, Long);
+        public static XsdSimpleRestrictionType Short = new XsdSimpleRestrictionType(SHORT, Int);
+        public static XsdSimpleRestrictionType Byte = new XsdSimpleRestrictionType(BYTE, Short);
+
         public XsdSimpleRestrictionType()
         {
             this.Facets = new List<XsdFacet>();
+        }
+
+        private XsdSimpleRestrictionType(string name, XsdSimpleType baseType)
+        {
+            this.Facets = new List<XsdFacet>();
+
+            this.Name = name;
+            this.BaseType = baseType;
+            this.BuiltIn = true;
+            this.TopLevel = true;
         }
 
         public XsdSimpleType BaseType { get; set; }

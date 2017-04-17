@@ -653,6 +653,7 @@ namespace XmlSchemaProcessor.Xsd
         private XsdAttribute ProcessXmlAttribute(XmlSchemaAttribute attribute)
         {
             string name = attribute.Name;
+            string defValue = attribute.DefaultValue;
 
             XmlSchemaSimpleType schemaType = attribute.SchemaType;
             XmlQualifiedName schemaTypeName = attribute.SchemaTypeName;
@@ -670,6 +671,7 @@ namespace XmlSchemaProcessor.Xsd
 
                     XsdAttribute _attribute = new XsdAttribute();
                     _attribute.Name = name;
+                    _attribute.DefValue = defValue;
                     this.FindSimple(schemaTypeName, x => _attribute.Type = x);
 
                     return _attribute;
@@ -678,6 +680,7 @@ namespace XmlSchemaProcessor.Xsd
                 {
                     XsdAttribute _attribute = new XsdAttribute();
                     _attribute.Name = name;
+                    _attribute.DefValue = defValue;
                     _attribute.Type = this.ProcessXmlSchemaSimpleType(schemaType);
 
                     return _attribute;
@@ -687,6 +690,7 @@ namespace XmlSchemaProcessor.Xsd
                     // No tiene definido tipo (a veces ocurre).
                     XsdAttribute _attribute = new XsdAttribute();
                     _attribute.Name = name;
+                    _attribute.DefValue = defValue;
                     //_attribute.Type = ..;
 
                     return _attribute;

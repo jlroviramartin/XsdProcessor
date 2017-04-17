@@ -17,32 +17,44 @@ using System.Linq;
 using XmlSchemaProcessor.Xsd;
 using XmlSchemaProcessor.Xsd.Facets;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor
 {
-    public static class XsdSimpleTypeExtensions
+    public static class XsdTypeExtensions
     {
-        public static string ToType(this XsdSimpleType xsdType)
+        public static string ToNetType(this XsdType xsdType)
+        {
+            if (xsdType is XsdSimpleType)
+            {
+                return ToNetType((XsdSimpleType)xsdType);
+            }
+            else
+            {
+                return xsdType.Name.ToTypeName();
+            }
+        }
+
+        public static string ToNetType(this XsdSimpleType xsdType)
         {
             if (xsdType is XsdBuiltInType)
             {
-                return ToType((XsdBuiltInType)xsdType);
+                return ToNetType((XsdBuiltInType)xsdType);
             }
             else if (xsdType is XsdSimpleListType)
             {
-                return ToType((XsdSimpleListType)xsdType);
+                return ToNetType((XsdSimpleListType)xsdType);
             }
             else if (xsdType is XsdSimpleRestrictionType)
             {
-                return ToType((XsdSimpleRestrictionType)xsdType);
+                return ToNetType((XsdSimpleRestrictionType)xsdType);
             }
             else if (xsdType is XsdSimpleUnionType)
             {
-                return ToType((XsdSimpleUnionType)xsdType);
+                return ToNetType((XsdSimpleUnionType)xsdType);
             }
             throw new IndexOutOfRangeException();
         }
 
-        private static string ToType(XsdBuiltInType xsdType)
+        private static string ToNetType(XsdBuiltInType xsdType)
         {
             switch (xsdType.Name)
             {
@@ -53,29 +65,29 @@ namespace XmlSchemaTest
                 case XsdBuiltInType.TIME:
                     return "System.DateTime";
                 case XsdBuiltInType.STRING:
-                    return "System.string";
+                    return "string";
                 case XsdBuiltInType.BOOLEAN:
-                    return "System.bool";
+                    return "bool";
                 case XsdBuiltInType.BASE_64_BINARY:
                 case XsdBuiltInType.HEX_BINARY:
-                    return "System.byte[]";
+                    return "byte[]";
                 case XsdBuiltInType.FLOAT:
-                    return "System.float";
+                    return "float";
                 case XsdBuiltInType.DOUBLE:
-                    return "System.double";
+                    return "double";
                 case XsdBuiltInType.DECIMAL:
-                    return "System.decimal";
+                    return "decimal";
 
                 case XsdBuiltInType.ANY_URI:
                     return "System.Uri";
                 case XsdBuiltInType.QNAME:
                 case XsdBuiltInType.NOTATION:
-                    return "System.string";
+                    return "string";
             }
             throw new IndexOutOfRangeException();
         }
 
-        private static string ToType(XsdSimpleRestrictionType xsdType)
+        private static string ToNetType(XsdSimpleRestrictionType xsdType)
         {
             switch (xsdType.Name)
             {
@@ -85,38 +97,38 @@ namespace XmlSchemaTest
                 case XsdSimpleRestrictionType.NAME:
                 case XsdSimpleRestrictionType.NMTOKEN:
                 case XsdSimpleRestrictionType.NCNAME:
-                    return "System.string";
+                    return "string";
                 case XsdSimpleRestrictionType.ID:
                 case XsdSimpleRestrictionType.IDREF:
-                    return "System.string";
+                    return "string";
                 case XsdSimpleRestrictionType.ENTITY:
-                    return "System.string";
+                    return "string";
 
                 case XsdSimpleRestrictionType.INTEGER:
                 case XsdSimpleRestrictionType.NON_POSITIVE_INTEGER:
                 case XsdSimpleRestrictionType.NEGATIVE_INTEGER:
-                    return "System.int";
+                    return "int";
                 case XsdSimpleRestrictionType.NON_NEGATIVE_INTEGER:
                 case XsdSimpleRestrictionType.POSITIVE_INTEGER:
-                    return "System.uint";
+                    return "uint";
 
                 case XsdSimpleRestrictionType.UNSIGNED_LONG:
-                    return "System.ulong";
+                    return "ulong";
                 case XsdSimpleRestrictionType.UNSIGNED_INT:
-                    return "System.uint";
+                    return "uint";
                 case XsdSimpleRestrictionType.UNSIGNED_SHORT:
-                    return "System.ushort";
+                    return "ushort";
                 case XsdSimpleRestrictionType.UNSIGNED_BYTE:
-                    return "System.byte";
+                    return "byte";
 
                 case XsdSimpleRestrictionType.LONG:
-                    return "System.long";
+                    return "long";
                 case XsdSimpleRestrictionType.INT:
-                    return "System.int";
+                    return "int";
                 case XsdSimpleRestrictionType.SHORT:
-                    return "System.short";
+                    return "short";
                 case XsdSimpleRestrictionType.BYTE:
-                    return "System.sbyte";
+                    return "sbyte";
             }
 
             XsdSimpleType builtInRootType = xsdType.GetBuiltInRootType();
@@ -127,16 +139,16 @@ namespace XmlSchemaTest
                            .Select(x => x.Value)
                            .Any())
                 {
-                    return "enum<" + xsdType.Name + ">";
+                    return xsdType.Name.ToTypeName();
                 }
             }
 
-            return ToType(xsdType.BaseType);
+            return ToNetType(xsdType.BaseType);
         }
 
-        private static string ToType(XsdSimpleListType xsdType)
+        private static string ToNetType(XsdSimpleListType xsdType)
         {
-            return "IList<" + ToType(xsdType.ItemType) + ">";
+            return "IList<" + ToNetType(xsdType.ItemType) + ">";
         }
     }
 }

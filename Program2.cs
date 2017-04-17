@@ -1,13 +1,23 @@
 ﻿using System.Xml.Schema;
+using XmlSchemaProcessor.LandXml;
 using XmlSchemaProcessor.Xsd;
 
-namespace XmlSchemaTest
+namespace XmlSchemaProcessor
 {
     public class Program2
     {
         private static void Main(string[] args)
         {
-            XmlSchema xmlSchema = ProcessXmlSchema.LoadXmlSchema("LandXML-1.2.xsd");
+#if BUILD_LAND_XML
+            BuildLandXml();
+#else
+            TestLandXml();
+#endif
+        }
+
+        public static void BuildLandXml()
+        {
+            XmlSchema xmlSchema = ProcessXmlSchema.LoadXmlSchema(@"Resources\Schemas\LandXML-1.2.xsd");
             //XmlSchema xmlSchema = LoadXmlSchema("Test1.xsd");
             //XmlSchema xmlSchema = LoadXmlSchema("Test2.xsd");
 
@@ -22,10 +32,31 @@ namespace XmlSchemaTest
             //documentXsd.Process(schema);
             //documentXsd.Write();
 
-            XsdToReader xsdToReader = new XsdToReader();
-            xsdToReader.Process(schema);
-            xsdToReader.Write();
+            XsdToNetReader xsdToNetReader = new XsdToNetReader();
+            xsdToNetReader.Process(schema);
+            xsdToNetReader.Write(@"C:\Proyectos\Publicos\XsdProcessor\LandXml\Test.cs", "XmlSchemaProcessor.LandXml");
         }
+
+#if !BUILD_LAND_XML
+        public static void TestLandXml()
+        {
+            LandXmlReader reader = new LandXmlReader(new MyLandXmlEvents());
+            reader.Read(@"Resources\Samples\MntnRoad.xml");
+        }
+
+        public class MyLandXmlEvents : LandXmlEvents
+        {
+            public override void BeginReadLandXML(LandXML value)
+            {
+                base.BeginReadLandXML(value);
+            }
+
+            public override void EndReadLandXML()
+            {
+                base.EndReadLandXML();
+            }
+        }
+#endif
     }
 
     /*public struct ValueObject<T> where T : struct
