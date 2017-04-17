@@ -1,5 +1,6 @@
 ﻿using System.Xml.Schema;
 using XmlSchemaProcessor.LandXml;
+using XmlSchemaProcessor.LandXml11;
 using XmlSchemaProcessor.Xsd;
 
 namespace XmlSchemaProcessor
@@ -9,32 +10,57 @@ namespace XmlSchemaProcessor
         private static void Main(string[] args)
         {
 #if BUILD_LAND_XML
-            BuildLandXml();
+            BuildLandXml10();
+            BuildLandXml11();
+            BuildLandXml12();
+            BuildLandXml20();
 #else
             TestLandXml();
 #endif
         }
 
-        public static void BuildLandXml()
+        public static void BuildLandXml(string xsdFile, string csfile, string @namespace)
         {
-            XmlSchema xmlSchema = ProcessXmlSchema.LoadXmlSchema(@"Resources\Schemas\LandXML-1.2.xsd");
-            //XmlSchema xmlSchema = LoadXmlSchema("Test1.xsd");
-            //XmlSchema xmlSchema = LoadXmlSchema("Test2.xsd");
+            XmlSchema xmlSchema = ProcessXmlSchema.LoadXmlSchema(xsdFile);
 
             XmlSchemaSet schemaSet = new XmlSchemaSet();
             schemaSet.Add(xmlSchema);
             schemaSet.Compile();
 
             XsdSchema schema = new ProcessXmlSchema(xmlSchema).GetSchema();
-            //Debug.WriteLine(schema);
-
-            //DocumentXsd documentXsd = new DocumentXsd();
-            //documentXsd.Process(schema);
-            //documentXsd.Write();
+            schema.ResolveAnonymousSimpleTypes();
 
             XsdToNetReader xsdToNetReader = new XsdToNetReader();
             xsdToNetReader.Process(schema);
-            xsdToNetReader.Write(@"C:\Proyectos\Publicos\XsdProcessor\LandXml\Test.cs", "XmlSchemaProcessor.LandXml");
+            xsdToNetReader.Write(csfile, @namespace);
+        }
+
+        public static void BuildLandXml10()
+        {
+            BuildLandXml(@"Resources\Schemas\LandXML-1.0.xsd",
+                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml\LandXML10.cs",
+                         "XmlSchemaProcessor.LandXml10");
+        }
+
+        public static void BuildLandXml11()
+        {
+            BuildLandXml(@"Resources\Schemas\LandXML-1.1.xsd",
+                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml\LandXML11.cs",
+                         "XmlSchemaProcessor.LandXml11");
+        }
+
+        public static void BuildLandXml12()
+        {
+            BuildLandXml(@"Resources\Schemas\LandXML-1.2.xsd",
+                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml\LandXML12.cs",
+                         "XmlSchemaProcessor.LandXml12");
+        }
+
+        public static void BuildLandXml20()
+        {
+            BuildLandXml(@"Resources\Schemas\LandXML-2.0.xsd",
+                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml\LandXML20.cs",
+                         "XmlSchemaProcessor.LandXml20");
         }
 
 #if !BUILD_LAND_XML

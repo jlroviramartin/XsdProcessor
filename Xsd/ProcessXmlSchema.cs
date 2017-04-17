@@ -18,6 +18,8 @@ namespace XmlSchemaProcessor.Xsd
             schemaSet.Add(xmlSchema);
             schemaSet.Compile();
 
+            this.schema.NamespaceURI = xmlSchema.TargetNamespace;
+
             this.Process(xmlSchema);
         }
 

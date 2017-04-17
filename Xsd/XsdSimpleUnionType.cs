@@ -7,9 +7,13 @@ namespace XmlSchemaProcessor.Xsd
     {
         public IList<XsdSimpleType> MemberTypes { get; set; }
 
+        #region object
+
         public override string ToString()
         {
             return this.Name + " Union of " + this.MemberTypes.Select(x => x.Name).Aggregate(string.Empty, (a, b) => ((a != string.Empty) ? (a + " , " + b) : b));
         }
+
+        #endregion
     }
 }

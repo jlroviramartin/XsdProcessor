@@ -10,10 +10,16 @@ namespace XmlSchemaProcessor.Xsd
         // openContent
         public XsdParticle Particle { get; set; }
 
+        #region XsdComplexType
+
         public override XsdParticle GetParticle()
         {
             return this.Particle;
         }
+
+        #endregion
+
+        #region object
 
         public override string ToString()
         {
@@ -25,9 +31,6 @@ namespace XmlSchemaProcessor.Xsd
             {
                 indent = StringUtils.INDENT;
                 buff.Append(this.Name);
-            }
-            else
-            {
             }
 
             if (this.Attributes.Content.Count > 0)
@@ -44,5 +47,7 @@ namespace XmlSchemaProcessor.Xsd
 
             return buff.ToString();
         }
+
+        #endregion
     }
 }

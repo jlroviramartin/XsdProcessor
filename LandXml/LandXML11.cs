@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using XmlSchemaProcessor;
 using XmlSchemaProcessor.LandXml;
-namespace XmlSchemaProcessor.LandXml
+namespace XmlSchemaProcessor.LandXml11
 {
 	// Simple types
 	// ------------
@@ -45,13 +45,6 @@ namespace XmlSchemaProcessor.LandXml
 		UserEnteredPoint,
 		[StringValue("control point")]
 		ControlPoint,
-	}
-	public enum ObservationStatusType
-	{
-		[StringValue("modified")]
-		Modified,
-		[StringValue("deleted")]
-		Deleted,
 	}
 	public enum BeaconProtectionType
 	{
@@ -294,8 +287,6 @@ namespace XmlSchemaProcessor.LandXml
 		In,
 		[StringValue("out")]
 		Out,
-		[StringValue("both")]
-		Both,
 	}
 	public enum MetArea
 	{
@@ -963,19 +954,14 @@ namespace XmlSchemaProcessor.LandXml
 			this.code = XsdConverter.Instance.Convert<string>(attributes.GetSafe("code"));
 			this.state = XsdConverter.Instance.Convert<StateType>(attributes.GetSafe("state"));
 			this.pntRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("pntRef"));
-			this.featureRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("featureRef"));
 			this.pointGeometry = XsdConverter.Instance.Convert<PointGeometryType>(attributes.GetSafe("pointGeometry"));
 			this.dTMAttribute = XsdConverter.Instance.Convert<DTMAttributeType>(attributes.GetSafe("DTMAttribute"));
 			this.timeStamp = XsdConverter.Instance.Convert<System.DateTime>(attributes.GetSafe("timeStamp"));
 			this.role = XsdConverter.Instance.Convert<SurveyRoleType>(attributes.GetSafe("role"));
 			this.determinedTimeStamp = XsdConverter.Instance.Convert<System.DateTime>(attributes.GetSafe("determinedTimeStamp"));
-			this.ellipsoidHeight = XsdConverter.Instance.Convert<double>(attributes.GetSafe("ellipsoidHeight"));
+			this.ellipsoidElev = XsdConverter.Instance.Convert<double>(attributes.GetSafe("ellipsoidElev"));
 			this.latitude = XsdConverter.Instance.Convert<double>(attributes.GetSafe("latitude"));
 			this.longitude = XsdConverter.Instance.Convert<double>(attributes.GetSafe("longitude"));
-			this.zone = XsdConverter.Instance.Convert<string>(attributes.GetSafe("zone"));
-			this.northingStdError = XsdConverter.Instance.Convert<double>(attributes.GetSafe("northingStdError"));
-			this.eastingStdError = XsdConverter.Instance.Convert<double>(attributes.GetSafe("eastingStdError"));
-			this.elevationStdError = XsdConverter.Instance.Convert<double>(attributes.GetSafe("elevationStdError"));
 			this.content = XsdConverter.Instance.Convert<IList<double>>(text);
 			return true;
 		}
@@ -984,19 +970,14 @@ namespace XmlSchemaProcessor.LandXml
 		public string code;
 		public StateType state;
 		public string pntRef;
-		public string featureRef;
 		public PointGeometryType pointGeometry;
 		public DTMAttributeType dTMAttribute;
 		public System.DateTime timeStamp;
 		public SurveyRoleType role;
 		public System.DateTime determinedTimeStamp;
-		public double ellipsoidHeight;
+		public double ellipsoidElev;
 		public double latitude;
 		public double longitude;
-		public string zone;
-		public double northingStdError;
-		public double eastingStdError;
-		public double elevationStdError;
 		public IList<double> content;
 	}
 	
@@ -1010,7 +991,6 @@ namespace XmlSchemaProcessor.LandXml
 			this.code = XsdConverter.Instance.Convert<string>(attributes.GetSafe("code"));
 			this.state = XsdConverter.Instance.Convert<StateType>(attributes.GetSafe("state"));
 			this.pntRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("pntRef"));
-			this.featureRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("featureRef"));
 			this.pointGeometry = XsdConverter.Instance.Convert<PointGeometryType>(attributes.GetSafe("pointGeometry"));
 			this.dTMAttribute = XsdConverter.Instance.Convert<DTMAttributeType>(attributes.GetSafe("DTMAttribute"));
 			this.timeStamp = XsdConverter.Instance.Convert<System.DateTime>(attributes.GetSafe("timeStamp"));
@@ -1023,67 +1003,11 @@ namespace XmlSchemaProcessor.LandXml
 		public string code;
 		public StateType state;
 		public string pntRef;
-		public string featureRef;
 		public PointGeometryType pointGeometry;
 		public DTMAttributeType dTMAttribute;
 		public System.DateTime timeStamp;
 		public SurveyRoleType role;
 		public IList<double> content;
-	}
-	
-	public class RawObservationType : XsdBaseObject
-	{
-		public override bool Read(IDictionary<string, string> attributes, string text)
-		{
-			base.Read(attributes, text);
-			this.setupID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("setupID"));
-			this.targetSetupID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("targetSetupID"));
-			this.setID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("setID"));
-			this.purpose = XsdConverter.Instance.Convert<PurposeType>(attributes.GetSafe("purpose"));
-			this.targetHeight = XsdConverter.Instance.Convert<double>(attributes.GetSafe("targetHeight"));
-			this.horizAngle = XsdConverter.Instance.Convert<double>(attributes.GetSafe("horizAngle"));
-			this.slopeDistance = XsdConverter.Instance.Convert<double>(attributes.GetSafe("slopeDistance"));
-			this.zenithAngle = XsdConverter.Instance.Convert<double>(attributes.GetSafe("zenithAngle"));
-			this.horizDistance = XsdConverter.Instance.Convert<double>(attributes.GetSafe("horizDistance"));
-			this.vertDistance = XsdConverter.Instance.Convert<double>(attributes.GetSafe("vertDistance"));
-			this.azimuth = XsdConverter.Instance.Convert<double>(attributes.GetSafe("azimuth"));
-			this.unused = XsdConverter.Instance.Convert<bool>(attributes.GetSafe("unused"));
-			this.directFace = XsdConverter.Instance.Convert<bool>(attributes.GetSafe("directFace"));
-			this.coordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(attributes.GetSafe("coordGeomRefs"));
-			this.timeStamp = XsdConverter.Instance.Convert<System.DateTime>(attributes.GetSafe("timeStamp"));
-			this.alignRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("alignRef"));
-			this.alignStationName = XsdConverter.Instance.Convert<string>(attributes.GetSafe("alignStationName"));
-			this.alignOffset = XsdConverter.Instance.Convert<double>(attributes.GetSafe("alignOffset"));
-			this.upperStadia = XsdConverter.Instance.Convert<double>(attributes.GetSafe("upperStadia"));
-			this.rod = XsdConverter.Instance.Convert<double>(attributes.GetSafe("rod"));
-			this.lowerStadia = XsdConverter.Instance.Convert<double>(attributes.GetSafe("lowerStadia"));
-			this.circlePositionSet = XsdConverter.Instance.Convert<double>(attributes.GetSafe("circlePositionSet"));
-			this.status = XsdConverter.Instance.Convert<ObservationStatusType>(attributes.GetSafe("status"));
-			return true;
-		}
-		public string setupID;
-		public string targetSetupID;
-		public string setID;
-		public PurposeType purpose;
-		public double targetHeight;
-		public double horizAngle;
-		public double slopeDistance;
-		public double zenithAngle;
-		public double horizDistance;
-		public double vertDistance;
-		public double azimuth;
-		public bool unused;
-		public bool directFace;
-		public IList<string> coordGeomRefs;
-		public System.DateTime timeStamp;
-		public string alignRef;
-		public string alignStationName;
-		public double alignOffset;
-		public double upperStadia;
-		public double rod;
-		public double lowerStadia;
-		public double circlePositionSet;
-		public ObservationStatusType status;
 	}
 	
 	
@@ -1196,12 +1120,10 @@ namespace XmlSchemaProcessor.LandXml
 		public override bool Read(IDictionary<string, string> attributes, string text)
 		{
 			base.Read(attributes, text);
-			this.name = XsdConverter.Instance.Convert<string>(attributes.GetSafe("name"));
 			this.code = XsdConverter.Instance.Convert<string>(attributes.GetSafe("code"));
 			this.source = XsdConverter.Instance.Convert<string>(attributes.GetSafe("source"));
 			return true;
 		}
-		public string name;
 		public string code;
 		public string source;
 	}
@@ -1259,9 +1181,6 @@ namespace XmlSchemaProcessor.LandXml
 			this.dTMAttribute = XsdConverter.Instance.Convert<DTMAttributeType>(attributes.GetSafe("DTMAttribute"));
 			this.timeStamp = XsdConverter.Instance.Convert<System.DateTime>(attributes.GetSafe("timeStamp"));
 			this.role = XsdConverter.Instance.Convert<SurveyRoleType>(attributes.GetSafe("role"));
-			this.station = XsdConverter.Instance.Convert<double>(attributes.GetSafe("station"));
-			this.zone = XsdConverter.Instance.Convert<string>(attributes.GetSafe("zone"));
-			this.status = XsdConverter.Instance.Convert<ObservationStatusType>(attributes.GetSafe("status"));
 			this.content = XsdConverter.Instance.Convert<IList<string>>(text);
 			return true;
 		}
@@ -1273,9 +1192,6 @@ namespace XmlSchemaProcessor.LandXml
 		public DTMAttributeType dTMAttribute;
 		public System.DateTime timeStamp;
 		public SurveyRoleType role;
-		public double station;
-		public string zone;
-		public ObservationStatusType status;
 		public IList<string> content;
 	}
 	
@@ -1766,6 +1682,7 @@ namespace XmlSchemaProcessor.LandXml
 			this.jurisdiction = XsdConverter.Instance.Convert<string>(attributes.GetSafe("jurisdiction"));
 			this.submissionDate = XsdConverter.Instance.Convert<System.DateTime>(attributes.GetSafe("submissionDate"));
 			this.documentStatus = XsdConverter.Instance.Convert<string>(attributes.GetSafe("documentStatus"));
+			this.headOfPower = XsdConverter.Instance.Convert<string>(attributes.GetSafe("headOfPower"));
 			this.surveyFormat = XsdConverter.Instance.Convert<string>(attributes.GetSafe("surveyFormat"));
 			this.surveyStatus = XsdConverter.Instance.Convert<string>(attributes.GetSafe("surveyStatus"));
 			this.communityTitleSchemeNo = XsdConverter.Instance.Convert<int>(attributes.GetSafe("communityTitleSchemeNo"));
@@ -1798,6 +1715,7 @@ namespace XmlSchemaProcessor.LandXml
 		public string jurisdiction;
 		public System.DateTime submissionDate;
 		public string documentStatus;
+		public string headOfPower;
 		public string surveyFormat;
 		public string surveyStatus;
 		public int communityTitleSchemeNo;
@@ -1805,17 +1723,6 @@ namespace XmlSchemaProcessor.LandXml
 		public bool fieldNoteFlag;
 		public string fieldNoteReference;
 		public string fieldReport;
-	}
-	
-	public class HeadOfPower : XsdBaseObject
-	{
-		public override bool Read(IDictionary<string, string> attributes, string text)
-		{
-			base.Read(attributes, text);
-			this.name = XsdConverter.Instance.Convert<string>(attributes.GetSafe("name"));
-			return true;
-		}
-		public string name;
 	}
 	
 	public class AdministrativeArea : XsdBaseObject
@@ -1976,7 +1883,6 @@ namespace XmlSchemaProcessor.LandXml
 			this.refractiveIndex = XsdConverter.Instance.Convert<double>(attributes.GetSafe("refractiveIndex"));
 			this.horizCollimation = XsdConverter.Instance.Convert<double>(attributes.GetSafe("horizCollimation"));
 			this.vertCollimation = XsdConverter.Instance.Convert<double>(attributes.GetSafe("vertCollimation"));
-			this.stadiaFactor = XsdConverter.Instance.Convert<double>(attributes.GetSafe("stadiaFactor"));
 			return true;
 		}
 		public string id;
@@ -1992,7 +1898,6 @@ namespace XmlSchemaProcessor.LandXml
 		public double refractiveIndex;
 		public double horizCollimation;
 		public double vertCollimation;
-		public double stadiaFactor;
 	}
 	
 	public class LaserDetails : XsdBaseObject
@@ -2026,7 +1931,7 @@ namespace XmlSchemaProcessor.LandXml
 			this.latitude = XsdConverter.Instance.Convert<double>(attributes.GetSafe("latitude"));
 			this.longitude = XsdConverter.Instance.Convert<double>(attributes.GetSafe("longitude"));
 			this.altitude = XsdConverter.Instance.Convert<double>(attributes.GetSafe("altitude"));
-			this.ellipsiodalHeight = XsdConverter.Instance.Convert<double>(attributes.GetSafe("ellipsiodalHeight"));
+			this.ellipsiodnalHeight = XsdConverter.Instance.Convert<double>(attributes.GetSafe("ellipsiodnalHeight"));
 			this.orthometricHeight = XsdConverter.Instance.Convert<double>(attributes.GetSafe("orthometricHeight"));
 			return true;
 		}
@@ -2037,7 +1942,7 @@ namespace XmlSchemaProcessor.LandXml
 		public double latitude;
 		public double longitude;
 		public double altitude;
-		public double ellipsiodalHeight;
+		public double ellipsiodnalHeight;
 		public double orthometricHeight;
 	}
 	
@@ -2115,7 +2020,6 @@ namespace XmlSchemaProcessor.LandXml
 			this.instrumentHeight = XsdConverter.Instance.Convert<double>(attributes.GetSafe("instrumentHeight"));
 			this.orientationAzimuth = XsdConverter.Instance.Convert<double>(attributes.GetSafe("orientationAzimuth"));
 			this.circleAzimuth = XsdConverter.Instance.Convert<double>(attributes.GetSafe("circleAzimuth"));
-			this.status = XsdConverter.Instance.Convert<ObservationStatusType>(attributes.GetSafe("status"));
 			return true;
 		}
 		public string id;
@@ -2124,7 +2028,6 @@ namespace XmlSchemaProcessor.LandXml
 		public double instrumentHeight;
 		public double orientationAzimuth;
 		public double circleAzimuth;
-		public ObservationStatusType status;
 	}
 	
 	public class LaserSetup : XsdBaseObject
@@ -2209,30 +2112,43 @@ namespace XmlSchemaProcessor.LandXml
 		public string setupID;
 	}
 	
-	public class RawObservation : RawObservationType
+	public class RawObservation : XsdBaseObject
 	{
 		public override bool Read(IDictionary<string, string> attributes, string text)
 		{
 			base.Read(attributes, text);
+			this.setupID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("setupID"));
+			this.targetSetupID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("targetSetupID"));
+			this.setID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("setID"));
+			this.purpose = XsdConverter.Instance.Convert<PurposeType>(attributes.GetSafe("purpose"));
+			this.targetHeight = XsdConverter.Instance.Convert<double>(attributes.GetSafe("targetHeight"));
+			this.horizAngle = XsdConverter.Instance.Convert<double>(attributes.GetSafe("horizAngle"));
+			this.slopeDistance = XsdConverter.Instance.Convert<double>(attributes.GetSafe("slopeDistance"));
+			this.zenithAngle = XsdConverter.Instance.Convert<double>(attributes.GetSafe("zenithAngle"));
+			this.horizDistance = XsdConverter.Instance.Convert<double>(attributes.GetSafe("horizDistance"));
+			this.vertDistance = XsdConverter.Instance.Convert<double>(attributes.GetSafe("vertDistance"));
+			this.azimuth = XsdConverter.Instance.Convert<double>(attributes.GetSafe("azimuth"));
+			this.unused = XsdConverter.Instance.Convert<bool>(attributes.GetSafe("unused"));
+			this.directFace = XsdConverter.Instance.Convert<bool>(attributes.GetSafe("directFace"));
+			this.coordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(attributes.GetSafe("coordGeomRefs"));
+			this.timeStamp = XsdConverter.Instance.Convert<System.DateTime>(attributes.GetSafe("timeStamp"));
 			return true;
 		}
-	}
-	
-	public class TestObservation : RawObservationType
-	{
-		public override bool Read(IDictionary<string, string> attributes, string text)
-		{
-			base.Read(attributes, text);
-			this.setup1RodA = XsdConverter.Instance.Convert<double>(attributes.GetSafe("setup1RodA"));
-			this.setup1RodB = XsdConverter.Instance.Convert<double>(attributes.GetSafe("setup1RodB"));
-			this.setup2RodA = XsdConverter.Instance.Convert<double>(attributes.GetSafe("setup2RodA"));
-			this.setup2RodB = XsdConverter.Instance.Convert<double>(attributes.GetSafe("setup2RodB"));
-			return true;
-		}
-		public double setup1RodA;
-		public double setup1RodB;
-		public double setup2RodA;
-		public double setup2RodB;
+		public string setupID;
+		public string targetSetupID;
+		public string setID;
+		public PurposeType purpose;
+		public double targetHeight;
+		public double horizAngle;
+		public double slopeDistance;
+		public double zenithAngle;
+		public double horizDistance;
+		public double vertDistance;
+		public double azimuth;
+		public bool unused;
+		public bool directFace;
+		public IList<string> coordGeomRefs;
+		public System.DateTime timeStamp;
 	}
 	
 	public class OffsetVals : XsdBaseObject
@@ -2375,9 +2291,6 @@ namespace XmlSchemaProcessor.LandXml
 			this.targetSetupID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("targetSetupID"));
 			this.setID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("setID"));
 			this.coordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(attributes.GetSafe("coordGeomRefs"));
-			this.alignRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("alignRef"));
-			this.alignStationName = XsdConverter.Instance.Convert<string>(attributes.GetSafe("alignStationName"));
-			this.alignOffset = XsdConverter.Instance.Convert<double>(attributes.GetSafe("alignOffset"));
 			return true;
 		}
 		public string id;
@@ -2386,9 +2299,6 @@ namespace XmlSchemaProcessor.LandXml
 		public string targetSetupID;
 		public string setID;
 		public IList<string> coordGeomRefs;
-		public string alignRef;
-		public string alignStationName;
-		public double alignOffset;
 	}
 	
 	public class ControlChecks : XsdBaseObject
@@ -2433,7 +2343,6 @@ namespace XmlSchemaProcessor.LandXml
 			this.purpose = XsdConverter.Instance.Convert<PurposeType>(attributes.GetSafe("purpose"));
 			this.setupID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("setupID"));
 			this.targetSetupID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("targetSetupID"));
-			this.targetSetup2ID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("targetSetup2ID"));
 			this.setID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("setID"));
 			this.targetHeight = XsdConverter.Instance.Convert<double>(attributes.GetSafe("targetHeight"));
 			this.azimuth = XsdConverter.Instance.Convert<double>(attributes.GetSafe("azimuth"));
@@ -2445,35 +2354,27 @@ namespace XmlSchemaProcessor.LandXml
 			this.equipmentUsed = XsdConverter.Instance.Convert<string>(attributes.GetSafe("equipmentUsed"));
 			this.azimuthAccuracy = XsdConverter.Instance.Convert<double>(attributes.GetSafe("azimuthAccuracy"));
 			this.distanceAccuracy = XsdConverter.Instance.Convert<double>(attributes.GetSafe("distanceAccuracy"));
-			this.angleAccuracy = XsdConverter.Instance.Convert<double>(attributes.GetSafe("angleAccuracy"));
 			this.date = XsdConverter.Instance.Convert<System.DateTime>(attributes.GetSafe("date"));
 			this.distanceType = XsdConverter.Instance.Convert<string>(attributes.GetSafe("distanceType"));
 			this.azimuthType = XsdConverter.Instance.Convert<string>(attributes.GetSafe("azimuthType"));
-			this.angleType = XsdConverter.Instance.Convert<string>(attributes.GetSafe("angleType"));
 			this.adoptedAzimuthSurvey = XsdConverter.Instance.Convert<string>(attributes.GetSafe("adoptedAzimuthSurvey"));
 			this.adoptedDistanceSurvey = XsdConverter.Instance.Convert<string>(attributes.GetSafe("adoptedDistanceSurvey"));
-			this.adoptedAngleSurvey = XsdConverter.Instance.Convert<string>(attributes.GetSafe("adoptedAngleSurvey"));
 			this.distanceAccClass = XsdConverter.Instance.Convert<string>(attributes.GetSafe("distanceAccClass"));
 			this.azimuthAccClass = XsdConverter.Instance.Convert<string>(attributes.GetSafe("azimuthAccClass"));
-			this.angleAccClass = XsdConverter.Instance.Convert<string>(attributes.GetSafe("angleAccClass"));
 			this.azimuthAdoptionFactor = XsdConverter.Instance.Convert<double>(attributes.GetSafe("azimuthAdoptionFactor"));
 			this.distanceAdoptionFactor = XsdConverter.Instance.Convert<double>(attributes.GetSafe("distanceAdoptionFactor"));
+			this.coordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(attributes.GetSafe("coordGeomRefs"));
 			this.name = XsdConverter.Instance.Convert<string>(attributes.GetSafe("name"));
 			this.desc = XsdConverter.Instance.Convert<string>(attributes.GetSafe("desc"));
 			this.state = XsdConverter.Instance.Convert<StateType>(attributes.GetSafe("state"));
 			this.oID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("oID"));
 			this.mSLDistance = XsdConverter.Instance.Convert<string>(attributes.GetSafe("MSLDistance"));
 			this.spherDistance = XsdConverter.Instance.Convert<string>(attributes.GetSafe("spherDistance"));
-			this.coordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(attributes.GetSafe("coordGeomRefs"));
-			this.alignRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("alignRef"));
-			this.alignStationName = XsdConverter.Instance.Convert<string>(attributes.GetSafe("alignStationName"));
-			this.alignOffset = XsdConverter.Instance.Convert<double>(attributes.GetSafe("alignOffset"));
 			return true;
 		}
 		public PurposeType purpose;
 		public string setupID;
 		public string targetSetupID;
-		public string targetSetup2ID;
 		public string setID;
 		public double targetHeight;
 		public double azimuth;
@@ -2485,29 +2386,22 @@ namespace XmlSchemaProcessor.LandXml
 		public string equipmentUsed;
 		public double azimuthAccuracy;
 		public double distanceAccuracy;
-		public double angleAccuracy;
 		public System.DateTime date;
 		public string distanceType;
 		public string azimuthType;
-		public string angleType;
 		public string adoptedAzimuthSurvey;
 		public string adoptedDistanceSurvey;
-		public string adoptedAngleSurvey;
 		public string distanceAccClass;
 		public string azimuthAccClass;
-		public string angleAccClass;
 		public double azimuthAdoptionFactor;
 		public double distanceAdoptionFactor;
+		public IList<string> coordGeomRefs;
 		public string name;
 		public string desc;
 		public StateType state;
 		public string oID;
 		public string mSLDistance;
 		public string spherDistance;
-		public IList<string> coordGeomRefs;
-		public string alignRef;
-		public string alignStationName;
-		public double alignOffset;
 	}
 	
 	public class ReducedArcObservation : XsdBaseObject
@@ -2533,14 +2427,11 @@ namespace XmlSchemaProcessor.LandXml
 			this.azimuthAccClass = XsdConverter.Instance.Convert<string>(attributes.GetSafe("azimuthAccClass"));
 			this.azimuthAdoptionFactor = XsdConverter.Instance.Convert<double>(attributes.GetSafe("azimuthAdoptionFactor"));
 			this.lengthAdoptionFactor = XsdConverter.Instance.Convert<double>(attributes.GetSafe("lengthAdoptionFactor"));
+			this.coordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(attributes.GetSafe("coordGeomRefs"));
 			this.name = XsdConverter.Instance.Convert<string>(attributes.GetSafe("name"));
 			this.desc = XsdConverter.Instance.Convert<string>(attributes.GetSafe("desc"));
 			this.state = XsdConverter.Instance.Convert<StateType>(attributes.GetSafe("state"));
 			this.oID = XsdConverter.Instance.Convert<string>(attributes.GetSafe("oID"));
-			this.coordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(attributes.GetSafe("coordGeomRefs"));
-			this.alignRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("alignRef"));
-			this.alignStationName = XsdConverter.Instance.Convert<string>(attributes.GetSafe("alignStationName"));
-			this.alignOffset = XsdConverter.Instance.Convert<double>(attributes.GetSafe("alignOffset"));
 			return true;
 		}
 		public PurposeType purpose;
@@ -2561,14 +2452,11 @@ namespace XmlSchemaProcessor.LandXml
 		public string azimuthAccClass;
 		public double azimuthAdoptionFactor;
 		public double lengthAdoptionFactor;
+		public IList<string> coordGeomRefs;
 		public string name;
 		public string desc;
 		public StateType state;
 		public string oID;
-		public IList<string> coordGeomRefs;
-		public string alignRef;
-		public string alignStationName;
-		public double alignOffset;
 	}
 	
 	public class RedHorizontalPosition : XsdBaseObject
@@ -2689,7 +2577,6 @@ namespace XmlSchemaProcessor.LandXml
 			base.Read(attributes, text);
 			this.name = XsdConverter.Instance.Convert<string>(attributes.GetSafe("name"));
 			this.pntRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("pntRef"));
-			this.featureRef = XsdConverter.Instance.Convert<string>(attributes.GetSafe("featureRef"));
 			this.desc = XsdConverter.Instance.Convert<string>(attributes.GetSafe("desc"));
 			this.state = XsdConverter.Instance.Convert<string>(attributes.GetSafe("state"));
 			this.type = XsdConverter.Instance.Convert<string>(attributes.GetSafe("type"));
@@ -2704,7 +2591,6 @@ namespace XmlSchemaProcessor.LandXml
 		}
 		public string name;
 		public string pntRef;
-		public string featureRef;
 		public string desc;
 		public string state;
 		public string type;
@@ -2970,13 +2856,11 @@ namespace XmlSchemaProcessor.LandXml
 			base.Read(attributes, text);
 			this.i = XsdConverter.Instance.Convert<int>(attributes.GetSafe("i"));
 			this.n = XsdConverter.Instance.Convert<IList<int>>(attributes.GetSafe("n"));
-			this.b = XsdConverter.Instance.Convert<uint>(attributes.GetSafe("b"));
 			this.content = XsdConverter.Instance.Convert<IList<int>>(text);
 			return true;
 		}
 		public int i;
 		public IList<int> n;
-		public uint b;
 		public IList<int> content;
 	}
 	
@@ -4922,8 +4806,6 @@ namespace XmlSchemaProcessor.LandXml
 		void EndReadSurvey();
 		void BeginReadSurveyHeader( SurveyHeader value );
 		void EndReadSurveyHeader();
-		void BeginReadHeadOfPower( HeadOfPower value );
-		void EndReadHeadOfPower();
 		void BeginReadAdministrativeArea( AdministrativeArea value );
 		void EndReadAdministrativeArea();
 		void BeginReadAdministrativeDate( AdministrativeDate value );
@@ -4968,8 +4850,6 @@ namespace XmlSchemaProcessor.LandXml
 		void EndReadBacksight();
 		void BeginReadRawObservation( RawObservation value );
 		void EndReadRawObservation();
-		void BeginReadTestObservation( TestObservation value );
-		void EndReadTestObservation();
 		void BeginReadTargetPoint( PointType value );
 		void EndReadTargetPoint();
 		void BeginReadBacksightPoint( PointType value );
@@ -5345,8 +5225,6 @@ namespace XmlSchemaProcessor.LandXml
 		public virtual void EndReadSurvey() {}
 		public virtual void BeginReadSurveyHeader( SurveyHeader value ) {}
 		public virtual void EndReadSurveyHeader() {}
-		public virtual void BeginReadHeadOfPower( HeadOfPower value ) {}
-		public virtual void EndReadHeadOfPower() {}
 		public virtual void BeginReadAdministrativeArea( AdministrativeArea value ) {}
 		public virtual void EndReadAdministrativeArea() {}
 		public virtual void BeginReadAdministrativeDate( AdministrativeDate value ) {}
@@ -5391,8 +5269,6 @@ namespace XmlSchemaProcessor.LandXml
 		public virtual void EndReadBacksight() {}
 		public virtual void BeginReadRawObservation( RawObservation value ) {}
 		public virtual void EndReadRawObservation() {}
-		public virtual void BeginReadTestObservation( TestObservation value ) {}
-		public virtual void EndReadTestObservation() {}
 		public virtual void BeginReadTargetPoint( PointType value ) {}
 		public virtual void EndReadTargetPoint() {}
 		public virtual void BeginReadBacksightPoint( PointType value ) {}
@@ -5679,217 +5555,216 @@ namespace XmlSchemaProcessor.LandXml
 	public class LandXmlReader : SimpleReader
 	{
 		public LandXmlReader(ILandXmlEvents events)
+			: base("http://www.landxml.org/schema/LandXML-1.1")
 		{
-			this.Register<IList<double>>("PntList2D", events.BeginReadPntList2D, events.EndReadPntList2D);
-			this.Register<IList<double>>("PntList3D", events.BeginReadPntList3D, events.EndReadPntList3D);
-			this.Register<double>("BeginRunoutSta", events.BeginReadBeginRunoutSta, events.EndReadBeginRunoutSta);
-			this.Register<double>("BeginRunoffSta", events.BeginReadBeginRunoffSta, events.EndReadBeginRunoffSta);
-			this.Register<double>("FullSuperSta", events.BeginReadFullSuperSta, events.EndReadFullSuperSta);
-			this.Register<double>("FullSuperelev", events.BeginReadFullSuperelev, events.EndReadFullSuperelev);
-			this.Register<double>("RunoffSta", events.BeginReadRunoffSta, events.EndReadRunoffSta);
-			this.Register<double>("StartofRunoutSta", events.BeginReadStartofRunoutSta, events.EndReadStartofRunoutSta);
-			this.Register<double>("EndofRunoutSta", events.BeginReadEndofRunoutSta, events.EndReadEndofRunoutSta);
-			this.Register<AdverseSEType>("AdverseSE", events.BeginReadAdverseSE, events.EndReadAdverseSE);
-			this.Register<double>("Station", events.BeginReadStation, events.EndReadStation);
-			this.Register<LandXML>("LandXML", events.BeginReadLandXML, events.EndReadLandXML);
-			this.Register<CgPoints>("CgPoints", events.BeginReadCgPoints, events.EndReadCgPoints);
-			this.Register<CgPoint>("CgPoint", events.BeginReadCgPoint, events.EndReadCgPoint);
-			this.Register<DocFileRef>("DocFileRef", events.BeginReadDocFileRef, events.EndReadDocFileRef);
-			this.Register<Property>("Property", events.BeginReadProperty, events.EndReadProperty);
-			this.Register<Feature>("Feature", events.BeginReadFeature, events.EndReadFeature);
-			this.Register<FeatureDictionary>("FeatureDictionary", events.BeginReadFeatureDictionary, events.EndReadFeatureDictionary);
-			this.Register<PointType>("Start", events.BeginReadStart, events.EndReadStart);
-			this.Register<PointType>("End", events.BeginReadEnd, events.EndReadEnd);
-			this.Register<PointType>("Center", events.BeginReadCenter, events.EndReadCenter);
-			this.Register<PointType>("PI", events.BeginReadPI, events.EndReadPI);
-			this.Register<PointType>("MapPoint", events.BeginReadMapPoint, events.EndReadMapPoint);
-			this.Register<PointType>("InstrumentPoint", events.BeginReadInstrumentPoint, events.EndReadInstrumentPoint);
-			this.Register<PointType>("Location", events.BeginReadLocation, events.EndReadLocation);
-			this.Register<IrregularLine>("IrregularLine", events.BeginReadIrregularLine, events.EndReadIrregularLine);
-			this.Register<Chain>("Chain", events.BeginReadChain, events.EndReadChain);
-			this.Register<Curve>("Curve", events.BeginReadCurve, events.EndReadCurve);
-			this.Register<Spiral>("Spiral", events.BeginReadSpiral, events.EndReadSpiral);
-			this.Register<CoordGeom>("CoordGeom", events.BeginReadCoordGeom, events.EndReadCoordGeom);
-			this.Register<Line>("Line", events.BeginReadLine, events.EndReadLine);
-			this.Register<CrossSects>("CrossSects", events.BeginReadCrossSects, events.EndReadCrossSects);
-			this.Register<CrossSect>("CrossSect", events.BeginReadCrossSect, events.EndReadCrossSect);
-			this.Register<CrossSectSurf>("CrossSectSurf", events.BeginReadCrossSectSurf, events.EndReadCrossSectSurf);
-			this.Register<CrossSectPnt>("CrossSectPnt", events.BeginReadCrossSectPnt, events.EndReadCrossSectPnt);
-			this.Register<DesignCrossSectSurf>("DesignCrossSectSurf", events.BeginReadDesignCrossSectSurf, events.EndReadDesignCrossSectSurf);
-			this.Register<Project>("Project", events.BeginReadProject, events.EndReadProject);
-			this.Register<Units>("Units", events.BeginReadUnits, events.EndReadUnits);
-			this.Register<Metric>("Metric", events.BeginReadMetric, events.EndReadMetric);
-			this.Register<Imperial>("Imperial", events.BeginReadImperial, events.EndReadImperial);
-			this.Register<CoordinateSystem>("CoordinateSystem", events.BeginReadCoordinateSystem, events.EndReadCoordinateSystem);
-			this.Register<Application>("Application", events.BeginReadApplication, events.EndReadApplication);
-			this.Register<Author>("Author", events.BeginReadAuthor, events.EndReadAuthor);
-			this.Register<Survey>("Survey", events.BeginReadSurvey, events.EndReadSurvey);
-			this.Register<SurveyHeader>("SurveyHeader", events.BeginReadSurveyHeader, events.EndReadSurveyHeader);
-			this.Register<HeadOfPower>("HeadOfPower", events.BeginReadHeadOfPower, events.EndReadHeadOfPower);
-			this.Register<AdministrativeArea>("AdministrativeArea", events.BeginReadAdministrativeArea, events.EndReadAdministrativeArea);
-			this.Register<AdministrativeDate>("AdministrativeDate", events.BeginReadAdministrativeDate, events.EndReadAdministrativeDate);
-			this.Register<Annotation>("Annotation", events.BeginReadAnnotation, events.EndReadAnnotation);
-			this.Register<SurveyorCertificate>("SurveyorCertificate", events.BeginReadSurveyorCertificate, events.EndReadSurveyorCertificate);
-			this.Register<PurposeOfSurvey>("PurposeOfSurvey", events.BeginReadPurposeOfSurvey, events.EndReadPurposeOfSurvey);
-			this.Register<Amendment>("Amendment", events.BeginReadAmendment, events.EndReadAmendment);
-			this.Register<AmendmentItem>("AmendmentItem", events.BeginReadAmendmentItem, events.EndReadAmendmentItem);
-			this.Register<Personnel>("Personnel", events.BeginReadPersonnel, events.EndReadPersonnel);
-			this.Register<FieldNote>("FieldNote", events.BeginReadFieldNote, events.EndReadFieldNote);
-			this.Register<Equipment>("Equipment", events.BeginReadEquipment, events.EndReadEquipment);
-			this.Register<InstrumentDetails>("InstrumentDetails", events.BeginReadInstrumentDetails, events.EndReadInstrumentDetails);
-			this.Register<LaserDetails>("LaserDetails", events.BeginReadLaserDetails, events.EndReadLaserDetails);
-			this.Register<GPSAntennaDetails>("GPSAntennaDetails", events.BeginReadGPSAntennaDetails, events.EndReadGPSAntennaDetails);
-			this.Register<GPSReceiverDetails>("GPSReceiverDetails", events.BeginReadGPSReceiverDetails, events.EndReadGPSReceiverDetails);
-			this.Register<Corrections>("Corrections", events.BeginReadCorrections, events.EndReadCorrections);
-			this.Register<SurveyMonument>("SurveyMonument", events.BeginReadSurveyMonument, events.EndReadSurveyMonument);
-			this.Register<InstrumentSetup>("InstrumentSetup", events.BeginReadInstrumentSetup, events.EndReadInstrumentSetup);
-			this.Register<LaserSetup>("LaserSetup", events.BeginReadLaserSetup, events.EndReadLaserSetup);
-			this.Register<GPSSetup>("GPSSetup", events.BeginReadGPSSetup, events.EndReadGPSSetup);
-			this.Register<TargetSetup>("TargetSetup", events.BeginReadTargetSetup, events.EndReadTargetSetup);
-			this.Register<Backsight>("Backsight", events.BeginReadBacksight, events.EndReadBacksight);
-			this.Register<RawObservation>("RawObservation", events.BeginReadRawObservation, events.EndReadRawObservation);
-			this.Register<TestObservation>("TestObservation", events.BeginReadTestObservation, events.EndReadTestObservation);
-			this.Register<PointType>("TargetPoint", events.BeginReadTargetPoint, events.EndReadTargetPoint);
-			this.Register<PointType>("BacksightPoint", events.BeginReadBacksightPoint, events.EndReadBacksightPoint);
-			this.Register<OffsetVals>("OffsetVals", events.BeginReadOffsetVals, events.EndReadOffsetVals);
-			this.Register<GPSVector>("GPSVector", events.BeginReadGPSVector, events.EndReadGPSVector);
-			this.Register<GPSPosition>("GPSPosition", events.BeginReadGPSPosition, events.EndReadGPSPosition);
-			this.Register<GPSQCInfoLevel1>("GPSQCInfoLevel1", events.BeginReadGPSQCInfoLevel1, events.EndReadGPSQCInfoLevel1);
-			this.Register<GPSQCInfoLevel2>("GPSQCInfoLevel2", events.BeginReadGPSQCInfoLevel2, events.EndReadGPSQCInfoLevel2);
-			this.Register<ObservationGroup>("ObservationGroup", events.BeginReadObservationGroup, events.EndReadObservationGroup);
-			this.Register<ControlChecks>("ControlChecks", events.BeginReadControlChecks, events.EndReadControlChecks);
-			this.Register<PointResults>("PointResults", events.BeginReadPointResults, events.EndReadPointResults);
-			this.Register<ReducedObservation>("ReducedObservation", events.BeginReadReducedObservation, events.EndReadReducedObservation);
-			this.Register<ReducedArcObservation>("ReducedArcObservation", events.BeginReadReducedArcObservation, events.EndReadReducedArcObservation);
-			this.Register<RedHorizontalPosition>("RedHorizontalPosition", events.BeginReadRedHorizontalPosition, events.EndReadRedHorizontalPosition);
-			this.Register<RedVerticalObservation>("RedVerticalObservation", events.BeginReadRedVerticalObservation, events.EndReadRedVerticalObservation);
-			this.Register<Monuments>("Monuments", events.BeginReadMonuments, events.EndReadMonuments);
-			this.Register<Monument>("Monument", events.BeginReadMonument, events.EndReadMonument);
-			this.Register<Surfaces>("Surfaces", events.BeginReadSurfaces, events.EndReadSurfaces);
-			this.Register<Surface>("Surface", events.BeginReadSurface, events.EndReadSurface);
-			this.Register<SourceData>("SourceData", events.BeginReadSourceData, events.EndReadSourceData);
-			this.Register<DataPoints>("DataPoints", events.BeginReadDataPoints, events.EndReadDataPoints);
-			this.Register<PointFiles>("PointFiles", events.BeginReadPointFiles, events.EndReadPointFiles);
-			this.Register<PointFile>("PointFile", events.BeginReadPointFile, events.EndReadPointFile);
-			this.Register<Boundaries>("Boundaries", events.BeginReadBoundaries, events.EndReadBoundaries);
-			this.Register<Boundary>("Boundary", events.BeginReadBoundary, events.EndReadBoundary);
-			this.Register<Breaklines>("Breaklines", events.BeginReadBreaklines, events.EndReadBreaklines);
-			this.Register<Breakline>("Breakline", events.BeginReadBreakline, events.EndReadBreakline);
-			this.Register<RetWall>("RetWall", events.BeginReadRetWall, events.EndReadRetWall);
-			this.Register<RetWallPnt>("RetWallPnt", events.BeginReadRetWallPnt, events.EndReadRetWallPnt);
-			this.Register<Contours>("Contours", events.BeginReadContours, events.EndReadContours);
-			this.Register<Contour>("Contour", events.BeginReadContour, events.EndReadContour);
-			this.Register<Definition>("Definition", events.BeginReadDefinition, events.EndReadDefinition);
-			this.Register<Pnts>("Pnts", events.BeginReadPnts, events.EndReadPnts);
-			this.Register<P>("P", events.BeginReadP, events.EndReadP);
-			this.Register<Faces>("Faces", events.BeginReadFaces, events.EndReadFaces);
-			this.Register<F>("F", events.BeginReadF, events.EndReadF);
-			this.Register<Watersheds>("Watersheds", events.BeginReadWatersheds, events.EndReadWatersheds);
-			this.Register<Watershed>("Watershed", events.BeginReadWatershed, events.EndReadWatershed);
-			this.Register<Outlet>("Outlet", events.BeginReadOutlet, events.EndReadOutlet);
-			this.Register<SurfVolumes>("SurfVolumes", events.BeginReadSurfVolumes, events.EndReadSurfVolumes);
-			this.Register<SurfVolume>("SurfVolume", events.BeginReadSurfVolume, events.EndReadSurfVolume);
-			this.Register<Parcels>("Parcels", events.BeginReadParcels, events.EndReadParcels);
-			this.Register<Parcel>("Parcel", events.BeginReadParcel, events.EndReadParcel);
-			this.Register<VolumeGeom>("VolumeGeom", events.BeginReadVolumeGeom, events.EndReadVolumeGeom);
-			this.Register<Title>("Title", events.BeginReadTitle, events.EndReadTitle);
-			this.Register<Exclusions>("Exclusions", events.BeginReadExclusions, events.EndReadExclusions);
-			this.Register<LocationAddress>("LocationAddress", events.BeginReadLocationAddress, events.EndReadLocationAddress);
-			this.Register<ComplexName>("ComplexName", events.BeginReadComplexName, events.EndReadComplexName);
-			this.Register<RoadName>("RoadName", events.BeginReadRoadName, events.EndReadRoadName);
-			this.Register<AddressPoint>("AddressPoint", events.BeginReadAddressPoint, events.EndReadAddressPoint);
-			this.Register<Alignments>("Alignments", events.BeginReadAlignments, events.EndReadAlignments);
-			this.Register<Alignment>("Alignment", events.BeginReadAlignment, events.EndReadAlignment);
-			this.Register<StaEquation>("StaEquation", events.BeginReadStaEquation, events.EndReadStaEquation);
-			this.Register<Profile>("Profile", events.BeginReadProfile, events.EndReadProfile);
-			this.Register<ProfSurf>("ProfSurf", events.BeginReadProfSurf, events.EndReadProfSurf);
-			this.Register<ProfAlign>("ProfAlign", events.BeginReadProfAlign, events.EndReadProfAlign);
-			this.Register<PVI>("PVI", events.BeginReadPVI, events.EndReadPVI);
-			this.Register<ParaCurve>("ParaCurve", events.BeginReadParaCurve, events.EndReadParaCurve);
-			this.Register<UnsymParaCurve>("UnsymParaCurve", events.BeginReadUnsymParaCurve, events.EndReadUnsymParaCurve);
-			this.Register<CircCurve>("CircCurve", events.BeginReadCircCurve, events.EndReadCircCurve);
-			this.Register<PipeNetworks>("PipeNetworks", events.BeginReadPipeNetworks, events.EndReadPipeNetworks);
-			this.Register<PipeNetwork>("PipeNetwork", events.BeginReadPipeNetwork, events.EndReadPipeNetwork);
-			this.Register<Pipes>("Pipes", events.BeginReadPipes, events.EndReadPipes);
-			this.Register<Pipe>("Pipe", events.BeginReadPipe, events.EndReadPipe);
-			this.Register<CircPipe>("CircPipe", events.BeginReadCircPipe, events.EndReadCircPipe);
-			this.Register<ElliPipe>("ElliPipe", events.BeginReadElliPipe, events.EndReadElliPipe);
-			this.Register<EggPipe>("EggPipe", events.BeginReadEggPipe, events.EndReadEggPipe);
-			this.Register<RectPipe>("RectPipe", events.BeginReadRectPipe, events.EndReadRectPipe);
-			this.Register<Channel>("Channel", events.BeginReadChannel, events.EndReadChannel);
-			this.Register<PipeFlow>("PipeFlow", events.BeginReadPipeFlow, events.EndReadPipeFlow);
-			this.Register<Structs>("Structs", events.BeginReadStructs, events.EndReadStructs);
-			this.Register<Struct>("Struct", events.BeginReadStruct, events.EndReadStruct);
-			this.Register<CircStruct>("CircStruct", events.BeginReadCircStruct, events.EndReadCircStruct);
-			this.Register<RectStruct>("RectStruct", events.BeginReadRectStruct, events.EndReadRectStruct);
-			this.Register<InletStruct>("InletStruct", events.BeginReadInletStruct, events.EndReadInletStruct);
-			this.Register<OutletStruct>("OutletStruct", events.BeginReadOutletStruct, events.EndReadOutletStruct);
-			this.Register<Connection>("Connection", events.BeginReadConnection, events.EndReadConnection);
-			this.Register<Invert>("Invert", events.BeginReadInvert, events.EndReadInvert);
-			this.Register<StructFlow>("StructFlow", events.BeginReadStructFlow, events.EndReadStructFlow);
-			this.Register<PlanFeatures>("PlanFeatures", events.BeginReadPlanFeatures, events.EndReadPlanFeatures);
-			this.Register<PlanFeature>("PlanFeature", events.BeginReadPlanFeature, events.EndReadPlanFeature);
-			this.Register<GradeModel>("GradeModel", events.BeginReadGradeModel, events.EndReadGradeModel);
-			this.Register<GradeSurface>("GradeSurface", events.BeginReadGradeSurface, events.EndReadGradeSurface);
-			this.Register<Zones>("Zones", events.BeginReadZones, events.EndReadZones);
-			this.Register<Zone>("Zone", events.BeginReadZone, events.EndReadZone);
-			this.Register<ZoneWidth>("ZoneWidth", events.BeginReadZoneWidth, events.EndReadZoneWidth);
-			this.Register<ZoneSlope>("ZoneSlope", events.BeginReadZoneSlope, events.EndReadZoneSlope);
-			this.Register<ZoneHinge>("ZoneHinge", events.BeginReadZoneHinge, events.EndReadZoneHinge);
-			this.Register<ZoneCutFill>("ZoneCutFill", events.BeginReadZoneCutFill, events.EndReadZoneCutFill);
-			this.Register<ZoneMaterial>("ZoneMaterial", events.BeginReadZoneMaterial, events.EndReadZoneMaterial);
-			this.Register<ZoneCrossSectStructure>("ZoneCrossSectStructure", events.BeginReadZoneCrossSectStructure, events.EndReadZoneCrossSectStructure);
-			this.Register<Roadways>("Roadways", events.BeginReadRoadways, events.EndReadRoadways);
-			this.Register<Roadway>("Roadway", events.BeginReadRoadway, events.EndReadRoadway);
-			this.Register<Classification>("Classification", events.BeginReadClassification, events.EndReadClassification);
-			this.Register<DesignSpeed>("DesignSpeed", events.BeginReadDesignSpeed, events.EndReadDesignSpeed);
-			this.Register<DesignSpeed85th>("DesignSpeed85th", events.BeginReadDesignSpeed85th, events.EndReadDesignSpeed85th);
-			this.Register<Speeds>("Speeds", events.BeginReadSpeeds, events.EndReadSpeeds);
-			this.Register<DailyTrafficVolume>("DailyTrafficVolume", events.BeginReadDailyTrafficVolume, events.EndReadDailyTrafficVolume);
-			this.Register<DesignHour>("DesignHour", events.BeginReadDesignHour, events.EndReadDesignHour);
-			this.Register<PeakHour>("PeakHour", events.BeginReadPeakHour, events.EndReadPeakHour);
-			this.Register<TrafficVolume>("TrafficVolume", events.BeginReadTrafficVolume, events.EndReadTrafficVolume);
-			this.Register<Superelevation>("Superelevation", events.BeginReadSuperelevation, events.EndReadSuperelevation);
-			this.Register<Lanes>("Lanes", events.BeginReadLanes, events.EndReadLanes);
-			this.Register<ThruLane>("ThruLane", events.BeginReadThruLane, events.EndReadThruLane);
-			this.Register<PassingLane>("PassingLane", events.BeginReadPassingLane, events.EndReadPassingLane);
-			this.Register<TurnLane>("TurnLane", events.BeginReadTurnLane, events.EndReadTurnLane);
-			this.Register<TwoWayLeftTurnLane>("TwoWayLeftTurnLane", events.BeginReadTwoWayLeftTurnLane, events.EndReadTwoWayLeftTurnLane);
-			this.Register<ClimbLane>("ClimbLane", events.BeginReadClimbLane, events.EndReadClimbLane);
-			this.Register<OffsetLane>("OffsetLane", events.BeginReadOffsetLane, events.EndReadOffsetLane);
-			this.Register<WideningLane>("WideningLane", events.BeginReadWideningLane, events.EndReadWideningLane);
-			this.Register<Roadside>("Roadside", events.BeginReadRoadside, events.EndReadRoadside);
-			this.Register<Ditch>("Ditch", events.BeginReadDitch, events.EndReadDitch);
-			this.Register<ObstructionOffset>("ObstructionOffset", events.BeginReadObstructionOffset, events.EndReadObstructionOffset);
-			this.Register<BikeFacilities>("BikeFacilities", events.BeginReadBikeFacilities, events.EndReadBikeFacilities);
-			this.Register<RoadSign>("RoadSign", events.BeginReadRoadSign, events.EndReadRoadSign);
-			this.Register<DrivewayDensity>("DrivewayDensity", events.BeginReadDrivewayDensity, events.EndReadDrivewayDensity);
-			this.Register<HazardRating>("HazardRating", events.BeginReadHazardRating, events.EndReadHazardRating);
-			this.Register<Intersections>("Intersections", events.BeginReadIntersections, events.EndReadIntersections);
-			this.Register<Intersection>("Intersection", events.BeginReadIntersection, events.EndReadIntersection);
-			this.Register<TrafficControl>("TrafficControl", events.BeginReadTrafficControl, events.EndReadTrafficControl);
-			this.Register<Timing>("Timing", events.BeginReadTiming, events.EndReadTiming);
-			this.Register<Volume>("Volume", events.BeginReadVolume, events.EndReadVolume);
-			this.Register<TurnSpeed>("TurnSpeed", events.BeginReadTurnSpeed, events.EndReadTurnSpeed);
-			this.Register<TurnRestriction>("TurnRestriction", events.BeginReadTurnRestriction, events.EndReadTurnRestriction);
-			this.Register<Curb>("Curb", events.BeginReadCurb, events.EndReadCurb);
-			this.Register<Corner>("Corner", events.BeginReadCorner, events.EndReadCorner);
-			this.Register<CrashData>("CrashData", events.BeginReadCrashData, events.EndReadCrashData);
-			this.Register<CrashHistory>("CrashHistory", events.BeginReadCrashHistory, events.EndReadCrashHistory);
-			this.Register<PostedSpeed>("PostedSpeed", events.BeginReadPostedSpeed, events.EndReadPostedSpeed);
-			this.Register<NoPassingZone>("NoPassingZone", events.BeginReadNoPassingZone, events.EndReadNoPassingZone);
-			this.Register<DecisionSightDistance>("DecisionSightDistance", events.BeginReadDecisionSightDistance, events.EndReadDecisionSightDistance);
-			this.Register<BridgeElement>("BridgeElement", events.BeginReadBridgeElement, events.EndReadBridgeElement);
-			this.Register<InSpiral>("InSpiral", events.BeginReadInSpiral, events.EndReadInSpiral);
-			this.Register<Curve1>("Curve1", events.BeginReadCurve1, events.EndReadCurve1);
-			this.Register<ConnSpiral>("ConnSpiral", events.BeginReadConnSpiral, events.EndReadConnSpiral);
-			this.Register<Curve2>("Curve2", events.BeginReadCurve2, events.EndReadCurve2);
-			this.Register<OutSpiral>("OutSpiral", events.BeginReadOutSpiral, events.EndReadOutSpiral);
-			this.Register<AlignPI>("AlignPI", events.BeginReadAlignPI, events.EndReadAlignPI);
-			this.Register<AlignPIs>("AlignPIs", events.BeginReadAlignPIs, events.EndReadAlignPIs);
-			this.Register<Cant>("Cant", events.BeginReadCant, events.EndReadCant);
-			this.Register<CantStation>("CantStation", events.BeginReadCantStation, events.EndReadCantStation);
-			this.Register<SpeedStation>("SpeedStation", events.BeginReadSpeedStation, events.EndReadSpeedStation);
+			this.Register<IList<double>>("PntList2D", events.BeginReadPntList2D, events.EndReadPntList2D, true);
+			this.Register<IList<double>>("PntList3D", events.BeginReadPntList3D, events.EndReadPntList3D, true);
+			this.Register<double>("BeginRunoutSta", events.BeginReadBeginRunoutSta, events.EndReadBeginRunoutSta, true);
+			this.Register<double>("BeginRunoffSta", events.BeginReadBeginRunoffSta, events.EndReadBeginRunoffSta, true);
+			this.Register<double>("FullSuperSta", events.BeginReadFullSuperSta, events.EndReadFullSuperSta, true);
+			this.Register<double>("FullSuperelev", events.BeginReadFullSuperelev, events.EndReadFullSuperelev, true);
+			this.Register<double>("RunoffSta", events.BeginReadRunoffSta, events.EndReadRunoffSta, true);
+			this.Register<double>("StartofRunoutSta", events.BeginReadStartofRunoutSta, events.EndReadStartofRunoutSta, true);
+			this.Register<double>("EndofRunoutSta", events.BeginReadEndofRunoutSta, events.EndReadEndofRunoutSta, true);
+			this.Register<AdverseSEType>("AdverseSE", events.BeginReadAdverseSE, events.EndReadAdverseSE, true);
+			this.Register<double>("Station", events.BeginReadStation, events.EndReadStation, true);
+			this.Register<LandXML>("LandXML", events.BeginReadLandXML, events.EndReadLandXML, false);
+			this.Register<CgPoints>("CgPoints", events.BeginReadCgPoints, events.EndReadCgPoints, false);
+			this.Register<CgPoint>("CgPoint", events.BeginReadCgPoint, events.EndReadCgPoint, false);
+			this.Register<DocFileRef>("DocFileRef", events.BeginReadDocFileRef, events.EndReadDocFileRef, false);
+			this.Register<Property>("Property", events.BeginReadProperty, events.EndReadProperty, false);
+			this.Register<Feature>("Feature", events.BeginReadFeature, events.EndReadFeature, false);
+			this.Register<FeatureDictionary>("FeatureDictionary", events.BeginReadFeatureDictionary, events.EndReadFeatureDictionary, false);
+			this.Register<PointType>("Start", events.BeginReadStart, events.EndReadStart, false);
+			this.Register<PointType>("End", events.BeginReadEnd, events.EndReadEnd, false);
+			this.Register<PointType>("Center", events.BeginReadCenter, events.EndReadCenter, false);
+			this.Register<PointType>("PI", events.BeginReadPI, events.EndReadPI, false);
+			this.Register<PointType>("MapPoint", events.BeginReadMapPoint, events.EndReadMapPoint, false);
+			this.Register<PointType>("InstrumentPoint", events.BeginReadInstrumentPoint, events.EndReadInstrumentPoint, false);
+			this.Register<PointType>("Location", events.BeginReadLocation, events.EndReadLocation, false);
+			this.Register<IrregularLine>("IrregularLine", events.BeginReadIrregularLine, events.EndReadIrregularLine, false);
+			this.Register<Chain>("Chain", events.BeginReadChain, events.EndReadChain, false);
+			this.Register<Curve>("Curve", events.BeginReadCurve, events.EndReadCurve, false);
+			this.Register<Spiral>("Spiral", events.BeginReadSpiral, events.EndReadSpiral, false);
+			this.Register<CoordGeom>("CoordGeom", events.BeginReadCoordGeom, events.EndReadCoordGeom, false);
+			this.Register<Line>("Line", events.BeginReadLine, events.EndReadLine, false);
+			this.Register<CrossSects>("CrossSects", events.BeginReadCrossSects, events.EndReadCrossSects, false);
+			this.Register<CrossSect>("CrossSect", events.BeginReadCrossSect, events.EndReadCrossSect, false);
+			this.Register<CrossSectSurf>("CrossSectSurf", events.BeginReadCrossSectSurf, events.EndReadCrossSectSurf, false);
+			this.Register<CrossSectPnt>("CrossSectPnt", events.BeginReadCrossSectPnt, events.EndReadCrossSectPnt, false);
+			this.Register<DesignCrossSectSurf>("DesignCrossSectSurf", events.BeginReadDesignCrossSectSurf, events.EndReadDesignCrossSectSurf, false);
+			this.Register<Project>("Project", events.BeginReadProject, events.EndReadProject, false);
+			this.Register<Units>("Units", events.BeginReadUnits, events.EndReadUnits, false);
+			this.Register<Metric>("Metric", events.BeginReadMetric, events.EndReadMetric, false);
+			this.Register<Imperial>("Imperial", events.BeginReadImperial, events.EndReadImperial, false);
+			this.Register<CoordinateSystem>("CoordinateSystem", events.BeginReadCoordinateSystem, events.EndReadCoordinateSystem, false);
+			this.Register<Application>("Application", events.BeginReadApplication, events.EndReadApplication, false);
+			this.Register<Author>("Author", events.BeginReadAuthor, events.EndReadAuthor, false);
+			this.Register<Survey>("Survey", events.BeginReadSurvey, events.EndReadSurvey, false);
+			this.Register<SurveyHeader>("SurveyHeader", events.BeginReadSurveyHeader, events.EndReadSurveyHeader, false);
+			this.Register<AdministrativeArea>("AdministrativeArea", events.BeginReadAdministrativeArea, events.EndReadAdministrativeArea, false);
+			this.Register<AdministrativeDate>("AdministrativeDate", events.BeginReadAdministrativeDate, events.EndReadAdministrativeDate, false);
+			this.Register<Annotation>("Annotation", events.BeginReadAnnotation, events.EndReadAnnotation, false);
+			this.Register<SurveyorCertificate>("SurveyorCertificate", events.BeginReadSurveyorCertificate, events.EndReadSurveyorCertificate, false);
+			this.Register<PurposeOfSurvey>("PurposeOfSurvey", events.BeginReadPurposeOfSurvey, events.EndReadPurposeOfSurvey, false);
+			this.Register<Amendment>("Amendment", events.BeginReadAmendment, events.EndReadAmendment, false);
+			this.Register<AmendmentItem>("AmendmentItem", events.BeginReadAmendmentItem, events.EndReadAmendmentItem, false);
+			this.Register<Personnel>("Personnel", events.BeginReadPersonnel, events.EndReadPersonnel, false);
+			this.Register<FieldNote>("FieldNote", events.BeginReadFieldNote, events.EndReadFieldNote, false);
+			this.Register<Equipment>("Equipment", events.BeginReadEquipment, events.EndReadEquipment, false);
+			this.Register<InstrumentDetails>("InstrumentDetails", events.BeginReadInstrumentDetails, events.EndReadInstrumentDetails, false);
+			this.Register<LaserDetails>("LaserDetails", events.BeginReadLaserDetails, events.EndReadLaserDetails, false);
+			this.Register<GPSAntennaDetails>("GPSAntennaDetails", events.BeginReadGPSAntennaDetails, events.EndReadGPSAntennaDetails, false);
+			this.Register<GPSReceiverDetails>("GPSReceiverDetails", events.BeginReadGPSReceiverDetails, events.EndReadGPSReceiverDetails, false);
+			this.Register<Corrections>("Corrections", events.BeginReadCorrections, events.EndReadCorrections, false);
+			this.Register<SurveyMonument>("SurveyMonument", events.BeginReadSurveyMonument, events.EndReadSurveyMonument, false);
+			this.Register<InstrumentSetup>("InstrumentSetup", events.BeginReadInstrumentSetup, events.EndReadInstrumentSetup, false);
+			this.Register<LaserSetup>("LaserSetup", events.BeginReadLaserSetup, events.EndReadLaserSetup, false);
+			this.Register<GPSSetup>("GPSSetup", events.BeginReadGPSSetup, events.EndReadGPSSetup, false);
+			this.Register<TargetSetup>("TargetSetup", events.BeginReadTargetSetup, events.EndReadTargetSetup, false);
+			this.Register<Backsight>("Backsight", events.BeginReadBacksight, events.EndReadBacksight, false);
+			this.Register<RawObservation>("RawObservation", events.BeginReadRawObservation, events.EndReadRawObservation, false);
+			this.Register<PointType>("TargetPoint", events.BeginReadTargetPoint, events.EndReadTargetPoint, false);
+			this.Register<PointType>("BacksightPoint", events.BeginReadBacksightPoint, events.EndReadBacksightPoint, false);
+			this.Register<OffsetVals>("OffsetVals", events.BeginReadOffsetVals, events.EndReadOffsetVals, false);
+			this.Register<GPSVector>("GPSVector", events.BeginReadGPSVector, events.EndReadGPSVector, false);
+			this.Register<GPSPosition>("GPSPosition", events.BeginReadGPSPosition, events.EndReadGPSPosition, false);
+			this.Register<GPSQCInfoLevel1>("GPSQCInfoLevel1", events.BeginReadGPSQCInfoLevel1, events.EndReadGPSQCInfoLevel1, false);
+			this.Register<GPSQCInfoLevel2>("GPSQCInfoLevel2", events.BeginReadGPSQCInfoLevel2, events.EndReadGPSQCInfoLevel2, false);
+			this.Register<ObservationGroup>("ObservationGroup", events.BeginReadObservationGroup, events.EndReadObservationGroup, false);
+			this.Register<ControlChecks>("ControlChecks", events.BeginReadControlChecks, events.EndReadControlChecks, false);
+			this.Register<PointResults>("PointResults", events.BeginReadPointResults, events.EndReadPointResults, false);
+			this.Register<ReducedObservation>("ReducedObservation", events.BeginReadReducedObservation, events.EndReadReducedObservation, false);
+			this.Register<ReducedArcObservation>("ReducedArcObservation", events.BeginReadReducedArcObservation, events.EndReadReducedArcObservation, false);
+			this.Register<RedHorizontalPosition>("RedHorizontalPosition", events.BeginReadRedHorizontalPosition, events.EndReadRedHorizontalPosition, false);
+			this.Register<RedVerticalObservation>("RedVerticalObservation", events.BeginReadRedVerticalObservation, events.EndReadRedVerticalObservation, false);
+			this.Register<Monuments>("Monuments", events.BeginReadMonuments, events.EndReadMonuments, false);
+			this.Register<Monument>("Monument", events.BeginReadMonument, events.EndReadMonument, false);
+			this.Register<Surfaces>("Surfaces", events.BeginReadSurfaces, events.EndReadSurfaces, false);
+			this.Register<Surface>("Surface", events.BeginReadSurface, events.EndReadSurface, false);
+			this.Register<SourceData>("SourceData", events.BeginReadSourceData, events.EndReadSourceData, false);
+			this.Register<DataPoints>("DataPoints", events.BeginReadDataPoints, events.EndReadDataPoints, false);
+			this.Register<PointFiles>("PointFiles", events.BeginReadPointFiles, events.EndReadPointFiles, false);
+			this.Register<PointFile>("PointFile", events.BeginReadPointFile, events.EndReadPointFile, false);
+			this.Register<Boundaries>("Boundaries", events.BeginReadBoundaries, events.EndReadBoundaries, false);
+			this.Register<Boundary>("Boundary", events.BeginReadBoundary, events.EndReadBoundary, false);
+			this.Register<Breaklines>("Breaklines", events.BeginReadBreaklines, events.EndReadBreaklines, false);
+			this.Register<Breakline>("Breakline", events.BeginReadBreakline, events.EndReadBreakline, false);
+			this.Register<RetWall>("RetWall", events.BeginReadRetWall, events.EndReadRetWall, false);
+			this.Register<RetWallPnt>("RetWallPnt", events.BeginReadRetWallPnt, events.EndReadRetWallPnt, false);
+			this.Register<Contours>("Contours", events.BeginReadContours, events.EndReadContours, false);
+			this.Register<Contour>("Contour", events.BeginReadContour, events.EndReadContour, false);
+			this.Register<Definition>("Definition", events.BeginReadDefinition, events.EndReadDefinition, false);
+			this.Register<Pnts>("Pnts", events.BeginReadPnts, events.EndReadPnts, false);
+			this.Register<P>("P", events.BeginReadP, events.EndReadP, false);
+			this.Register<Faces>("Faces", events.BeginReadFaces, events.EndReadFaces, false);
+			this.Register<F>("F", events.BeginReadF, events.EndReadF, false);
+			this.Register<Watersheds>("Watersheds", events.BeginReadWatersheds, events.EndReadWatersheds, false);
+			this.Register<Watershed>("Watershed", events.BeginReadWatershed, events.EndReadWatershed, false);
+			this.Register<Outlet>("Outlet", events.BeginReadOutlet, events.EndReadOutlet, false);
+			this.Register<SurfVolumes>("SurfVolumes", events.BeginReadSurfVolumes, events.EndReadSurfVolumes, false);
+			this.Register<SurfVolume>("SurfVolume", events.BeginReadSurfVolume, events.EndReadSurfVolume, false);
+			this.Register<Parcels>("Parcels", events.BeginReadParcels, events.EndReadParcels, false);
+			this.Register<Parcel>("Parcel", events.BeginReadParcel, events.EndReadParcel, false);
+			this.Register<VolumeGeom>("VolumeGeom", events.BeginReadVolumeGeom, events.EndReadVolumeGeom, false);
+			this.Register<Title>("Title", events.BeginReadTitle, events.EndReadTitle, false);
+			this.Register<Exclusions>("Exclusions", events.BeginReadExclusions, events.EndReadExclusions, false);
+			this.Register<LocationAddress>("LocationAddress", events.BeginReadLocationAddress, events.EndReadLocationAddress, false);
+			this.Register<ComplexName>("ComplexName", events.BeginReadComplexName, events.EndReadComplexName, false);
+			this.Register<RoadName>("RoadName", events.BeginReadRoadName, events.EndReadRoadName, false);
+			this.Register<AddressPoint>("AddressPoint", events.BeginReadAddressPoint, events.EndReadAddressPoint, false);
+			this.Register<Alignments>("Alignments", events.BeginReadAlignments, events.EndReadAlignments, false);
+			this.Register<Alignment>("Alignment", events.BeginReadAlignment, events.EndReadAlignment, false);
+			this.Register<StaEquation>("StaEquation", events.BeginReadStaEquation, events.EndReadStaEquation, false);
+			this.Register<Profile>("Profile", events.BeginReadProfile, events.EndReadProfile, false);
+			this.Register<ProfSurf>("ProfSurf", events.BeginReadProfSurf, events.EndReadProfSurf, false);
+			this.Register<ProfAlign>("ProfAlign", events.BeginReadProfAlign, events.EndReadProfAlign, false);
+			this.Register<PVI>("PVI", events.BeginReadPVI, events.EndReadPVI, false);
+			this.Register<ParaCurve>("ParaCurve", events.BeginReadParaCurve, events.EndReadParaCurve, false);
+			this.Register<UnsymParaCurve>("UnsymParaCurve", events.BeginReadUnsymParaCurve, events.EndReadUnsymParaCurve, false);
+			this.Register<CircCurve>("CircCurve", events.BeginReadCircCurve, events.EndReadCircCurve, false);
+			this.Register<PipeNetworks>("PipeNetworks", events.BeginReadPipeNetworks, events.EndReadPipeNetworks, false);
+			this.Register<PipeNetwork>("PipeNetwork", events.BeginReadPipeNetwork, events.EndReadPipeNetwork, false);
+			this.Register<Pipes>("Pipes", events.BeginReadPipes, events.EndReadPipes, false);
+			this.Register<Pipe>("Pipe", events.BeginReadPipe, events.EndReadPipe, false);
+			this.Register<CircPipe>("CircPipe", events.BeginReadCircPipe, events.EndReadCircPipe, false);
+			this.Register<ElliPipe>("ElliPipe", events.BeginReadElliPipe, events.EndReadElliPipe, false);
+			this.Register<EggPipe>("EggPipe", events.BeginReadEggPipe, events.EndReadEggPipe, false);
+			this.Register<RectPipe>("RectPipe", events.BeginReadRectPipe, events.EndReadRectPipe, false);
+			this.Register<Channel>("Channel", events.BeginReadChannel, events.EndReadChannel, false);
+			this.Register<PipeFlow>("PipeFlow", events.BeginReadPipeFlow, events.EndReadPipeFlow, false);
+			this.Register<Structs>("Structs", events.BeginReadStructs, events.EndReadStructs, false);
+			this.Register<Struct>("Struct", events.BeginReadStruct, events.EndReadStruct, false);
+			this.Register<CircStruct>("CircStruct", events.BeginReadCircStruct, events.EndReadCircStruct, false);
+			this.Register<RectStruct>("RectStruct", events.BeginReadRectStruct, events.EndReadRectStruct, false);
+			this.Register<InletStruct>("InletStruct", events.BeginReadInletStruct, events.EndReadInletStruct, false);
+			this.Register<OutletStruct>("OutletStruct", events.BeginReadOutletStruct, events.EndReadOutletStruct, false);
+			this.Register<Connection>("Connection", events.BeginReadConnection, events.EndReadConnection, false);
+			this.Register<Invert>("Invert", events.BeginReadInvert, events.EndReadInvert, false);
+			this.Register<StructFlow>("StructFlow", events.BeginReadStructFlow, events.EndReadStructFlow, false);
+			this.Register<PlanFeatures>("PlanFeatures", events.BeginReadPlanFeatures, events.EndReadPlanFeatures, false);
+			this.Register<PlanFeature>("PlanFeature", events.BeginReadPlanFeature, events.EndReadPlanFeature, false);
+			this.Register<GradeModel>("GradeModel", events.BeginReadGradeModel, events.EndReadGradeModel, false);
+			this.Register<GradeSurface>("GradeSurface", events.BeginReadGradeSurface, events.EndReadGradeSurface, false);
+			this.Register<Zones>("Zones", events.BeginReadZones, events.EndReadZones, false);
+			this.Register<Zone>("Zone", events.BeginReadZone, events.EndReadZone, false);
+			this.Register<ZoneWidth>("ZoneWidth", events.BeginReadZoneWidth, events.EndReadZoneWidth, false);
+			this.Register<ZoneSlope>("ZoneSlope", events.BeginReadZoneSlope, events.EndReadZoneSlope, false);
+			this.Register<ZoneHinge>("ZoneHinge", events.BeginReadZoneHinge, events.EndReadZoneHinge, false);
+			this.Register<ZoneCutFill>("ZoneCutFill", events.BeginReadZoneCutFill, events.EndReadZoneCutFill, false);
+			this.Register<ZoneMaterial>("ZoneMaterial", events.BeginReadZoneMaterial, events.EndReadZoneMaterial, false);
+			this.Register<ZoneCrossSectStructure>("ZoneCrossSectStructure", events.BeginReadZoneCrossSectStructure, events.EndReadZoneCrossSectStructure, false);
+			this.Register<Roadways>("Roadways", events.BeginReadRoadways, events.EndReadRoadways, false);
+			this.Register<Roadway>("Roadway", events.BeginReadRoadway, events.EndReadRoadway, false);
+			this.Register<Classification>("Classification", events.BeginReadClassification, events.EndReadClassification, false);
+			this.Register<DesignSpeed>("DesignSpeed", events.BeginReadDesignSpeed, events.EndReadDesignSpeed, false);
+			this.Register<DesignSpeed85th>("DesignSpeed85th", events.BeginReadDesignSpeed85th, events.EndReadDesignSpeed85th, false);
+			this.Register<Speeds>("Speeds", events.BeginReadSpeeds, events.EndReadSpeeds, false);
+			this.Register<DailyTrafficVolume>("DailyTrafficVolume", events.BeginReadDailyTrafficVolume, events.EndReadDailyTrafficVolume, false);
+			this.Register<DesignHour>("DesignHour", events.BeginReadDesignHour, events.EndReadDesignHour, false);
+			this.Register<PeakHour>("PeakHour", events.BeginReadPeakHour, events.EndReadPeakHour, false);
+			this.Register<TrafficVolume>("TrafficVolume", events.BeginReadTrafficVolume, events.EndReadTrafficVolume, false);
+			this.Register<Superelevation>("Superelevation", events.BeginReadSuperelevation, events.EndReadSuperelevation, false);
+			this.Register<Lanes>("Lanes", events.BeginReadLanes, events.EndReadLanes, false);
+			this.Register<ThruLane>("ThruLane", events.BeginReadThruLane, events.EndReadThruLane, false);
+			this.Register<PassingLane>("PassingLane", events.BeginReadPassingLane, events.EndReadPassingLane, false);
+			this.Register<TurnLane>("TurnLane", events.BeginReadTurnLane, events.EndReadTurnLane, false);
+			this.Register<TwoWayLeftTurnLane>("TwoWayLeftTurnLane", events.BeginReadTwoWayLeftTurnLane, events.EndReadTwoWayLeftTurnLane, false);
+			this.Register<ClimbLane>("ClimbLane", events.BeginReadClimbLane, events.EndReadClimbLane, false);
+			this.Register<OffsetLane>("OffsetLane", events.BeginReadOffsetLane, events.EndReadOffsetLane, false);
+			this.Register<WideningLane>("WideningLane", events.BeginReadWideningLane, events.EndReadWideningLane, false);
+			this.Register<Roadside>("Roadside", events.BeginReadRoadside, events.EndReadRoadside, false);
+			this.Register<Ditch>("Ditch", events.BeginReadDitch, events.EndReadDitch, false);
+			this.Register<ObstructionOffset>("ObstructionOffset", events.BeginReadObstructionOffset, events.EndReadObstructionOffset, false);
+			this.Register<BikeFacilities>("BikeFacilities", events.BeginReadBikeFacilities, events.EndReadBikeFacilities, false);
+			this.Register<RoadSign>("RoadSign", events.BeginReadRoadSign, events.EndReadRoadSign, false);
+			this.Register<DrivewayDensity>("DrivewayDensity", events.BeginReadDrivewayDensity, events.EndReadDrivewayDensity, false);
+			this.Register<HazardRating>("HazardRating", events.BeginReadHazardRating, events.EndReadHazardRating, false);
+			this.Register<Intersections>("Intersections", events.BeginReadIntersections, events.EndReadIntersections, false);
+			this.Register<Intersection>("Intersection", events.BeginReadIntersection, events.EndReadIntersection, false);
+			this.Register<TrafficControl>("TrafficControl", events.BeginReadTrafficControl, events.EndReadTrafficControl, false);
+			this.Register<Timing>("Timing", events.BeginReadTiming, events.EndReadTiming, false);
+			this.Register<Volume>("Volume", events.BeginReadVolume, events.EndReadVolume, false);
+			this.Register<TurnSpeed>("TurnSpeed", events.BeginReadTurnSpeed, events.EndReadTurnSpeed, false);
+			this.Register<TurnRestriction>("TurnRestriction", events.BeginReadTurnRestriction, events.EndReadTurnRestriction, false);
+			this.Register<Curb>("Curb", events.BeginReadCurb, events.EndReadCurb, false);
+			this.Register<Corner>("Corner", events.BeginReadCorner, events.EndReadCorner, false);
+			this.Register<CrashData>("CrashData", events.BeginReadCrashData, events.EndReadCrashData, false);
+			this.Register<CrashHistory>("CrashHistory", events.BeginReadCrashHistory, events.EndReadCrashHistory, false);
+			this.Register<PostedSpeed>("PostedSpeed", events.BeginReadPostedSpeed, events.EndReadPostedSpeed, false);
+			this.Register<NoPassingZone>("NoPassingZone", events.BeginReadNoPassingZone, events.EndReadNoPassingZone, false);
+			this.Register<DecisionSightDistance>("DecisionSightDistance", events.BeginReadDecisionSightDistance, events.EndReadDecisionSightDistance, false);
+			this.Register<BridgeElement>("BridgeElement", events.BeginReadBridgeElement, events.EndReadBridgeElement, false);
+			this.Register<InSpiral>("InSpiral", events.BeginReadInSpiral, events.EndReadInSpiral, false);
+			this.Register<Curve1>("Curve1", events.BeginReadCurve1, events.EndReadCurve1, false);
+			this.Register<ConnSpiral>("ConnSpiral", events.BeginReadConnSpiral, events.EndReadConnSpiral, false);
+			this.Register<Curve2>("Curve2", events.BeginReadCurve2, events.EndReadCurve2, false);
+			this.Register<OutSpiral>("OutSpiral", events.BeginReadOutSpiral, events.EndReadOutSpiral, false);
+			this.Register<AlignPI>("AlignPI", events.BeginReadAlignPI, events.EndReadAlignPI, false);
+			this.Register<AlignPIs>("AlignPIs", events.BeginReadAlignPIs, events.EndReadAlignPIs, false);
+			this.Register<Cant>("Cant", events.BeginReadCant, events.EndReadCant, false);
+			this.Register<CantStation>("CantStation", events.BeginReadCantStation, events.EndReadCantStation, false);
+			this.Register<SpeedStation>("SpeedStation", events.BeginReadSpeedStation, events.EndReadSpeedStation, false);
 		}
 	}
 }

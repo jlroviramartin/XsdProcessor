@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
 
@@ -119,6 +121,27 @@ namespace XmlSchemaProcessor.Xsd
             return this.attributes.GetSafe(name);
         }
 
+        public void ResolveAnonymousSimpleTypes()
+        {
+            List<XsdSimpleType> toAdd = new List<XsdSimpleType>();
+            foreach (XsdSimpleListType xsdList in this.types.Values.OfType<XsdSimpleListType>())
+            {
+                XsdSimpleType xsdInner = xsdList.ItemType;
+                if (!xsdInner.IsBuiltIn() && !xsdInner.TopLevel && xsdInner.Name == null)
+                {
+                    xsdInner.Name = xsdList.Name + "_anonymous";
+                    xsdInner.TopLevel = true;
+                    toAdd.Add(xsdInner);
+                }
+            }
+            foreach (XsdSimpleType xsdType in toAdd)
+            {
+                this.Add(xsdType);
+            }
+        }
+
+        public string NamespaceURI { get; set; }
+
         #region private
 
         internal XsdType FindType(XmlQualifiedName baseTypeName)
@@ -190,6 +213,8 @@ namespace XmlSchemaProcessor.Xsd
 
         #endregion
 
+        #region object
+
         public override string ToString()
         {
             StringBuilder buff = new StringBuilder();
@@ -213,5 +238,7 @@ namespace XmlSchemaProcessor.Xsd
 
             return buff.ToString();
         }
+
+        #endregion
     }
 }

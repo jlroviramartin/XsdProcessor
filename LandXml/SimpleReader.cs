@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 // XsdBaseObject.Read(IDictionary<string, string> attributes, string text)
 using BeginRead = System.Action<System.Collections.Generic.IDictionary<string, string>, string>;
@@ -9,6 +10,11 @@ namespace XmlSchemaProcessor.LandXml
 {
     public class SimpleReader
     {
+        public SimpleReader(string namespaceURI)
+        {
+            this.namespaceURI = namespaceURI;
+        }
+
         public void Read(string url)
         {
             using (XmlReader xmlReader = new XmlTextReader(url))
@@ -25,25 +31,31 @@ namespace XmlSchemaProcessor.LandXml
                 {
                     case XmlNodeType.Element:
                     {
-                        ReadBeginEnd readBeginEnd = this.map.GetSafe(reader.Name) ?? this.defaultReader;
-                        IDictionary<string, string> attributes = this.ReadAttributes(reader);
+                        ReadBeginEnd readBeginEnd;
+                        IDictionary<string, string> attributes;
+                        if (this.namespaceURI.Equals(reader.NamespaceURI))
+                        {
+                            readBeginEnd = this.map.GetSafe(reader.Name);
+                            attributes = this.ReadAttributes(reader, true);
+                        }
+                        else
+                        {
+                            readBeginEnd = this.nonNamespaceURIReader;
+                            attributes = this.ReadAttributes(reader, false);
+                        }
 
-                        //reader.mo
+                        string content = null;
+                        if (readBeginEnd.NeedContent)
+                        {
+                            content = ReadContent(reader);
+                        }
 
-                        readBeginEnd.BeginRead(attributes, "");
+                        readBeginEnd.BeginRead(attributes, content);
                         break;
                     }
-                    case XmlNodeType.Text:
-                    case XmlNodeType.CDATA:
-                        break;
-                    case XmlNodeType.XmlDeclaration:
-                    case XmlNodeType.ProcessingInstruction:
-                        break;
-                    case XmlNodeType.Comment:
-                        break;
                     case XmlNodeType.EndElement:
                     {
-                        ReadBeginEnd readBeginEnd = this.map.GetSafe(reader.Name) ?? this.defaultReader;
+                        ReadBeginEnd readBeginEnd = this.map.GetSafe(reader.Name);
                         readBeginEnd.EndRead();
                         break;
                     }
@@ -51,12 +63,7 @@ namespace XmlSchemaProcessor.LandXml
             }
         }
 
-        /*public void Register<T>(string elementName, Action<T> beginRead, Action<T> endRead)
-        {
-            this.map.Add(elementName, new ReadBeginEnd(x => beginRead((T)x), x => endRead((T)x)));
-        }*/
-
-        public void Register<T>(string elementName, Action<T> beginRead, EndRead endRead)
+        public void Register<T>(string elementName, Action<T> beginRead, EndRead endRead, bool needContent)
         {
             this.map.Add(elementName, new ReadBeginEnd(
                              (attrs, text) =>
@@ -71,47 +78,83 @@ namespace XmlSchemaProcessor.LandXml
                                  {
                                      beginRead(XsdConverter.Instance.Convert<T>(text));
                                  }
-                             }, endRead));
+                             },
+                             endRead,
+                             needContent));
         }
 
-        public void Register(string elementName, BeginRead beginRead, EndRead endRead)
+        public void Register(string elementName, BeginRead beginRead, EndRead endRead, bool needContent)
         {
-            this.map.Add(elementName, new ReadBeginEnd(beginRead, endRead));
+            this.map.Add(elementName, new ReadBeginEnd(beginRead, endRead, needContent));
         }
 
-        private IDictionary<string, string> ReadAttributes(XmlReader reader)
+        #region private
+
+        private IDictionary<string, string> ReadAttributes(XmlReader reader, bool useNamespaceURI)
         {
             Dictionary<string, string> attributes = new Dictionary<string, string>();
             if (reader.MoveToFirstAttribute())
             {
                 while (reader.MoveToNextAttribute())
                 {
-                    string name = reader.Name;
-                    reader.ReadAttributeValue();
-                    string value = reader.Value;
-                    attributes.SafeAdd(name, value);
+                    bool sameURI = this.namespaceURI.Equals(reader.NamespaceURI);
+
+                    if (string.IsNullOrWhiteSpace(reader.NamespaceURI)
+                        || (useNamespaceURI && sameURI)
+                        || (!useNamespaceURI && !sameURI))
+                    {
+                        string name = reader.Name;
+                        reader.ReadAttributeValue();
+                        string value = reader.Value;
+                        attributes.SafeAdd(name, value);
+                    }
                 }
                 reader.MoveToElement();
             }
             return attributes;
         }
 
+        private static string ReadContent(XmlReader reader)
+        {
+            StringBuilder buff = new StringBuilder();
+            using (XmlReader subReader = reader.ReadSubtree())
+            {
+                while (subReader.Read())
+                {
+                    if (subReader.NodeType == XmlNodeType.Text || subReader.NodeType == XmlNodeType.CDATA)
+                    {
+                        buff.Append(subReader.Value);
+                    }
+                }
+            }
+            return buff.ToString();
+        }
+
+        private readonly string namespaceURI;
         private readonly Dictionary<string, ReadBeginEnd> map = new Dictionary<string, ReadBeginEnd>();
 
-        private readonly ReadBeginEnd defaultReader = new ReadBeginEnd(
+        private readonly ReadBeginEnd nonNamespaceURIReader = new ReadBeginEnd(
             (attrs, text) =>
             {
             }, () =>
             {
-            });
+            },
+            false);
+
+        #endregion
+
+        #region inner classes
 
         private class ReadBeginEnd
         {
-            public ReadBeginEnd(BeginRead beginRead, EndRead endRead)
+            public ReadBeginEnd(BeginRead beginRead, EndRead endRead, bool needContent)
             {
                 this.beginRead = beginRead;
                 this.endRead = endRead;
+                this.NeedContent = needContent;
             }
+
+            public readonly bool NeedContent;
 
             public void BeginRead(IDictionary<string, string> attributes, string text)
             {
@@ -126,5 +169,7 @@ namespace XmlSchemaProcessor.LandXml
             private readonly BeginRead beginRead;
             private readonly EndRead endRead;
         }
+
+        #endregion
     }
 }

@@ -24,14 +24,22 @@ namespace XmlSchemaProcessor.Xsd
 
         public bool BuiltIn { get; set; }
 
+        #region XsdSimpleType
+
         public override bool IsBuiltIn()
         {
             return this.BuiltIn;
         }
 
+        #endregion
+
+        #region object
+
         public override string ToString()
         {
             return this.Name + " List of " + this.ItemType.Name;
         }
+
+        #endregion
     }
 }

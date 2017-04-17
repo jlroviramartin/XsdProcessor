@@ -90,15 +90,19 @@ namespace XmlSchemaProcessor
                 writer.Indent();
 
                 writer.WriteLine("public LandXmlReader(ILandXmlEvents events)");
+                writer.Indent();
+                writer.WriteLine(": base(\"{0}\")", this.xsdNamespace);
+                writer.Unindent();
                 writer.WriteLine("{");
                 writer.Indent();
 
                 foreach (SimpleEvent simpleEvent in this.events)
                 {
-                    writer.WriteLine("this.Register<{2}>(\"{0}\", events.BeginRead{1}, events.EndRead{1});",
+                    writer.WriteLine("this.Register<{2}>(\"{0}\", events.BeginRead{1}, events.EndRead{1}, {3});",
                                      simpleEvent.Name,
                                      simpleEvent.Name.FirstUpper(),
-                                     simpleEvent.ArgType);
+                                     simpleEvent.ArgType,
+                                     simpleEvent.NeedContent ? "true" : "false");
                 }
 
                 writer.Unindent();
@@ -165,9 +169,9 @@ namespace XmlSchemaProcessor
             this.buff.WriteLine();
         }
 
-        private void BuildEvents(string name, string argType)
+        private void BuildEvents(string name, string argType, bool needContent)
         {
-            this.events.Add(new SimpleEvent(name, argType));
+            this.events.Add(new SimpleEvent(name, argType, needContent));
         }
 
         private void BuildEnum(XsdSimpleRestrictionType xsdType)
@@ -245,27 +249,19 @@ namespace XmlSchemaProcessor
 
         private readonly string contentFieldName = "content";
 
+        private string xsdNamespace;
+
         private readonly StringWriter stringWriter;
         private readonly TextWriterEx buff;
 
         private readonly List<SimpleEvent> events = new List<SimpleEvent>();
 
-        private sealed class SimpleEvent
-        {
-            public SimpleEvent(string name, string argType)
-            {
-                this.Name = name;
-                this.ArgType = argType;
-            }
-
-            public readonly string Name;
-            public readonly string ArgType;
-        }
-
         #endregion
 
         public override void Process(XsdSchema schema)
         {
+            this.xsdNamespace = schema.NamespaceURI;
+
             this.buff.WriteLine("// Simple types");
             this.buff.WriteLine("// ------------");
 
@@ -316,20 +312,20 @@ namespace XmlSchemaProcessor
             Contract.Assert(xsdElement.TypeDefinition is XsdComplexType);
             if (xsdElement.TypeDefinition.TopLevel)
             {
-                this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType());
+                this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(), false);
             }
             else
             {
                 this.BuildType((XsdComplexType)xsdElement.TypeDefinition, xsdElement.Name, false);
 
-                this.BuildEvents(xsdElement.Name, xsdElement.Name.ToTypeName());
+                this.BuildEvents(xsdElement.Name, xsdElement.Name.ToTypeName(), false);
             }
         }
 
         private void ProcessSimpleElement(XsdElement xsdElement)
         {
             Contract.Assert(xsdElement.TypeDefinition is XsdSimpleType);
-            this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType());
+            this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(), true);
         }
 
         #region XsdSimpleType
@@ -397,6 +393,24 @@ namespace XmlSchemaProcessor
                                     xsdAttributeType.ToNetType(),
                                     xsdAttribute.Name.ToFieldName());
             }
+        }
+
+        #endregion
+
+        #region inner classes
+
+        private sealed class SimpleEvent
+        {
+            public SimpleEvent(string name, string argType, bool needContent)
+            {
+                this.Name = name;
+                this.ArgType = argType;
+                this.NeedContent = needContent;
+            }
+
+            public readonly string Name;
+            public readonly string ArgType;
+            public readonly bool NeedContent;
         }
 
         #endregion

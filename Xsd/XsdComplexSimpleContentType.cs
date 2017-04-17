@@ -13,6 +13,8 @@ namespace XmlSchemaProcessor.Xsd
 
         // Facets solo para Derivation = restriction
 
+        #region XsdComplexType
+
         public override XsdType GetBaseType()
         {
             return this.BaseType ?? base.GetBaseType();
@@ -22,6 +24,10 @@ namespace XmlSchemaProcessor.Xsd
         {
             return this.Derivation;
         }
+
+        #endregion
+
+        #region object
 
         public override string ToString()
         {
@@ -36,7 +42,7 @@ namespace XmlSchemaProcessor.Xsd
             }
             else
             {
-                buff.Append("<- ");
+                buff.Append("<unnamed>");
             }
             buff.Append(this.Derivation + " of " + this.BaseType.Name);
 
@@ -54,5 +60,7 @@ namespace XmlSchemaProcessor.Xsd
 
             return buff.ToString();
         }
+
+        #endregion
     }
 }

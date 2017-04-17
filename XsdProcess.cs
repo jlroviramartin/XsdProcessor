@@ -33,7 +33,7 @@ namespace XmlSchemaProcessor
 
         #region XsdType
 
-        public virtual void Process(XmlSchemaProcessor.Xsd.XsdType xsdType)
+        public virtual void Process(XsdType xsdType)
         {
             if (xsdType is XsdSimpleType)
             {

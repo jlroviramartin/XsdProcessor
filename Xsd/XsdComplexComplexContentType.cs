@@ -13,6 +13,8 @@ namespace XmlSchemaProcessor.Xsd
         // openContent
         public XsdParticle Particle { get; set; }
 
+        #region XsdComplexType
+
         public override XsdType GetBaseType()
         {
             return this.BaseType ?? base.GetBaseType();
@@ -28,6 +30,10 @@ namespace XmlSchemaProcessor.Xsd
             return this.Particle;
         }
 
+        #endregion
+
+        #region object
+
         public override string ToString()
         {
             StringBuilder buff = new StringBuilder();
@@ -41,7 +47,7 @@ namespace XmlSchemaProcessor.Xsd
             }
             else
             {
-                buff.Append("<- ");
+                buff.Append("<unnamed>");
             }
             buff.Append(this.Derivation + " of " + this.BaseType.Name);
 
@@ -65,5 +71,7 @@ namespace XmlSchemaProcessor.Xsd
 
             return buff.ToString();
         }
+
+        #endregion
     }
 }

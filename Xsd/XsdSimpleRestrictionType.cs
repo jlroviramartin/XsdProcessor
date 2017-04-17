@@ -63,6 +63,14 @@ namespace XmlSchemaProcessor.Xsd
             this.Facets = new List<XsdFacet>();
         }
 
+        public XsdSimpleType BaseType { get; set; }
+
+        public bool BuiltIn { get; set; }
+
+        public List<XsdFacet> Facets { get; internal set; }
+
+        #region private
+
         private XsdSimpleRestrictionType(string name, XsdSimpleType baseType)
         {
             this.Facets = new List<XsdFacet>();
@@ -73,11 +81,9 @@ namespace XmlSchemaProcessor.Xsd
             this.TopLevel = true;
         }
 
-        public XsdSimpleType BaseType { get; set; }
+        #endregion
 
-        public bool BuiltIn { get; set; }
-
-        public List<XsdFacet> Facets { get; internal set; }
+        #region XsdSimpleType
 
         public override bool IsBuiltIn()
         {
@@ -98,6 +104,10 @@ namespace XmlSchemaProcessor.Xsd
                     : null));
         }
 
+        #endregion
+
+        #region object
+
         public override string ToString()
         {
             return string.Format("{0} Restrictions {{ {1} }} of {2}",
@@ -105,5 +115,7 @@ namespace XmlSchemaProcessor.Xsd
                                  this.Facets.Select(x => x.ToString()).ToStringAsList("; "),
                                  this.BaseType.Name);
         }
+
+        #endregion
     }
 }

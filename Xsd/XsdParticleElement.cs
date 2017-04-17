@@ -6,6 +6,8 @@ namespace XmlSchemaProcessor.Xsd
     {
         public XsdElement Element { get; set; }
 
+        #region object
+
         public override string ToString()
         {
             StringBuilder buff = new StringBuilder();
@@ -20,5 +22,7 @@ namespace XmlSchemaProcessor.Xsd
 
             return buff.ToString();
         }
+
+        #endregion
     }
 }

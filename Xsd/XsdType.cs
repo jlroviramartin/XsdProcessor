@@ -4,9 +4,13 @@ namespace XmlSchemaProcessor.Xsd
     {
         public string Name { get; set; }
 
+        #region object
+
         public override string ToString()
         {
             return this.Name;
         }
+
+        #endregion
     }
 }

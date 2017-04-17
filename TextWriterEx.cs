@@ -40,6 +40,11 @@ namespace XmlSchemaProcessor
             this.indent--;
         }
 
+        public TextWriter Inner
+        {
+            get { return this.textWriter; }
+        }
+
         #region private
 
         private string space = "\t";

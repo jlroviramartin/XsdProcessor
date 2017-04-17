@@ -40,9 +40,13 @@ namespace XmlSchemaProcessor.Xsd.Facets
         public FacetType FacetType { get; private set; }
         public object Value { get; private set; }
 
+        #region object
+
         public override string ToString()
         {
             return string.Format("[{0} {1}]", this.FacetType, this.Value);
         }
+
+        #endregion
     }
 }

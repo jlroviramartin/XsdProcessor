@@ -44,8 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="LandXml\LandXML10.cs" />
+    <Compile Include="LandXml\LandXML11.cs" />
+    <Compile Include="LandXml\LandXML12.cs" />
+    <Compile Include="LandXml\LandXML20.cs" />
     <Compile Include="LandXml\SimpleReader.cs" />
-    <Compile Include="LandXml\Test.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="StringValueAttribute.cs" />
     <Compile Include="XsdConverter.cs" />
@@ -95,6 +98,14 @@
     <None Include="Documentation\XmlSchemaParticle.cd" />
     <None Include="Documentation\XmlSchemaObject - Others.cd" />
     <None Include="Documentation\XmlSchemaObject.cd" />
+    <None Include="Resources\Schemas\LandXML-1.0.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Schemas\LandXML-1.1.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Schemas\LandXML-1.2.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -42,6 +42,8 @@ namespace XmlSchemaProcessor.Xsd
             this.TopLevel = true;
         }
 
+        #region XsdSimpleType
+
         public override bool IsBuiltIn()
         {
             return true;
@@ -51,5 +53,7 @@ namespace XmlSchemaProcessor.Xsd
         {
             return this;
         }
+
+        #endregion
     }
 }

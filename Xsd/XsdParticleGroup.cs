@@ -12,7 +12,13 @@ namespace XmlSchemaProcessor.Xsd
 
         public ParticleGroupType GroupType { get; set; }
 
+        #region private
+
         private readonly List<XsdParticle> items = new List<XsdParticle>();
+
+        #endregion
+
+        #region object
 
         public override string ToString()
         {
@@ -28,5 +34,7 @@ namespace XmlSchemaProcessor.Xsd
 
             return buff.ToString();
         }
+
+        #endregion
     }
 }

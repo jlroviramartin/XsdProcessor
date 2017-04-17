@@ -10,7 +10,13 @@ namespace XmlSchemaProcessor.Xsd
             get { return this.content; }
         }
 
+        #region private
+
         private readonly List<XsdAttribute> content = new List<XsdAttribute>();
+
+        #endregion
+
+        #region object
 
         public override string ToString()
         {
@@ -23,5 +29,7 @@ namespace XmlSchemaProcessor.Xsd
             }
             return buff.ToString();
         }
+
+        #endregion
     }
 }
