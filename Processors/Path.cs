@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace XmlSchemaProcessor
+namespace XmlSchemaProcessor.Processors
 {
     public class Path
     {

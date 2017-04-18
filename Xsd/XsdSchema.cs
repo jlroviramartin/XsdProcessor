@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace XmlSchemaProcessor.Xsd
 {
-    public class XsdSchema
+    public class XsdSchema : XsdAnnotated
     {
         public XsdSchema()
         {

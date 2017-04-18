@@ -2,7 +2,7 @@ using System.Text;
 
 namespace XmlSchemaProcessor.Xsd
 {
-    public sealed class XsdElement : XsdObject
+    public sealed class XsdElement : XsdAnnotated
     {
         public string Name { get; set; }
 

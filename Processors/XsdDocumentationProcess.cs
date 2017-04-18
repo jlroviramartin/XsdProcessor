@@ -18,11 +18,11 @@ using System.IO;
 using System.Linq;
 using XmlSchemaProcessor.Xsd;
 
-namespace XmlSchemaProcessor
+namespace XmlSchemaProcessor.Processors
 {
-    public class DocumentXsd : XsdProcess
+    public class XsdDocumentationProcess : XsdProcess
     {
-        public DocumentXsd()
+        public XsdDocumentationProcess()
         {
             this.stringWriter = new StringWriter();
             this.buff = new TextWriterEx(this.stringWriter);

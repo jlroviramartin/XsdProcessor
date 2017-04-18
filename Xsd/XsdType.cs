@@ -1,6 +1,6 @@
 namespace XmlSchemaProcessor.Xsd
 {
-    public abstract class XsdType : XsdObject
+    public abstract class XsdType : XsdAnnotated
     {
         public string Name { get; set; }
 

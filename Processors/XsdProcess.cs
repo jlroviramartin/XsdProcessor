@@ -14,7 +14,7 @@
 
 using XmlSchemaProcessor.Xsd;
 
-namespace XmlSchemaProcessor
+namespace XmlSchemaProcessor.Processors
 {
     public class XsdProcess
     {

@@ -16,7 +16,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace XmlSchemaProcessor
+namespace XmlSchemaProcessor.Processors
 {
     public class StringValueAttribute : Attribute
     {

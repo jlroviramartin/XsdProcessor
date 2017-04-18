@@ -13,19 +13,67 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using XmlSchemaProcessor.Xsd;
 using XmlSchemaProcessor.Xsd.Facets;
 
-namespace XmlSchemaProcessor
+namespace XmlSchemaProcessor.Processors
 {
     public static class XsdTypeExtensions
     {
-        public static string ToNetType(this XsdType xsdType)
+        public static string GetNetDocumentation(this XsdElement xsdElement)
+        {
+            StringBuilder buff = new StringBuilder();
+
+            foreach (XsdDocumentation doc in xsdElement.Annotations)
+            {
+                buff.AppendLine(doc.Text);
+            }
+            return buff.ToString();
+        }
+
+        public static string GetNetDocumentation(this XsdType xsdType)
+        {
+            return GetNetDocumentationImp(xsdType);
+        }
+
+        private static string GetNetDocumentationImp(this XsdType xsdType)
+        {
+            StringBuilder buff = new StringBuilder();
+
+            foreach (XsdDocumentation doc in xsdType.Annotations)
+            {
+                buff.AppendLine(doc.Text);
+            }
+
+            if (xsdType is XsdSimpleRestrictionType)
+            {
+                string aux = GetNetDocumentationImp(((XsdSimpleRestrictionType)xsdType).BaseType);
+                if (!string.IsNullOrWhiteSpace(aux))
+                {
+                    buff.AppendLine("Restriction:");
+                    buff.AppendLine(aux);
+                }
+            }
+            else if (xsdType is XsdSimpleListType)
+            {
+                string aux = GetNetDocumentationImp(((XsdSimpleListType)xsdType).ItemType);
+                if (!string.IsNullOrWhiteSpace(aux))
+                {
+                    buff.AppendLine("List:");
+                    buff.AppendLine(aux);
+                }
+            }
+            return buff.ToString();
+        }
+
+        public static string ToNetType(this XsdType xsdType, bool optional)
         {
             if (xsdType is XsdSimpleType)
             {
-                return ToNetType((XsdSimpleType)xsdType);
+                return ToNetType((XsdSimpleType)xsdType, optional);
             }
             else
             {
@@ -33,53 +81,53 @@ namespace XmlSchemaProcessor
             }
         }
 
-        public static string ToNetType(this XsdSimpleType xsdType)
+        public static string ToNetType(this XsdSimpleType xsdType, bool optional)
         {
             if (xsdType is XsdBuiltInType)
             {
-                return ToNetType((XsdBuiltInType)xsdType);
+                return ToNetType((XsdBuiltInType)xsdType, optional);
             }
             else if (xsdType is XsdSimpleListType)
             {
-                return ToNetType((XsdSimpleListType)xsdType);
+                return ToNetType((XsdSimpleListType)xsdType, optional);
             }
             else if (xsdType is XsdSimpleRestrictionType)
             {
-                return ToNetType((XsdSimpleRestrictionType)xsdType);
+                return ToNetType((XsdSimpleRestrictionType)xsdType, optional);
             }
             else if (xsdType is XsdSimpleUnionType)
             {
-                return ToNetType((XsdSimpleUnionType)xsdType);
+                return ToNetType((XsdSimpleUnionType)xsdType, optional);
             }
             throw new IndexOutOfRangeException();
         }
 
-        private static string ToNetType(XsdBuiltInType xsdType)
+        private static string ToNetType(XsdBuiltInType xsdType, bool optional)
         {
             switch (xsdType.Name)
             {
                 case XsdBuiltInType.DURATION:
-                    return "System.TimeSpan";
+                    return CanBeOptional("TimeSpan", optional);
                 case XsdBuiltInType.DATETIME:
                 case XsdBuiltInType.DATE:
                 case XsdBuiltInType.TIME:
-                    return "System.DateTime";
+                    return CanBeOptional("DateTime", optional);
                 case XsdBuiltInType.STRING:
                     return "string";
                 case XsdBuiltInType.BOOLEAN:
-                    return "bool";
+                    return CanBeOptional("bool", optional);
                 case XsdBuiltInType.BASE_64_BINARY:
                 case XsdBuiltInType.HEX_BINARY:
                     return "byte[]";
                 case XsdBuiltInType.FLOAT:
-                    return "float";
+                    return CanBeOptional("float", optional);
                 case XsdBuiltInType.DOUBLE:
-                    return "double";
+                    return CanBeOptional("double", optional);
                 case XsdBuiltInType.DECIMAL:
-                    return "decimal";
+                    return CanBeOptional("decimal", optional);
 
                 case XsdBuiltInType.ANY_URI:
-                    return "System.Uri";
+                    return "Uri";
                 case XsdBuiltInType.QNAME:
                 case XsdBuiltInType.NOTATION:
                     return "string";
@@ -87,7 +135,7 @@ namespace XmlSchemaProcessor
             throw new IndexOutOfRangeException();
         }
 
-        private static string ToNetType(XsdSimpleRestrictionType xsdType)
+        private static string ToNetType(XsdSimpleRestrictionType xsdType, bool optional)
         {
             switch (xsdType.Name)
             {
@@ -107,28 +155,28 @@ namespace XmlSchemaProcessor
                 case XsdSimpleRestrictionType.INTEGER:
                 case XsdSimpleRestrictionType.NON_POSITIVE_INTEGER:
                 case XsdSimpleRestrictionType.NEGATIVE_INTEGER:
-                    return "int";
+                    return CanBeOptional("int", optional);
                 case XsdSimpleRestrictionType.NON_NEGATIVE_INTEGER:
                 case XsdSimpleRestrictionType.POSITIVE_INTEGER:
-                    return "uint";
+                    return CanBeOptional("uint", optional);
 
                 case XsdSimpleRestrictionType.UNSIGNED_LONG:
-                    return "ulong";
+                    return CanBeOptional("ulong", optional);
                 case XsdSimpleRestrictionType.UNSIGNED_INT:
-                    return "uint";
+                    return CanBeOptional("uint", optional);
                 case XsdSimpleRestrictionType.UNSIGNED_SHORT:
-                    return "ushort";
+                    return CanBeOptional("ushort", optional);
                 case XsdSimpleRestrictionType.UNSIGNED_BYTE:
-                    return "byte";
+                    return CanBeOptional("byte", optional);
 
                 case XsdSimpleRestrictionType.LONG:
-                    return "long";
+                    return CanBeOptional("long", optional);
                 case XsdSimpleRestrictionType.INT:
-                    return "int";
+                    return CanBeOptional("int", optional);
                 case XsdSimpleRestrictionType.SHORT:
-                    return "short";
+                    return CanBeOptional("short", optional);
                 case XsdSimpleRestrictionType.BYTE:
-                    return "sbyte";
+                    return CanBeOptional("sbyte", optional);
             }
 
             XsdSimpleType builtInRootType = xsdType.GetBuiltInRootType();
@@ -139,16 +187,21 @@ namespace XmlSchemaProcessor
                            .Select(x => x.Value)
                            .Any())
                 {
-                    return xsdType.Name.ToTypeName();
+                    return CanBeOptional(xsdType.Name.ToTypeName(), optional);
                 }
             }
 
-            return ToNetType(xsdType.BaseType);
+            return ToNetType(xsdType.BaseType, optional);
         }
 
-        private static string ToNetType(XsdSimpleListType xsdType)
+        private static string ToNetType(XsdSimpleListType xsdType, bool optional)
         {
-            return "IList<" + ToNetType(xsdType.ItemType) + ">";
+            return "IList<" + ToNetType(xsdType.ItemType, optional) + ">";
+        }
+
+        private static string CanBeOptional(string type, bool optional)
+        {
+            return !optional ? type : type + "?";
         }
     }
 }

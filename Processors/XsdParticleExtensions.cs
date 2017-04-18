@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using XmlSchemaProcessor.Xsd;
 
-namespace XmlSchemaProcessor
+namespace XmlSchemaProcessor.Processors
 {
     public static class XsdParticleExtensions
     {

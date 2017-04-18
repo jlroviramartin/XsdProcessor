@@ -43,18 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildLandXML.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="LandXml\LandXML10.cs" />
     <Compile Include="LandXml\LandXML11.cs" />
     <Compile Include="LandXml\LandXML12.cs" />
     <Compile Include="LandXml\LandXML20.cs" />
-    <Compile Include="LandXml\SimpleReader.cs" />
-    <Compile Include="Path.cs" />
-    <Compile Include="StringValueAttribute.cs" />
-    <Compile Include="XsdConverter.cs" />
-    <Compile Include="XsdBaseObject.cs" />
-    <Compile Include="XsdTypeExtensions.cs" />
-    <Compile Include="XsdToNetReader.cs" />
+    <Compile Include="Processors\SimpleReader.cs" />
+    <Compile Include="Processors\Path.cs" />
+    <Compile Include="Processors\StringValueAttribute.cs" />
+    <Compile Include="Processors\XsdConverter.cs" />
+    <Compile Include="Processors\XsdBaseObject.cs" />
+    <Compile Include="Processors\XsdTypeExtensions.cs" />
+    <Compile Include="Processors\XsdToNetProcess.cs" />
+    <Compile Include="ValueObject.cs" />
+    <Compile Include="Xsd\AttributeUse.cs" />
     <Compile Include="Xsd\Facets\FacetType.cs" />
     <Compile Include="Xsd\Facets\XsdFacet.cs" />
     <Compile Include="Xsd\Facets\XsdIntFacet.cs" />
@@ -62,15 +65,14 @@
     <Compile Include="Xsd\Facets\XsdStringFacet.cs" />
     <Compile Include="Xsd\ProcessXmlSchema.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Program2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringUtils.cs" />
     <Compile Include="TextWriterEx.cs" />
-    <Compile Include="XsdParticleExtensions.cs" />
-    <Compile Include="XsdProcess.cs" />
-    <Compile Include="DocumentXsd.cs" />
+    <Compile Include="Processors\XsdParticleExtensions.cs" />
+    <Compile Include="Processors\XsdProcess.cs" />
+    <Compile Include="Processors\XsdDocumentationProcess.cs" />
     <Compile Include="Xsd\DerivationMethod.cs" />
     <Compile Include="Xsd\ParticleGroupType.cs" />
+    <Compile Include="Xsd\XsdDocumentation.cs" />
     <Compile Include="Xsd\XsdParticleGroup.cs" />
     <Compile Include="Xsd\XsdAttribute.cs" />
     <Compile Include="Xsd\XsdAttributes.cs" />
@@ -98,6 +100,7 @@
     <None Include="Documentation\XmlSchemaParticle.cd" />
     <None Include="Documentation\XmlSchemaObject - Others.cd" />
     <None Include="Documentation\XmlSchemaObject.cd" />
+    <None Include="LICENSE" />
     <None Include="Resources\Schemas\LandXML-1.0.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

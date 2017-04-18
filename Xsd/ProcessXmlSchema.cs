@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using XmlSchemaProcessor.Xsd.Facets;
@@ -92,6 +93,8 @@ namespace XmlSchemaProcessor.Xsd
                 }
                 else if (schemaObject is XmlSchemaAnnotation)
                 {
+                    List<XsdDocumentation> documentations = this.ProcessXmlSchemaAnnotation((XmlSchemaAnnotation)schemaObject).ToList();
+                    this.schema.Annotations.AddRange(documentations);
                 }
                 else
                 {
@@ -174,6 +177,10 @@ namespace XmlSchemaProcessor.Xsd
 
             XmlSchemaSimpleTypeContent content = xmlSchemaSimpleType.Content;
 
+            // Anotaciones.
+            List<XsdDocumentation> documentations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
+
+            XsdSimpleType ret = null;
             if (content is XmlSchemaSimpleTypeRestriction)
             {
                 XmlSchemaSimpleTypeRestriction restriction = (XmlSchemaSimpleTypeRestriction)content;
@@ -184,12 +191,9 @@ namespace XmlSchemaProcessor.Xsd
                     _simpleType.Name = name;
                     _simpleType.BaseType = this.ProcessXmlSchemaSimpleType(restriction.BaseType);
 
-                    foreach (XmlSchemaFacet facet in restriction.Facets.OfType<XmlSchemaFacet>())
-                    {
-                        _simpleType.Facets.Add(this.ProcessFacet(facet));
-                    }
+                    _simpleType.Facets.AddRange(restriction.Facets.OfType<XmlSchemaFacet>().Select(this.ProcessFacet));
 
-                    return _simpleType;
+                    ret = _simpleType;
                 }
                 else if (!restriction.BaseTypeName.IsEmpty)
                 {
@@ -197,15 +201,10 @@ namespace XmlSchemaProcessor.Xsd
                     _simpleType.Name = name;
                     this.FindSimple(restriction.BaseTypeName, x => _simpleType.BaseType = x);
 
-                    foreach (XmlSchemaFacet facet in restriction.Facets.OfType<XmlSchemaFacet>())
-                    {
-                        _simpleType.Facets.Add(this.ProcessFacet(facet));
-                    }
+                    _simpleType.Facets.AddRange(restriction.Facets.OfType<XmlSchemaFacet>().Select(this.ProcessFacet));
 
-                    return _simpleType;
+                    ret = _simpleType;
                 }
-
-                throw new Exception();
             }
             else if (content is XmlSchemaSimpleTypeList)
             {
@@ -217,7 +216,7 @@ namespace XmlSchemaProcessor.Xsd
                     _simpleType.Name = name;
                     _simpleType.ItemType = this.ProcessXmlSchemaSimpleType(list.ItemType);
 
-                    return _simpleType;
+                    ret = _simpleType;
                 }
                 else if (!list.ItemTypeName.IsEmpty)
                 {
@@ -225,10 +224,8 @@ namespace XmlSchemaProcessor.Xsd
                     _simpleType.Name = name;
                     this.FindSimple(list.ItemTypeName, x => _simpleType.ItemType = x);
 
-                    return _simpleType;
+                    ret = _simpleType;
                 }
-
-                throw new Exception();
             }
             else if (content is XmlSchemaSimpleTypeUnion)
             {
@@ -237,7 +234,13 @@ namespace XmlSchemaProcessor.Xsd
                 throw new NotImplementedException();
             }
 
-            throw new Exception();
+            if (ret == null)
+            {
+                throw new Exception();
+            }
+
+            ret.Annotations.AddRange(documentations);
+            return ret;
         }
 
         private XsdFacet ProcessFacet(XmlSchemaFacet facet)
@@ -373,6 +376,10 @@ namespace XmlSchemaProcessor.Xsd
             XmlSchemaContentModel contentModel = complexType.ContentModel;
             XmlSchemaParticle particle = complexType.Particle; // complexType.ContentTypeParticle;
 
+            // Anotaciones.
+            List<XsdDocumentation> documentations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
+
+            XsdComplexType ret = null;
             if (contentModel != null)
             {
                 Contract.Assert(particle == null);
@@ -394,7 +401,7 @@ namespace XmlSchemaProcessor.Xsd
                             _complexType.BaseType = this.ProcessXmlSchemaSimpleType(restriction.BaseType);
                             _complexType.Attributes = this.ProcessXmlAttributes(restriction.Attributes, restriction.AnyAttribute);
 
-                            return _complexType;
+                            ret = _complexType;
                         }
                         else if (!restriction.BaseTypeName.IsEmpty)
                         {
@@ -404,7 +411,7 @@ namespace XmlSchemaProcessor.Xsd
                             this.FindSimple(restriction.BaseTypeName, x => _complexType.BaseType = x);
                             _complexType.Attributes = this.ProcessXmlAttributes(restriction.Attributes, restriction.AnyAttribute);
 
-                            return _complexType;
+                            ret = _complexType;
                         }
                     }
                     else if (content is XmlSchemaSimpleContentExtension)
@@ -420,7 +427,7 @@ namespace XmlSchemaProcessor.Xsd
                             this.FindType(extension.BaseTypeName, x => _complexType.BaseType = x);
                             _complexType.Attributes = this.ProcessXmlAttributes(extension.Attributes, extension.AnyAttribute);
 
-                            return _complexType;
+                            ret = _complexType;
                         }
                     }
                 }
@@ -442,7 +449,7 @@ namespace XmlSchemaProcessor.Xsd
                             _complexType.Particle = this.ProcessXmlSchemaParticle(restriction.Particle);
                             _complexType.Attributes = this.ProcessXmlAttributes(restriction.Attributes, restriction.AnyAttribute);
 
-                            return _complexType;
+                            ret = _complexType;
                         }
                     }
                     else if (content is XmlSchemaComplexContentExtension)
@@ -458,12 +465,10 @@ namespace XmlSchemaProcessor.Xsd
                             _complexType.Particle = this.ProcessXmlSchemaParticle(extension.Particle);
                             _complexType.Attributes = this.ProcessXmlAttributes(extension.Attributes, extension.AnyAttribute);
 
-                            return _complexType;
+                            ret = _complexType;
                         }
                     }
                 }
-
-                throw new Exception();
             }
             else
             {
@@ -475,11 +480,17 @@ namespace XmlSchemaProcessor.Xsd
                 }
                 _complexType.Attributes = this.ProcessXmlAttributes(complexType.Attributes, complexType.AnyAttribute);
 
-                return _complexType;
+                ret = _complexType;
             }
 
-            // Falta openContent, attribute, attributeGroup, anyAttribute, assert
-            throw new Exception();
+            if (ret == null)
+            {
+                // Falta openContent, attribute, attributeGroup, anyAttribute, assert
+                throw new Exception();
+            }
+
+            ret.Annotations.AddRange(documentations);
+            return ret;
         }
 
         /// <summary>
@@ -661,11 +672,10 @@ namespace XmlSchemaProcessor.Xsd
             XmlQualifiedName schemaTypeName = attribute.SchemaTypeName;
             XmlSchemaSimpleType attributeSchemaType = attribute.AttributeSchemaType; // based on the SchemaType or SchemaTypeName
 
-            if (!attribute.RefName.IsEmpty)
-            {
-                throw new Exception();
-            }
-            else
+            XmlSchemaUse use = attribute.Use;
+
+            XsdAttribute ret = null;
+            if (attribute.RefName.IsEmpty)
             {
                 if (!schemaTypeName.IsEmpty)
                 {
@@ -673,31 +683,53 @@ namespace XmlSchemaProcessor.Xsd
 
                     XsdAttribute _attribute = new XsdAttribute();
                     _attribute.Name = name;
-                    _attribute.DefValue = defValue;
                     this.FindSimple(schemaTypeName, x => _attribute.Type = x);
 
-                    return _attribute;
+                    ret = _attribute;
                 }
                 else if (schemaType != null)
                 {
                     XsdAttribute _attribute = new XsdAttribute();
                     _attribute.Name = name;
-                    _attribute.DefValue = defValue;
                     _attribute.Type = this.ProcessXmlSchemaSimpleType(schemaType);
 
-                    return _attribute;
+                    ret = _attribute;
                 }
                 else
                 {
                     // No tiene definido tipo (a veces ocurre).
                     XsdAttribute _attribute = new XsdAttribute();
                     _attribute.Name = name;
-                    _attribute.DefValue = defValue;
                     //_attribute.Type = ..;
 
-                    return _attribute;
+                    ret = _attribute;
                 }
             }
+
+            if (ret == null)
+            {
+                throw new Exception();
+            }
+
+            AttributeUse _use = AttributeUse.None;
+            switch (use)
+            {
+                case XmlSchemaUse.None:
+                    _use = AttributeUse.None;
+                    break;
+                case XmlSchemaUse.Optional:
+                    _use = AttributeUse.Optional;
+                    break;
+                case XmlSchemaUse.Prohibited:
+                    _use = AttributeUse.Prohibited;
+                    break;
+                case XmlSchemaUse.Required:
+                    _use = AttributeUse.Required;
+                    break;
+            }
+            ret.Use = _use;
+            ret.DefValue = defValue;
+            return ret;
         }
 
         private XsdAttributeGroup ProcessXmlAttributeGroup(XmlSchemaAttributeGroup attributeGroup)
@@ -771,11 +803,11 @@ namespace XmlSchemaProcessor.Xsd
             XmlQualifiedName schemaTypeName = xmlSchemaElement.SchemaTypeName;
             XmlSchemaType elementSchemaType = xmlSchemaElement.ElementSchemaType; // based on the SchemaType or SchemaTypeName
 
-            if (!xmlSchemaElement.RefName.IsEmpty)
-            {
-                throw new Exception();
-            }
-            else
+            // Anotaciones.
+            List<XsdDocumentation> documentations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
+
+            XsdElement ret = null;
+            if (xmlSchemaElement.RefName.IsEmpty)
             {
                 if (!schemaTypeName.IsEmpty)
                 {
@@ -787,7 +819,7 @@ namespace XmlSchemaProcessor.Xsd
                     _element.IsNillable = isNillable;
                     this.FindType(schemaTypeName, x => _element.TypeDefinition = x);
 
-                    return _element;
+                    ret = _element;
                 }
                 else if (schemaType != null)
                 {
@@ -797,7 +829,7 @@ namespace XmlSchemaProcessor.Xsd
                     _element.IsNillable = isNillable;
                     _element.TypeDefinition = this.ProcessXmlSchemaType(schemaType);
 
-                    return _element;
+                    ret = _element;
                 }
                 else
                 {
@@ -807,41 +839,50 @@ namespace XmlSchemaProcessor.Xsd
                     _element.IsAbstract = isAbstract;
                     _element.IsNillable = isNillable;
 
-                    return _element;
+                    ret = _element;
                 }
             }
+
+            if (ret == null)
+            {
+                throw new Exception();
+            }
+
+            ret.Annotations.AddRange(documentations);
+            return ret;
         }
 
         #endregion
 
-        private void ProcessXmlSchemaAnnotation(XmlSchemaAnnotation annotation)
+        private IEnumerable<XsdDocumentation> ProcessXmlSchemaAnnotation(XmlSchemaAnnotation annotation)
         {
-            return;
-
+            List<XsdDocumentation> ret = new List<XsdDocumentation>();
             if (annotation != null)
             {
                 foreach (XmlSchemaObject schemaObject in annotation.Items)
                 {
                     if (schemaObject is XmlSchemaAppInfo)
                     {
-                        XmlSchemaAppInfo schemaAppInfo = (XmlSchemaAppInfo)schemaObject;
-                        //Debug.WriteLine("AppInfo " + schemaAppInfo.Source);
+                        /*XmlSchemaAppInfo schemaAppInfo = (XmlSchemaAppInfo)schemaObject;
+                        StringBuilder buff = new StringBuilder();
                         foreach (XmlNode markup in schemaAppInfo.Markup)
                         {
-                            //Debug.WriteLine(markup.OuterXml);
-                        }
+                            buff.AppendLine(markup.OuterXml);
+                        }*/
                     }
                     else if (schemaObject is XmlSchemaDocumentation)
                     {
                         XmlSchemaDocumentation schemaDocumentation = (XmlSchemaDocumentation)schemaObject;
-                        //Debug.WriteLine("Documentation " + schemaDocumentation.Source + "Lang " + schemaDocumentation.Language);
+                        StringBuilder buff = new StringBuilder();
                         foreach (XmlNode markup in schemaDocumentation.Markup)
                         {
-                            //Debug.WriteLine(markup.OuterXml);
+                            buff.AppendLine(markup.OuterXml);
                         }
+                        ret.Add(new XsdDocumentation(schemaDocumentation.Source, schemaDocumentation.Language, buff.ToString()));
                     }
                 }
             }
+            return ret;
         }
 
         private void Find<T>(Func<XmlQualifiedName, T> find, XmlQualifiedName baseTypeName, Action<T> found)

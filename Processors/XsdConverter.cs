@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace XmlSchemaProcessor
+namespace XmlSchemaProcessor.Processors
 {
     public class XsdConverter
     {
@@ -73,47 +73,47 @@ namespace XmlSchemaProcessor
         {
             this.map.Add(typeof(string), v => v);
 
-            this.map.Add(typeof(long), v => XmlConvert.ToInt64(v));
-            this.map.Add(typeof(int), v => XmlConvert.ToInt32(v));
-            this.map.Add(typeof(short), v => XmlConvert.ToInt16(v));
-            this.map.Add(typeof(sbyte), v => XmlConvert.ToSByte(v));
+            this.AddConverterValueType(v => XmlConvert.ToInt64(v));
+            this.AddConverterValueType(v => XmlConvert.ToInt32(v));
+            this.AddConverterValueType(v => XmlConvert.ToInt16(v));
+            this.AddConverterValueType(v => XmlConvert.ToSByte(v));
 
-            this.map.Add(typeof(ulong), v => XmlConvert.ToUInt64(v));
-            this.map.Add(typeof(uint), v => XmlConvert.ToUInt32(v));
-            this.map.Add(typeof(ushort), v => XmlConvert.ToUInt16(v));
-            this.map.Add(typeof(byte), v => XmlConvert.ToByte(v));
+            this.AddConverterValueType(v => XmlConvert.ToUInt64(v));
+            this.AddConverterValueType(v => XmlConvert.ToUInt32(v));
+            this.AddConverterValueType(v => XmlConvert.ToUInt16(v));
+            this.AddConverterValueType(v => XmlConvert.ToByte(v));
 
-            this.map.Add(typeof(float), v => XmlConvert.ToSingle(v));
-            this.map.Add(typeof(double), v => XmlConvert.ToDouble(v));
-            this.map.Add(typeof(decimal), v => XmlConvert.ToDecimal(v));
+            this.AddConverterValueType(v => XmlConvert.ToSingle(v));
+            this.AddConverterValueType(v => XmlConvert.ToDouble(v));
+            this.AddConverterValueType(v => XmlConvert.ToDecimal(v));
 
-            this.map.Add(typeof(char), v => XmlConvert.ToChar(v));
-            this.map.Add(typeof(bool), v => XmlConvert.ToBoolean(v));
+            this.AddConverterValueType(v => XmlConvert.ToChar(v));
+            this.AddConverterValueType(v => XmlConvert.ToBoolean(v));
 
-            this.map.Add(typeof(DateTime), v => XmlConvert.ToDateTime(v));
-            this.map.Add(typeof(DateTimeOffset), v => XmlConvert.ToDateTimeOffset(v));
-            this.map.Add(typeof(TimeSpan), v => XmlConvert.ToTimeSpan(v));
+            this.AddConverterValueType(v => XmlConvert.ToDateTime(v));
+            this.AddConverterValueType(v => XmlConvert.ToDateTimeOffset(v));
+            this.AddConverterValueType(v => XmlConvert.ToTimeSpan(v));
 
-            this.AddDef<long>();
-            this.AddDef<int>();
-            this.AddDef<short>();
-            this.AddDef<sbyte>();
+            this.AddDefValueType<long>();
+            this.AddDefValueType<int>();
+            this.AddDefValueType<short>();
+            this.AddDefValueType<sbyte>();
 
-            this.AddDef<ulong>();
-            this.AddDef<uint>();
-            this.AddDef<ushort>();
-            this.AddDef<byte>();
+            this.AddDefValueType<ulong>();
+            this.AddDefValueType<uint>();
+            this.AddDefValueType<ushort>();
+            this.AddDefValueType<byte>();
 
-            this.AddDef<float>();
-            this.AddDef<double>();
-            this.AddDef<decimal>();
+            this.AddDefValueType<float>();
+            this.AddDefValueType<double>();
+            this.AddDefValueType<decimal>();
 
-            this.AddDef<char>();
-            this.AddDef<bool>();
+            this.AddDefValueType<char>();
+            this.AddDefValueType<bool>();
 
-            this.AddDef<DateTime>();
-            this.AddDef<DateTimeOffset>();
-            this.AddDef<TimeSpan>();
+            this.AddDefValueType<DateTime>();
+            this.AddDefValueType<DateTimeOffset>();
+            this.AddDefValueType<TimeSpan>();
         }
 
         private object GetDefValue(Type toType)
@@ -142,12 +142,26 @@ namespace XmlSchemaProcessor
                     {
                         enumMap.Add(StringValueAttribute.GetValue(enumValue), enumValue);
                     }
-                    Enum defValue = Enum.GetValues(toType).Cast<Enum>().First();
                     convert = v =>
                     {
                         return enumMap.GetSafe(v);
                     };
-                    this.map.Add(toType, convert);
+                }
+                else if (toType.IsGenericType && (toType.GetGenericTypeDefinition() == typeof(Nullable<>)))
+                {
+                    Type innerType = toType.GetGenericArguments()[0];
+                    if (innerType.IsEnum)
+                    {
+                        Dictionary<string, object> enumMap = new Dictionary<string, object>();
+                        foreach (Enum enumValue in Enum.GetValues(innerType).Cast<Enum>())
+                        {
+                            enumMap.Add(StringValueAttribute.GetValue(enumValue), enumValue);
+                        }
+                        convert = v =>
+                        {
+                            return (v != null) ? enumMap.GetSafe(v) : null;
+                        };
+                    }
                 }
                 else if (toType.IsGenericType && (toType.GetGenericTypeDefinition() == typeof(IList<>)))
                 {
@@ -163,14 +177,26 @@ namespace XmlSchemaProcessor
                         }
                         return list;
                     };
-                    this.map.Add(toType, convert);
                 }
                 else
                 {
                     throw new Exception("No se puede convertir.");
                 }
+                this.map.Add(toType, convert);
             }
             return convert;
+        }
+
+        private void AddConverterValueType<T>(Func<string, T> converter) where T : struct
+        {
+            this.map.Add(typeof(T), v => converter(v));
+            this.map.Add(typeof(T?), v => (v != null) ? converter(v) : (T?)null);
+        }
+
+        private void AddDefValueType<T>() where T : struct
+        {
+            this.defValues.Add(typeof(T), default(T));
+            this.defValues.Add(typeof(T?), default(T?));
         }
 
         private void AddDef<T>()

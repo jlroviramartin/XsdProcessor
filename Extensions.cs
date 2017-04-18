@@ -44,6 +44,19 @@ namespace XmlSchemaProcessor
             }
         }
 
+        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> enumer)
+        {
+            foreach (T value in enumer)
+            {
+                collection.Add(value);
+            }
+        }
+
+        public static void AppendLine(this StringBuilder buff, object obj)
+        {
+            buff.AppendLine((obj != null) ? obj.ToString() : null);
+        }
+
         public static string ToStringAsList(this IEnumerable<string> enumer, string sep)
         {
             StringBuilder buff = new StringBuilder();
@@ -140,11 +153,72 @@ namespace XmlSchemaProcessor
             return memberInfo.GetCustomAttributes(inherit).OfType<T>().ToArray();
         }
 
+        public const string INDENT = "    ";
+        public const string OPEN = "{";
+        public const string CLOSE = "}";
+
+        public static string Indent(this string str, string indent = INDENT)
+        {
+            return indent + str.Replace(Environment.NewLine, Environment.NewLine + indent);
+        }
+
+        public static string Indent(object obj, string indent = INDENT)
+        {
+            return ((obj != null) ? obj.ToString().Indent(indent) : "");
+        }
+
+        public static StringBuilder AppendIndent(this StringBuilder buff, object obj, string indent = INDENT)
+        {
+            return buff.Append(Indent(obj, indent));
+        }
+
+        public static StringBuilder AppendLineSafe(this StringBuilder buff)
+        {
+            if (buff.Length > 0)
+            {
+                if (buff.Length >= Environment.NewLine.Length)
+                {
+                    bool lastIsNewLine = true;
+                    for (int i = 0; i < Environment.NewLine.Length; i++)
+                    {
+                        if (Environment.NewLine[i] != buff[buff.Length - Environment.NewLine.Length + i])
+                        {
+                            lastIsNewLine = false;
+                            break;
+                        }
+                    }
+                    if (lastIsNewLine)
+                    {
+                        return buff;
+                    }
+                }
+                buff.AppendLine();
+            }
+            return buff;
+        }
+
+        public static StringBuilder AppendRegion(this StringBuilder buff, object obj, string indent = INDENT, string open = OPEN, string close = CLOSE)
+        {
+            buff.Append(open);
+
+            buff.AppendLine();
+            buff.AppendIndent(obj);
+
+            buff.AppendLine();
+            buff.Append(close);
+
+            return buff;
+        }
+
+        #region private
+
         private static readonly HashSet<string> restrictedNamed = new HashSet<string>(new[]
         {
             "namespace", "using", "class", "struct", "enum", "delegate",
             "public", "protected", "private", "internal",
             "static" // .. complete this list :)
         });
+
+        #endregion
     }
 }

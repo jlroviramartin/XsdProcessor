@@ -6,13 +6,13 @@ using System.Xml;
 using BeginRead = System.Action<System.Collections.Generic.IDictionary<string, string>, string>;
 using EndRead = System.Action;
 
-namespace XmlSchemaProcessor.LandXml
+namespace XmlSchemaProcessor.Processors
 {
     public class SimpleReader
     {
-        public SimpleReader(string namespaceURI)
+        public SimpleReader(params string[] namespacesURI)
         {
-            this.namespaceURI = namespaceURI;
+            this.namespacesURI = new HashSet<string>(namespacesURI);
         }
 
         public void Read(string url)
@@ -33,7 +33,7 @@ namespace XmlSchemaProcessor.LandXml
                     {
                         ReadBeginEnd readBeginEnd;
                         IDictionary<string, string> attributes;
-                        if (this.namespaceURI.Equals(reader.NamespaceURI))
+                        if (this.TestURI(reader.NamespaceURI))
                         {
                             readBeginEnd = this.map.GetSafe(reader.Name);
                             attributes = this.ReadAttributes(reader, true);
@@ -51,6 +51,11 @@ namespace XmlSchemaProcessor.LandXml
                         }
 
                         readBeginEnd.BeginRead(attributes, content);
+
+                        if (readBeginEnd.NeedContent || reader.IsEmptyElement)
+                        {
+                            readBeginEnd.EndRead();
+                        }
                         break;
                     }
                     case XmlNodeType.EndElement:
@@ -97,7 +102,7 @@ namespace XmlSchemaProcessor.LandXml
             {
                 while (reader.MoveToNextAttribute())
                 {
-                    bool sameURI = this.namespaceURI.Equals(reader.NamespaceURI);
+                    bool sameURI = this.TestURI(reader.NamespaceURI);
 
                     if (string.IsNullOrWhiteSpace(reader.NamespaceURI)
                         || (useNamespaceURI && sameURI)
@@ -130,7 +135,12 @@ namespace XmlSchemaProcessor.LandXml
             return buff.ToString();
         }
 
-        private readonly string namespaceURI;
+        private bool TestURI(string uri)
+        {
+            return this.namespacesURI.Contains(uri);
+        }
+
+        private readonly HashSet<string> namespacesURI;
         private readonly Dictionary<string, ReadBeginEnd> map = new Dictionary<string, ReadBeginEnd>();
 
         private readonly ReadBeginEnd nonNamespaceURIReader = new ReadBeginEnd(

@@ -1,4 +1,4 @@
-using System.Text;
+using System.IO;
 
 namespace XmlSchemaProcessor.Xsd
 {
@@ -36,40 +36,42 @@ namespace XmlSchemaProcessor.Xsd
 
         public override string ToString()
         {
-            StringBuilder buff = new StringBuilder();
-
-            string indent = string.Empty;
-
-            if (!string.IsNullOrEmpty(this.Name))
+            using (StringWriter inner = new StringWriter())
+            using (TextWriterEx writer = new TextWriterEx(inner))
             {
-                indent = StringUtils.INDENT;
-                buff.Append(this.Name + " ");
-            }
-            else
-            {
-                buff.Append("<unnamed>");
-            }
-            buff.Append(this.Derivation + " of " + this.BaseType.Name);
+                if (!string.IsNullOrEmpty(this.Name))
+                {
+                    writer.Write(this.Name + " ");
+                }
+                else
+                {
+                    writer.Write("<unnamed> ");
+                }
+                writer.WriteLine(this.Derivation + " of " + this.BaseType.Name);
 
-            if (!this.BaseType.TopLevel)
-            {
-                buff.AppendLineSafe();
-                buff.AppendRegion(this.BaseType, indent);
-            }
+                if (!this.BaseType.TopLevel)
+                {
+                    writer.Indent();
+                    writer.WriteLine(this.BaseType);
+                    writer.Unindent();
+                }
 
-            if (this.Attributes.Content.Count > 0)
-            {
-                buff.AppendLineSafe();
-                buff.AppendIndent(this.Attributes, indent);
-            }
+                if (this.Attributes.Content.Count > 0)
+                {
+                    writer.Indent();
+                    writer.WriteLine(this.Attributes);
+                    writer.Unindent();
+                }
 
-            if (this.Particle != null)
-            {
-                buff.AppendLineSafe();
-                buff.AppendIndent(this.Particle, indent);
-            }
+                if (this.Particle != null)
+                {
+                    writer.Indent();
+                    writer.WriteLine(this.Particle);
+                    writer.Unindent();
+                }
 
-            return buff.ToString();
+                return inner.ToString();
+            }
         }
 
         #endregion

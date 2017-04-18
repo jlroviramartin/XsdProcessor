@@ -8,6 +8,7 @@ namespace XmlSchemaProcessor.Xsd
         public XsdSimpleType Type { get; set; }
 
         public string DefValue { get; set; }
+        public AttributeUse Use { get; set; }
 
         #region object
 
