@@ -51,6 +51,27 @@ namespace XmlSchemaProcessor.Xsd
 
         #region private
 
+        private static AttributeUse GetAttributeUse(XmlSchemaUse use)
+        {
+            AttributeUse _use = AttributeUse.None;
+            switch (use)
+            {
+                case XmlSchemaUse.None:
+                    _use = AttributeUse.None;
+                    break;
+                case XmlSchemaUse.Optional:
+                    _use = AttributeUse.Optional;
+                    break;
+                case XmlSchemaUse.Prohibited:
+                    _use = AttributeUse.Prohibited;
+                    break;
+                case XmlSchemaUse.Required:
+                    _use = AttributeUse.Required;
+                    break;
+            }
+            return _use;
+        }
+
         private bool Process(XmlSchema xmlSchema)
         {
             // The collection of XmlSchemaAnnotation, XmlSchemaAttribute, XmlSchemaAttributeGroup, XmlSchemaComplexType, XmlSchemaSimpleType, XmlSchemaElement, XmlSchemaGroup, or XmlSchemaNotation.
@@ -93,8 +114,8 @@ namespace XmlSchemaProcessor.Xsd
                 }
                 else if (schemaObject is XmlSchemaAnnotation)
                 {
-                    List<XsdDocumentation> documentations = this.ProcessXmlSchemaAnnotation((XmlSchemaAnnotation)schemaObject).ToList();
-                    this.schema.Annotations.AddRange(documentations);
+                    List<XsdDocumentation> annotations = this.ProcessXmlSchemaAnnotation((XmlSchemaAnnotation)schemaObject).ToList();
+                    this.schema.Annotations.AddRange(annotations);
                 }
                 else
                 {
@@ -178,7 +199,7 @@ namespace XmlSchemaProcessor.Xsd
             XmlSchemaSimpleTypeContent content = xmlSchemaSimpleType.Content;
 
             // Anotaciones.
-            List<XsdDocumentation> documentations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
+            List<XsdDocumentation> annotations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
 
             XsdSimpleType ret = null;
             if (content is XmlSchemaSimpleTypeRestriction)
@@ -239,7 +260,7 @@ namespace XmlSchemaProcessor.Xsd
                 throw new Exception();
             }
 
-            ret.Annotations.AddRange(documentations);
+            ret.Annotations.AddRange(annotations);
             return ret;
         }
 
@@ -377,7 +398,7 @@ namespace XmlSchemaProcessor.Xsd
             XmlSchemaParticle particle = complexType.Particle; // complexType.ContentTypeParticle;
 
             // Anotaciones.
-            List<XsdDocumentation> documentations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
+            List<XsdDocumentation> annotations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
 
             XsdComplexType ret = null;
             if (contentModel != null)
@@ -489,7 +510,7 @@ namespace XmlSchemaProcessor.Xsd
                 throw new Exception();
             }
 
-            ret.Annotations.AddRange(documentations);
+            ret.Annotations.AddRange(annotations);
             return ret;
         }
 
@@ -711,22 +732,7 @@ namespace XmlSchemaProcessor.Xsd
                 throw new Exception();
             }
 
-            AttributeUse _use = AttributeUse.None;
-            switch (use)
-            {
-                case XmlSchemaUse.None:
-                    _use = AttributeUse.None;
-                    break;
-                case XmlSchemaUse.Optional:
-                    _use = AttributeUse.Optional;
-                    break;
-                case XmlSchemaUse.Prohibited:
-                    _use = AttributeUse.Prohibited;
-                    break;
-                case XmlSchemaUse.Required:
-                    _use = AttributeUse.Required;
-                    break;
-            }
+            AttributeUse _use = GetAttributeUse(use);
             ret.Use = _use;
             ret.DefValue = defValue;
             return ret;
@@ -804,7 +810,7 @@ namespace XmlSchemaProcessor.Xsd
             XmlSchemaType elementSchemaType = xmlSchemaElement.ElementSchemaType; // based on the SchemaType or SchemaTypeName
 
             // Anotaciones.
-            List<XsdDocumentation> documentations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
+            List<XsdDocumentation> annotations = this.ProcessXmlSchemaAnnotation(annotation).ToList();
 
             XsdElement ret = null;
             if (xmlSchemaElement.RefName.IsEmpty)
@@ -848,7 +854,7 @@ namespace XmlSchemaProcessor.Xsd
                 throw new Exception();
             }
 
-            ret.Annotations.AddRange(documentations);
+            ret.Annotations.AddRange(annotations);
             return ret;
         }
 

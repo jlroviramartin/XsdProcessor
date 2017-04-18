@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace XmlSchemaProcessor
 {
@@ -104,6 +105,13 @@ namespace XmlSchemaProcessor
         public static string FirstLower(this string name)
         {
             return Normalize(name, true);
+        }
+
+        public static string RemoveEmptyLines(this string text)
+        {
+            return text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                       .Where(s => !string.IsNullOrWhiteSpace(s))
+                       .Aggregate(String.Empty, (a, b) => a != String.Empty ? (a + Environment.NewLine + b) : b);
         }
 
         public static string Normalize(this string name, bool firstLower)

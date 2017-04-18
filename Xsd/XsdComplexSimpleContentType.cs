@@ -7,7 +7,7 @@ namespace XmlSchemaProcessor.Xsd
     /// </summary>
     public sealed class XsdComplexSimpleContentType : XsdComplexType
     {
-        // -----> public XsdSimpleType BaseType { get; set; }
+        // public XsdSimpleType BaseType { get; set; }
         public XsdType BaseType { get; set; }
         public DerivationMethod Derivation { get; set; }
 

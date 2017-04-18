@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
+using Antlr4.StringTemplate;
 using XmlSchemaProcessor.Xsd;
 using XmlSchemaProcessor.Xsd.Facets;
 
@@ -69,222 +72,61 @@ namespace XmlSchemaProcessor.Processors
 
         #region private
 
-        public static string PrepareNetDocumentation(string doc1, string doc2)
-        {
-            if (string.IsNullOrWhiteSpace(doc1))
-            {
-                return PrepareNetDocumentation(doc2);
-            }
-            if (string.IsNullOrWhiteSpace(doc2))
-            {
-                return PrepareNetDocumentation(doc1);
-            }
-            StringBuilder buff = new StringBuilder();
-            buff.AppendLine(doc1);
-            buff.AppendLine(doc2);
-            return PrepareNetDocumentation(buff.ToString());
-        }
-
-        public static string PrepareNetDocumentation(string doc)
-        {
-            if (string.IsNullOrWhiteSpace(doc))
-            {
-                return string.Empty;
-            }
-            StringBuilder buff = new StringBuilder();
-            buff.AppendLine("/// <summary>");
-            buff.Append("/// ").AppendLine(doc.Replace("\n", "\n/// "));
-            buff.AppendLine("/// </summary>");
-            return buff.ToString();
-        }
-
         private void WriteEventInterface(TextWriterEx writer)
         {
-            // Interface para los eventos.
-            writer.WriteLine("public interface ILandXmlEvents");
-            writer.WriteLine("{");
-            writer.Indent();
-
-            foreach (SimpleEvent simpleEvent in this.events)
+            try
             {
-                writer.WriteLine("void BeginRead{0}( {1} value );",
-                                 simpleEvent.Name.FirstUpper(),
-                                 simpleEvent.ArgType);
-
-                writer.WriteLine("void EndRead{0}();",
-                                 simpleEvent.Name.FirstUpper());
+                Template eventsInterface = group.GetInstanceOf("EventsInterface");
+                eventsInterface.Add("events", this.events);
+                writer.Write(eventsInterface.Render());
             }
-
-            writer.Unindent();
-            writer.WriteLine("}");
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
         }
 
         private void WriteEventImplementation(TextWriterEx writer)
         {
-            // Clase para los eventos.
-            writer.WriteLine("public class LandXmlEvents : ILandXmlEvents");
-            writer.WriteLine("{");
-            writer.Indent();
-
-            foreach (SimpleEvent simpleEvent in this.events)
+            try
             {
-                writer.WriteLine("public virtual void BeginRead{0}( {1} value ) {{}}",
-                                 simpleEvent.Name.FirstUpper(),
-                                 simpleEvent.ArgType);
-
-                writer.WriteLine("public virtual void EndRead{0}() {{}}",
-                                 simpleEvent.Name.FirstUpper());
+                Template eventsImplementation = group.GetInstanceOf("EventsImplementation");
+                eventsImplementation.Add("events", this.events);
+                writer.Write(eventsImplementation.Render());
             }
-
-            writer.Unindent();
-            writer.WriteLine("}");
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
         }
 
         private void WriteEventTest(TextWriterEx writer)
         {
-            // Clase para los eventos.
-            writer.WriteLine("public class TestLandXmlEvents : ILandXmlEvents");
-            writer.WriteLine("{");
-            writer.Indent();
-
-            writer.WriteLine("public bool AsXml { get; set; }");
-
-            // DebugWrite
-            writer.WriteLine("public void DebugWrite(string outFile)");
-            writer.WriteLine("{");
-            writer.Indent();
-
-            writer.WriteLine("using (FileStream fstream = new FileInfo(outFile).Open(FileMode.Create, FileAccess.Write))");
-            writer.WriteLine("using (StreamWriter stream = new StreamWriter(fstream))");
-            writer.WriteLine("using (TextWriterEx writer = new TextWriterEx(stream))");
-            writer.WriteLine("{");
-            writer.Indent();
-
-            writer.WriteLine("writer.WriteLine(this.buff.Inner);");
-
-            writer.Unindent();
-            writer.WriteLine("}");
-
-            writer.Unindent();
-            writer.WriteLine("}");
-
-            writer.WriteLine("private readonly TextWriterEx buff = new TextWriterEx(new StringWriter());");
-
-            foreach (SimpleEvent simpleEvent in this.events)
+            try
             {
-                writer.WriteLine("public virtual void BeginRead{0}( {1} value )",
-                                 simpleEvent.Name.FirstUpper(),
-                                 simpleEvent.ArgType);
-                writer.WriteLine("{");
-                writer.Indent();
-
-                // BeginRead
-                writer.WriteLine("if (this.AsXml)");
-                writer.WriteLine("{");
-                writer.Indent();
-
-                writer.WriteLine("buff.WriteLine(\"<{0}>\");",
-                                 simpleEvent.Name.FirstUpper());
-                writer.WriteLine("buff.Indent();");
-
-                writer.Unindent();
-                writer.WriteLine("}");
-                writer.WriteLine("else");
-                writer.WriteLine("{");
-                writer.Indent();
-
-                writer.WriteLine("buff.WriteLine(\"BeginRead{0}\");",
-                                 simpleEvent.Name.FirstUpper());
-                writer.WriteLine("buff.Indent();");
-                writer.WriteLine("buff.WriteLine(value);");
-                writer.WriteLine("buff.Indent();");
-
-                writer.Unindent();
-                writer.WriteLine("}");
-
-                writer.Unindent();
-                writer.WriteLine("}");
-
-                // EndRead
-                writer.WriteLine("public virtual void EndRead{0}()",
-                                 simpleEvent.Name.FirstUpper());
-
-                writer.WriteLine("{");
-                writer.Indent();
-
-                writer.WriteLine("if (this.AsXml)");
-                writer.WriteLine("{");
-                writer.Indent();
-
-                writer.WriteLine("buff.Unindent();");
-                writer.WriteLine("buff.WriteLine(\"</{0}>\");",
-                                 simpleEvent.Name.FirstUpper());
-
-                writer.Unindent();
-                writer.WriteLine("}");
-                writer.WriteLine("else");
-                writer.WriteLine("{");
-                writer.Indent();
-
-                writer.WriteLine("buff.Unindent();");
-                writer.WriteLine("buff.Unindent();");
-                writer.WriteLine("buff.WriteLine(\"EndRead{0}\");",
-                                 simpleEvent.Name.FirstUpper());
-
-                writer.Unindent();
-                writer.WriteLine("}");
-
-                writer.Unindent();
-                writer.WriteLine("}");
+                Template eventsTest = group.GetInstanceOf("EventsTest");
+                eventsTest.Add("events", this.events);
+                writer.Write(eventsTest.Render());
             }
-
-            writer.Unindent();
-            writer.WriteLine("}");
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
         }
 
         private void WriteReader(TextWriterEx writer)
         {
-            // Clase reader.
-            writer.WriteLine("public class LandXmlReader : SimpleReader");
-            writer.WriteLine("{");
-            writer.Indent();
-
-            writer.WriteLine("public LandXmlReader(ILandXmlEvents events)");
-            writer.Indent();
-            writer.Write(": base(");
-            bool first = true;
-            foreach (string uri in this.namespacesURI)
+            try
             {
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    writer.Write(", ");
-                }
-                writer.Write("\"{0}\"", uri);
+                Template eventsTest = group.GetInstanceOf("XmlReader");
+                eventsTest.Add("namespacesURI", this.namespacesURI);
+                eventsTest.Add("events", this.events);
+                writer.Write(eventsTest.Render());
             }
-            writer.WriteLine(")");
-
-            writer.Unindent();
-            writer.WriteLine("{");
-            writer.Indent();
-
-            foreach (SimpleEvent simpleEvent in this.events)
+            catch (Exception exception)
             {
-                writer.WriteLine("this.Register<{2}>(\"{0}\", events.BeginRead{1}, events.EndRead{1}, {3});",
-                                 simpleEvent.Name,
-                                 simpleEvent.Name.FirstUpper(),
-                                 simpleEvent.ArgType,
-                                 simpleEvent.NeedContent ? "true" : "false");
+                Debug.WriteLine(exception);
             }
-
-            writer.Unindent();
-            writer.WriteLine("}");
-
-            writer.Unindent();
-            writer.WriteLine("}");
         }
 
         private void Write(XsdParticleElement xsdParticle)
@@ -303,7 +145,35 @@ namespace XmlSchemaProcessor.Processors
         {
             XsdType xsdBaseType = xsdComplexType.GetBaseType();
 
-            this.buff.Write(PrepareNetDocumentation(docToAdd, xsdComplexType.GetNetDocumentation()));
+            try
+            {
+                string baseType;
+                if ((xsdBaseType != null) && xsdBaseType.TopLevel && !(xsdBaseType is XsdSimpleType))
+                {
+                    baseType = xsdComplexType.GetBaseType().Name;
+                }
+                else
+                {
+                    baseType = "XsdBaseObject";
+                }
+
+                Template eventsTest = group.GetInstanceOf("BuildType");
+                eventsTest.Add("documentation", docToAdd + xsdComplexType.GetNetDocumentation());
+
+                eventsTest.Add("typeName", name.ToTypeName());
+                eventsTest.Add("baseType", baseType);
+                eventsTest.Add("attributes", xsdComplexType.Attributes);
+
+                eventsTest.Add("includeContent", xsdBaseType is XsdSimpleType);
+                eventsTest.Add("contentType", xsdBaseType);
+                this.buff.Write(eventsTest.Render());
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
+
+            /*this.buff.Write(ProcessorUtils.PrepareNetDocumentation(docToAdd, xsdComplexType.GetNetDocumentation()));
 
             if ((xsdBaseType != null) && xsdBaseType.TopLevel && !(xsdBaseType is XsdSimpleType))
             {
@@ -324,12 +194,12 @@ namespace XmlSchemaProcessor.Processors
 
             this.buff.Unindent();
             this.buff.WriteLine("}");
-            this.buff.WriteLine();
+            this.buff.WriteLine();*/
         }
 
-        private void BuildEvents(string name, string argType, bool needContent)
+        private void BuildEvents(string name, string argType, bool needContent, string documentation)
         {
-            this.events.Add(new SimpleEvent(name, argType, needContent));
+            this.events.Add(new SimpleEvent(name, argType, needContent, documentation));
         }
 
         private void BuildEnum(XsdSimpleRestrictionType xsdType)
@@ -344,7 +214,20 @@ namespace XmlSchemaProcessor.Processors
 
                 if (values.Length > 0)
                 {
-                    this.buff.Write(PrepareNetDocumentation(xsdType.GetNetDocumentation()));
+                    try
+                    {
+                        Template eventsTest = group.GetInstanceOf("BuildEnum");
+                        eventsTest.Add("enumType", xsdType);
+                        eventsTest.Add("enumValues", values);
+                        this.buff.Write(eventsTest.Render());
+                    }
+                    catch (Exception exception)
+                    {
+                        Debug.WriteLine(exception);
+                    }
+
+
+                    /*this.buff.Write(ProcessorUtils.PrepareNetDocumentation(xsdType.GetNetDocumentation()));
 
                     this.buff.WriteLine("public enum {0}", xsdType.Name.ToTypeName());
                     this.buff.WriteLine("{");
@@ -357,12 +240,12 @@ namespace XmlSchemaProcessor.Processors
                     }
                     this.buff.Unindent();
 
-                    this.buff.WriteLine("}");
+                    this.buff.WriteLine("}");*/
                 }
             }
         }
 
-        private void BuildRead(XsdAttributes xsdAttributes, XsdType xsdBaseType)
+        /*private void BuildRead(XsdAttributes xsdAttributes, XsdType xsdBaseType)
         {
             // Constructor.
             this.buff.WriteLine("public override bool Read(IDictionary<string, string> attributes, string text)");
@@ -444,7 +327,32 @@ namespace XmlSchemaProcessor.Processors
 
             this.buff.Unindent();
             this.buff.WriteLine("}");
+        }*/
+
+        private static string GetElementDocumentation(XsdElement xsdElement)
+        {
+            return xsdElement.ToString();
         }
+
+        static XsdToNetProcess()
+        {
+            try
+            {
+                string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string groupFile = System.IO.Path.Combine(path, @"Resources\Templates\EventTest.stg");
+
+                group = new TemplateGroupFile(groupFile);
+                group.RegisterRenderer(typeof(string), new StringNetRenderer());
+                group.RegisterRenderer(typeof(XsdAttribute), new XsdAttributeNetRenderer());
+                group.RegisterRenderer(typeof(XsdType), new XsdTypeNetRenderer());
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
+        }
+
+        private static readonly TemplateGroupFile group;
 
         private readonly string contentFieldName = "content";
 
@@ -455,6 +363,8 @@ namespace XmlSchemaProcessor.Processors
         private readonly List<SimpleEvent> events = new List<SimpleEvent>();
 
         #endregion
+
+        #region XsdProcess
 
         public override void Process(XsdSchema schema)
         {
@@ -508,20 +418,20 @@ namespace XmlSchemaProcessor.Processors
             Contract.Assert(xsdElement.TypeDefinition is XsdComplexType);
             if (xsdElement.TypeDefinition.TopLevel)
             {
-                this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), false);
+                this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), false, GetElementDocumentation(xsdElement));
             }
             else
             {
                 this.BuildType((XsdComplexType)xsdElement.TypeDefinition, xsdElement.Name, xsdElement.GetNetDocumentation());
 
-                this.BuildEvents(xsdElement.Name, xsdElement.Name.ToTypeName(), false);
+                this.BuildEvents(xsdElement.Name, xsdElement.Name.ToTypeName(), false, GetElementDocumentation(xsdElement));
             }
         }
 
         private void ProcessSimpleElement(XsdElement xsdElement)
         {
             Contract.Assert(xsdElement.TypeDefinition is XsdSimpleType);
-            this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), true);
+            this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), true, GetElementDocumentation(xsdElement));
         }
 
         #region XsdSimpleType
@@ -538,7 +448,7 @@ namespace XmlSchemaProcessor.Processors
 
         #region XsdComplexType
 
-        public override void Process(XsdComplexType xsdType)
+        /*public override void Process(XsdComplexType xsdType)
         {
             XsdType xsdBaseType = xsdType.GetBaseType();
 
@@ -555,7 +465,7 @@ namespace XmlSchemaProcessor.Processors
                                     xsdBaseType.ToNetType(false),
                                     this.contentFieldName.ToFieldName());
             }
-        }
+        }*/
 
         #endregion
 
@@ -590,19 +500,21 @@ namespace XmlSchemaProcessor.Processors
 
         #region XsdAttribute
 
-        public override void Process(XsdAttributes xsdAttributes)
+        /*public override void Process(XsdAttributes xsdAttributes)
         {
             foreach (XsdAttribute xsdAttribute in xsdAttributes.Content)
             {
                 XsdSimpleType xsdAttributeType = xsdAttribute.Type ?? XsdBuiltInType.String;
 
-                this.buff.Write(PrepareNetDocumentation(xsdAttributeType.GetNetDocumentation()));
+                this.buff.Write(ProcessorUtils.PrepareNetDocumentation(xsdAttributeType.GetNetDocumentation()));
 
                 this.buff.WriteLine("public {0} {1};",
                                     xsdAttributeType.ToNetType(xsdAttribute.Use != AttributeUse.Required),
                                     xsdAttribute.Name.ToFieldName());
             }
-        }
+        }*/
+
+        #endregion
 
         #endregion
 
@@ -610,16 +522,18 @@ namespace XmlSchemaProcessor.Processors
 
         private sealed class SimpleEvent
         {
-            public SimpleEvent(string name, string argType, bool needContent)
+            public SimpleEvent(string name, string argType, bool needContent, string documentation)
             {
                 this.Name = name;
                 this.ArgType = argType;
                 this.NeedContent = needContent;
+                this.Documentation = documentation;
             }
 
             public readonly string Name;
             public readonly string ArgType;
             public readonly bool NeedContent;
+            public readonly string Documentation;
         }
 
         #endregion
