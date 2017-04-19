@@ -18,6 +18,8 @@ namespace XmlSchemaProcessor.Processors
                     return ProcessorUtils.PrepareNetDocumentation(xsdType.GetNetDocumentation());
                 case "NetType":
                     return xsdType.ToNetType(false);
+                case "OptionalNetType":
+                    return xsdType.ToNetType(true);
             }
             return xsdType.ToString();
         }

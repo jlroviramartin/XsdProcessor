@@ -19,7 +19,7 @@ namespace XmlSchemaProcessor
         public static void TestLandXml()
         {
             TestLandXmlEvents landXmlEvents = new TestLandXmlEvents();
-            landXmlEvents.AsXml = false;
+            landXmlEvents.AsXml = true;
             LandXmlReader reader = new LandXmlReader(landXmlEvents);
             reader.Read(@"Resources\Samples\MntnRoad.xml");
             landXmlEvents.DebugWrite(@"Output.txt");

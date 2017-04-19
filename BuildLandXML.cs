@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #if BUILD_LAND_XML
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
@@ -37,7 +38,7 @@ namespace XmlSchemaProcessor
             BuildLandXml20(LANDXML20_URI, LANDXML12_URI, LANDXML11_URI, LANDXML10_URI);
         }
 
-        public static void BuildLandXml(string xsdFile, string csfile, string @namespace, string[] namespacesURI)
+        public static void BuildLandXml(string xsdFile, string path, string @namespace, string[] namespacesURI)
         {
             XmlSchema xmlSchema = ProcessXmlSchema.LoadXmlSchema(xsdFile);
 
@@ -48,19 +49,19 @@ namespace XmlSchemaProcessor
             XsdSchema schema = new ProcessXmlSchema(xmlSchema).GetSchema();
             schema.ResolveAnonymousSimpleTypes();
 
-            XsdToNetProcess xsdToNetReader = new XsdToNetProcess();
+            XsdToNetProcess xsdToNetReader = new XsdToNetProcess(@namespace, path);
+            xsdToNetReader.PropertyMap = new LandXmlPropertyMap();
             foreach (string uri in namespacesURI)
             {
                 xsdToNetReader.AddNamespaceURI(uri);
             }
             xsdToNetReader.Process(schema);
-            xsdToNetReader.Write(csfile, @namespace);
         }
 
         public static void BuildLandXml10(params string[] namespacesURI)
         {
             BuildLandXml(@"Resources\Schemas\LandXML-1.0.xsd",
-                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml\LandXML10.cs",
+                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml10\",
                          "XmlSchemaProcessor.LandXml10",
                          namespacesURI);
         }
@@ -68,7 +69,7 @@ namespace XmlSchemaProcessor
         public static void BuildLandXml11(params string[] namespacesURI)
         {
             BuildLandXml(@"Resources\Schemas\LandXML-1.1.xsd",
-                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml\LandXML11.cs",
+                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml11\",
                          "XmlSchemaProcessor.LandXml11",
                          namespacesURI);
         }
@@ -76,7 +77,7 @@ namespace XmlSchemaProcessor
         public static void BuildLandXml12(params string[] namespacesURI)
         {
             BuildLandXml(@"Resources\Schemas\LandXML-1.2.xsd",
-                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml\LandXML12.cs",
+                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml12\",
                          "XmlSchemaProcessor.LandXml12",
                          namespacesURI);
         }
@@ -84,7 +85,7 @@ namespace XmlSchemaProcessor
         public static void BuildLandXml20(params string[] namespacesURI)
         {
             BuildLandXml(@"Resources\Schemas\LandXML-2.0.xsd",
-                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml\LandXML20.cs",
+                         @"C:\Proyectos\Publicos\XsdProcessor\LandXml20\",
                          "XmlSchemaProcessor.LandXml20",
                          namespacesURI);
         }
@@ -102,6 +103,18 @@ namespace XmlSchemaProcessor
         private static void Validation(object sender, ValidationEventArgs args)
         {
             Debug.WriteLine("Validation Error: {0}", args.Message);
+        }
+
+        private class LandXmlPropertyMap : IPropertyMap
+        {
+            public string Map(XsdComplexType xsdComplexType, string typeName, string attributeName)
+            {
+                if (typeName.Equals("RoadName") && attributeName.Equals("roadName"))
+                {
+                    return "_RoadName";
+                }
+                return attributeName;
+            }
         }
     }
 }

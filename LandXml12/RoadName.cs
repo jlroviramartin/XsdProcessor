@@ -1,0 +1,132 @@
+#if !BUILD_LAND_XML
+using System;
+using System.IO;
+using System.Collections.Generic;
+using XmlSchemaProcessor.Processors;
+
+namespace XmlSchemaProcessor.LandXml12
+{
+
+    public class RoadName : XsdBaseObject
+    {
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+
+            this.RoadNameType = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("roadNameType"));
+
+
+
+            this._RoadName = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("roadName"));
+
+
+
+            this.RoadNameSuffix = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("roadNameSuffix"));
+
+
+
+            this.RoadType = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("roadType"));
+
+
+
+            this.PclRef = XsdConverter.Instance.Convert<IList<string>>(
+                    attributes.GetSafe("pclRef"));
+
+
+
+            return true;
+        }
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder();
+            buff.AppendLine(base.ToString());
+
+            if ((object)this.RoadNameType != null)
+            {
+                buff.AppendFormat("roadNameType = {0}", this.RoadNameType).AppendLine();
+            }
+            if ((object)this._RoadName != null)
+            {
+                buff.AppendFormat("roadName = {0}", this._RoadName).AppendLine();
+            }
+            if ((object)this.RoadNameSuffix != null)
+            {
+                buff.AppendFormat("roadNameSuffix = {0}", this.RoadNameSuffix).AppendLine();
+            }
+            if ((object)this.RoadType != null)
+            {
+                buff.AppendFormat("roadType = {0}", this.RoadType).AppendLine();
+            }
+            if ((object)this.PclRef != null)
+            {
+                buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
+            }
+
+
+            return buff.ToString();
+        }
+
+        public override string ToAttributes()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder();
+            buff.Append(base.ToAttributes());
+
+            if ((object)this.RoadNameType != null)
+            {
+                buff.AppendFormat(" roadNameType=\"{0}\"", this.RoadNameType);
+            }
+            if ((object)this._RoadName != null)
+            {
+                buff.AppendFormat(" roadName=\"{0}\"", this._RoadName);
+            }
+            if ((object)this.RoadNameSuffix != null)
+            {
+                buff.AppendFormat(" roadNameSuffix=\"{0}\"", this.RoadNameSuffix);
+            }
+            if ((object)this.RoadType != null)
+            {
+                buff.AppendFormat(" roadType=\"{0}\"", this.RoadType);
+            }
+            if ((object)this.PclRef != null)
+            {
+                buff.AppendFormat(" pclRef=\"{0}\"", this.PclRef);
+            }
+
+
+            return buff.ToString();
+        }
+
+        /// <summary>
+        /// to define a jurisdictionally specific list of Road name types such a street, road, avenue etc.
+        /// </summary>
+
+        public string RoadNameType;
+
+        public string _RoadName;
+        /// <summary>
+        /// to Allow a list of specific road suffixes to be specified, ie east, upper etc (ie Fred Street East)
+        /// </summary>
+
+        public string RoadNameSuffix;
+        /// <summary>
+        /// To define if the road is a public or private road.
+        /// </summary>
+
+        public string RoadType;
+        /// <summary>
+        /// A list of reference names values refering to one or more Parcel.name attributes.
+        /// </summary>
+
+        public IList<string> PclRef;
+
+
+    }
+}
+#endif
+

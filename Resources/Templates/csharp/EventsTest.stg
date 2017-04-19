@@ -1,0 +1,73 @@
+﻿delimiters "$", "$"
+
+EventsTest(namespace, testTypeName, interfaceTypeName, events) ::= <<
+$Pre(namespace)$
+    /// <summary>
+    /// Event test class.
+    /// </summary>
+    public class $testTypeName$ : $interfaceTypeName$
+    {
+        public bool AsXml { get; set; }
+
+        // DebugWrite
+        public void DebugWrite(string outFile)
+        {
+            using (FileStream fstream = new FileInfo(outFile).Open(FileMode.Create, FileAccess.Write))
+            using (StreamWriter stream = new StreamWriter(fstream))
+            using (TextWriterEx writer = new TextWriterEx(stream))
+            {
+                writer.WriteLine(this.buff.Inner);
+            }
+        }
+
+        private readonly TextWriterEx buff = new TextWriterEx(new StringWriter());
+
+        private static string ToAttributes(object obj)
+        {
+            if (obj is XsdBaseObject)
+            {
+                return ((XsdBaseObject)obj).ToAttributes();
+            }
+            return "";
+        }
+
+        $events:{x | $EventTest(x)$}$
+    }
+$Post()$
+
+>>
+
+EventTest(simpleEvent) ::= <<
+public virtual void BeginRead$simpleEvent.Name; format="FirstUpper"$( $simpleEvent.ArgType$ value )
+{
+    // BeginRead
+    if (this.AsXml)
+    {
+        buff.WriteLine("<$simpleEvent.Name; format="FirstUpper"$ {0}>", ToAttributes(value));
+        buff.Indent();
+    }
+    else
+    {
+        buff.WriteLine("BeginRead $simpleEvent.Name; format="FirstUpper"$");
+        buff.Indent();
+        buff.WriteLine(value);
+        buff.Indent();
+    }
+}
+
+public virtual void EndRead$simpleEvent.Name; format="FirstUpper"$()
+{
+    if (this.AsXml)
+    {
+        buff.Unindent();
+        buff.WriteLine("</$simpleEvent.Name; format="FirstUpper"$>");
+    }
+    else
+    {
+        buff.Unindent();
+        buff.Unindent();
+        buff.WriteLine("EndRead $simpleEvent.Name; format="FirstUpper"$");
+    }
+}
+
+>>

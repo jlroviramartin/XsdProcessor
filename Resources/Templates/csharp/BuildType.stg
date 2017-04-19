@@ -1,0 +1,120 @@
+﻿delimiters "$", "$"
+
+BuildType(namespace, documentation, typeName, baseType, properties, includeContent, contentType, contentFieldName="Content") ::= <<
+$Pre(namespace)$
+    $documentation; format="NetDocumentation"$
+    public class $typeName; format="TypeName"$ : $baseType; format="TypeName"$
+    {
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            $properties:{property | $ReadAttribute(property)$}$
+
+            $if(includeContent)$
+            this.$contentFieldName; format="PropertyName"$ = XsdConverter.Instance.Convert<$contentType; format="NetType"$>(text);
+            $endif$
+
+            return true;
+        }
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder();
+            buff.AppendLine(base.ToString());
+
+            $properties:{property | $AttributeToString(property)$}$
+
+            $if(includeContent)$
+            if ((object)this.$contentFieldName; format="PropertyName"$ != null)
+            {
+                buff.AppendFormat("$contentFieldName$ = {0}", this.$contentFieldName; format="PropertyName"$).AppendLine();
+            }
+            $endif$
+
+            return buff.ToString();
+        }
+
+        public override string ToAttributes()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder();
+            buff.Append(base.ToAttributes());
+
+            $properties:{property | $AttributeToAttributes(property)$}$
+
+            $if(includeContent)$
+            if ((object)this.$contentFieldName; format="PropertyName"$ != null)
+            {
+                buff.AppendFormat(" $contentFieldName$ = \"{0}\"", this.$contentFieldName; format="PropertyName"$);
+            }
+            $endif$
+
+            return buff.ToString();
+        }
+
+        $properties:{property | $AttributeAsProperty(property)$}$
+
+        $if(includeContent)$
+        public $contentType; format="NetType"$ $contentFieldName; format="PropertyName"$;
+        $endif$
+    }
+$Post()$
+
+>>
+
+ReadAttribute(property) ::= <<
+$if(property.Optional)$
+
+    $if(property.DefValue)$
+this.$property.Name; format="PropertyName"$ = XsdConverter.Instance.Convert<$property.PropertyType; format="OptionalNetType"$>(
+        attributes.GetSafe("$property.AttributeName$"),
+        XsdConverter.Instance.Convert<$property.PropertyType; format="OptionalNetType"$>("$property.DefValue$"));
+    $else$
+this.$property.Name; format="PropertyName"$ = XsdConverter.Instance.Convert<$property.PropertyType; format="OptionalNetType"$>(
+        attributes.GetSafe("$property.AttributeName$"));
+    $endif$
+
+$else$
+
+    $if(property.DefValue)$
+this.$property.Name; format="PropertyName"$ = XsdConverter.Instance.Convert<$property.PropertyType; format="NetType"$>(
+        attributes.GetSafe("$property.AttributeName$"),
+        XsdConverter.Instance.Convert<$propert.PropertyType; format="NetType"$>("$property.DefValue$"));
+    $else$
+this.$property.Name; format="PropertyName"$ = XsdConverter.Instance.Convert<$property.PropertyType; format="NetType"$>(
+        attributes.GetSafe("$property.AttributeName$"));
+    $endif$
+
+$endif$
+
+>>
+
+AttributeToString(property) ::= <<
+if ((object)this.$property.Name; format="PropertyName"$ != null)
+{
+$if(property.DefValue)$
+    buff.AppendFormat("$property.AttributeName$ = {0} defvalue = {1}", this.$property.Name; format="PropertyName"$, "$property.DefValue$").AppendLine();
+$else$
+    buff.AppendFormat("$property.AttributeName$ = {0}", this.$property.Name; format="PropertyName"$).AppendLine();
+$endif$
+}
+
+>>
+
+AttributeToAttributes(property) ::= <<
+if ((object)this.$property.Name; format="PropertyName"$ != null)
+{
+    buff.AppendFormat(" $property.AttributeName$=\"{0}\"", this.$property.Name; format="PropertyName"$);
+}
+
+>>
+
+AttributeAsProperty(property) ::= <<
+$property.Documentation; format="NetDocumentation"$
+$if(property.Optional)$
+public $property.PropertyType; format="OptionalNetType"$ $property.Name; format="PropertyName"$;
+$else$
+public $property.PropertyType; format="NetType"$ $property.Name; format="PropertyName"$;
+$endif$
+
+>>

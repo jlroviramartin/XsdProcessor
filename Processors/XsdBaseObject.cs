@@ -9,6 +9,11 @@ namespace XmlSchemaProcessor.Processors
             return true;
         }
 
+        public virtual string ToAttributes()
+        {
+            return "";
+        }
+
         public override string ToString()
         {
             return "Type = " + base.ToString();

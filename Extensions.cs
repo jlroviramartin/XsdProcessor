@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace XmlSchemaProcessor
 {
@@ -80,6 +79,11 @@ namespace XmlSchemaProcessor
         public static string ToFieldName(this string name)
         {
             return FirstLower(name);
+        }
+
+        public static string ToPropertyName(this string name)
+        {
+            return FirstUpper(name);
         }
 
         public static string ToMethodName(this string name)

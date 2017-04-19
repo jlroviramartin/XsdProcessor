@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Antlr4.StringTemplate;
+using Antlr4.StringTemplate.Misc;
 using XmlSchemaProcessor.Xsd;
 using XmlSchemaProcessor.Xsd.Facets;
 
@@ -27,42 +28,12 @@ namespace XmlSchemaProcessor.Processors
 {
     public class XsdToNetProcess : XsdProcess
     {
-        public XsdToNetProcess()
+        public XsdToNetProcess(string @namespace, string path)
         {
-        }
+            this.@namespace = @namespace;
+            this.path = path;
 
-        public void Write(string outFile, string @namespace)
-        {
-            using (FileStream fstream = new FileInfo(outFile).Open(FileMode.Create, FileAccess.Write))
-            using (StreamWriter stream = new StreamWriter(fstream))
-            using (TextWriterEx writer = new TextWriterEx(stream))
-            {
-                writer.WriteLine("#if !BUILD_LAND_XML");
-
-                writer.WriteLine("using System;");
-                writer.WriteLine("using System.IO;");
-                writer.WriteLine("using System.Collections.Generic;");
-                writer.WriteLine("using XmlSchemaProcessor.Processors;");
-
-                writer.WriteLine("namespace {0}", @namespace);
-                writer.WriteLine("{");
-                writer.Indent();
-
-                writer.WriteLine(this.buff.Inner);
-
-                this.WriteEventInterface(writer);
-                this.WriteEventImplementation(writer);
-                this.WriteEventTest(writer);
-                this.WriteReader(writer);
-
-                writer.Unindent();
-                writer.WriteLine("}");
-
-                writer.WriteLine("#endif");
-            }
-            //Debug.WriteLine(this.stringWriter);
-            //Debug.WriteLine("--------------------");
-            //Debug.WriteLine(this.stringWriterEvents);
+            this.PropertyMap = IdentityPropertyMap.Instance;
         }
 
         public void AddNamespaceURI(string uri)
@@ -70,15 +41,23 @@ namespace XmlSchemaProcessor.Processors
             this.namespacesURI.Add(uri);
         }
 
+        /// <summary>
+        /// Property map used to get the name of a property related to an attribute. 
+        /// </summary>
+        public IPropertyMap PropertyMap { get; set; }
+
         #region private
 
-        private void WriteEventInterface(TextWriterEx writer)
+        private void WriteEventInterface()
         {
             try
             {
-                Template eventsInterface = group.GetInstanceOf("EventsInterface");
-                eventsInterface.Add("events", this.events);
-                writer.Write(eventsInterface.Render());
+                Template template = group.GetInstanceOf("EventsInterface");
+                template.Add("namespace", this.@namespace);
+                template.Add("interfaceTypeName", "ILandXmlEvents");
+                template.Add("events", this.events);
+
+                this.WriteInFile("ILandXmlEvents", buff => buff.Write(template.Render()));
             }
             catch (Exception exception)
             {
@@ -86,13 +65,17 @@ namespace XmlSchemaProcessor.Processors
             }
         }
 
-        private void WriteEventImplementation(TextWriterEx writer)
+        private void WriteEventImplementation()
         {
             try
             {
-                Template eventsImplementation = group.GetInstanceOf("EventsImplementation");
-                eventsImplementation.Add("events", this.events);
-                writer.Write(eventsImplementation.Render());
+                Template template = group.GetInstanceOf("EventsImplementation");
+                template.Add("namespace", this.@namespace);
+                template.Add("implementationTypeName", implementationTypeName);
+                template.Add("interfaceTypeName", interfaceTypeName);
+                template.Add("events", this.events);
+
+                this.WriteInFile("LandXmlEvents", buff => buff.Write(template.Render()));
             }
             catch (Exception exception)
             {
@@ -100,13 +83,17 @@ namespace XmlSchemaProcessor.Processors
             }
         }
 
-        private void WriteEventTest(TextWriterEx writer)
+        private void WriteEventTest()
         {
             try
             {
-                Template eventsTest = group.GetInstanceOf("EventsTest");
-                eventsTest.Add("events", this.events);
-                writer.Write(eventsTest.Render());
+                Template template = group.GetInstanceOf("EventsTest");
+                template.Add("namespace", this.@namespace);
+                template.Add("testTypeName", testTypeName);
+                template.Add("interfaceTypeName", interfaceTypeName);
+                template.Add("events", this.events);
+
+                this.WriteInFile("TestLandXmlEvents", buff => buff.Write(template.Render()));
             }
             catch (Exception exception)
             {
@@ -114,14 +101,17 @@ namespace XmlSchemaProcessor.Processors
             }
         }
 
-        private void WriteReader(TextWriterEx writer)
+        private void WriteReader()
         {
             try
             {
-                Template eventsTest = group.GetInstanceOf("XmlReader");
-                eventsTest.Add("namespacesURI", this.namespacesURI);
-                eventsTest.Add("events", this.events);
-                writer.Write(eventsTest.Render());
+                Template template = group.GetInstanceOf("XmlReader");
+                template.Add("namespace", this.@namespace);
+                template.Add("xmlReaderTypeName", xmlReaderTypeName);
+                template.Add("namespacesURI", this.namespacesURI);
+                template.Add("events", this.events);
+
+                this.WriteInFile("LandXmlReader", buff => buff.Write(template.Render()));
             }
             catch (Exception exception)
             {
@@ -129,19 +119,7 @@ namespace XmlSchemaProcessor.Processors
             }
         }
 
-        private void Write(XsdParticleElement xsdParticle)
-        {
-            if (xsdParticle.MaxOccurs == 1)
-            {
-                this.buff.WriteLine("// " + xsdParticle.Element.Name);
-            }
-            else
-            {
-                this.buff.WriteLine("// List of {0} {1}", xsdParticle.Element.Name, xsdParticle.SafeOccursToString());
-            }
-        }
-
-        private void BuildType(XsdComplexType xsdComplexType, string name, string docToAdd = "")
+        private void BuildType(XsdComplexType xsdComplexType, string typeName, string docToAdd = "")
         {
             XsdType xsdBaseType = xsdComplexType.GetBaseType();
 
@@ -157,49 +135,24 @@ namespace XmlSchemaProcessor.Processors
                     baseType = "XsdBaseObject";
                 }
 
-                Template eventsTest = group.GetInstanceOf("BuildType");
-                eventsTest.Add("documentation", docToAdd + xsdComplexType.GetNetDocumentation());
+                Template template = group.GetInstanceOf("BuildType");
+                template.Add("namespace", this.@namespace);
+                template.Add("documentation", docToAdd + xsdComplexType.GetNetDocumentation());
 
-                eventsTest.Add("typeName", name.ToTypeName());
-                eventsTest.Add("baseType", baseType);
-                eventsTest.Add("attributes", xsdComplexType.Attributes);
+                template.Add("typeName", typeName);
+                template.Add("baseType", baseType);
+                template.Add("properties", xsdComplexType.Attributes.Content.Select(attribute => new Property(attribute, this.PropertyMap.Map(xsdComplexType, typeName, attribute.Name))));
 
-                eventsTest.Add("includeContent", xsdBaseType is XsdSimpleType);
-                eventsTest.Add("contentType", xsdBaseType);
-                this.buff.Write(eventsTest.Render());
+                template.Add("includeContent", xsdBaseType is XsdSimpleType);
+                template.Add("contentType", xsdBaseType);
+                template.Add("contentFieldName", contentFieldName);
+
+                this.WriteInFile(typeName.ToTypeName(), buff => buff.Write(template.Render()));
             }
             catch (Exception exception)
             {
                 Debug.WriteLine(exception);
             }
-
-            /*this.buff.Write(ProcessorUtils.PrepareNetDocumentation(docToAdd, xsdComplexType.GetNetDocumentation()));
-
-            if ((xsdBaseType != null) && xsdBaseType.TopLevel && !(xsdBaseType is XsdSimpleType))
-            {
-                this.buff.WriteLine("public class {0} : {1}",
-                                    name.ToTypeName(),
-                                    xsdComplexType.GetBaseType().Name.ToTypeName());
-            }
-            else
-            {
-                this.buff.WriteLine("public class {0} : XsdBaseObject",
-                                    name.ToTypeName());
-            }
-
-            this.buff.WriteLine("{");
-            this.buff.Indent();
-
-            this.Process(xsdComplexType);
-
-            this.buff.Unindent();
-            this.buff.WriteLine("}");
-            this.buff.WriteLine();*/
-        }
-
-        private void BuildEvents(string name, string argType, bool needContent, string documentation)
-        {
-            this.events.Add(new SimpleEvent(name, argType, needContent, documentation));
         }
 
         private void BuildEnum(XsdSimpleRestrictionType xsdType)
@@ -216,122 +169,39 @@ namespace XmlSchemaProcessor.Processors
                 {
                     try
                     {
-                        Template eventsTest = group.GetInstanceOf("BuildEnum");
-                        eventsTest.Add("enumType", xsdType);
-                        eventsTest.Add("enumValues", values);
-                        this.buff.Write(eventsTest.Render());
+                        Template template = group.GetInstanceOf("BuildEnum");
+                        template.Add("namespace", this.@namespace);
+                        template.Add("enumType", xsdType);
+                        template.Add("enumValues", values);
+
+                        this.WriteInFile(xsdType.Name.ToTypeName(), buff => buff.Write(template.Render()));
                     }
                     catch (Exception exception)
                     {
                         Debug.WriteLine(exception);
                     }
-
-
-                    /*this.buff.Write(ProcessorUtils.PrepareNetDocumentation(xsdType.GetNetDocumentation()));
-
-                    this.buff.WriteLine("public enum {0}", xsdType.Name.ToTypeName());
-                    this.buff.WriteLine("{");
-
-                    this.buff.Indent();
-                    foreach (string value in values)
-                    {
-                        this.buff.WriteLine("[StringValue(\"{0}\")]", value);
-                        this.buff.WriteLine("{0},", value.ToEnumValueName());
-                    }
-                    this.buff.Unindent();
-
-                    this.buff.WriteLine("}");*/
                 }
             }
         }
 
-        /*private void BuildRead(XsdAttributes xsdAttributes, XsdType xsdBaseType)
+        private void NewEvent(string name, string argType, bool needContent, string documentation)
         {
-            // Constructor.
-            this.buff.WriteLine("public override bool Read(IDictionary<string, string> attributes, string text)");
-            this.buff.WriteLine("{");
-            this.buff.Indent();
-
-            this.buff.WriteLine("base.Read(attributes, text);");
-
-            // Attributes.
-            foreach (XsdAttribute xsdAttribute in xsdAttributes.Content)
-            {
-                XsdSimpleType xsdAttributeType = xsdAttribute.Type ?? XsdBuiltInType.String;
-
-                if (xsdAttribute.DefValue != null)
-                {
-                    this.buff.WriteLine("this.{0} = XsdConverter.Instance.Convert<{2}>(attributes.GetSafe(\"{1}\"), XsdConverter.Instance.Convert<{2}>(\"{3}\"));",
-                                        xsdAttribute.Name.ToFieldName(),
-                                        xsdAttribute.Name,
-                                        xsdAttributeType.ToNetType(xsdAttribute.Use != AttributeUse.Required),
-                                        xsdAttribute.DefValue);
-                }
-                else
-                {
-                    this.buff.WriteLine("this.{0} = XsdConverter.Instance.Convert<{2}>(attributes.GetSafe(\"{1}\"));",
-                                        xsdAttribute.Name.ToFieldName(),
-                                        xsdAttribute.Name,
-                                        xsdAttributeType.ToNetType(xsdAttribute.Use != AttributeUse.Required));
-                }
-            }
-
-            // Content.
-            if (xsdBaseType is XsdSimpleType)
-            {
-                this.buff.WriteLine("this.{0} = XsdConverter.Instance.Convert<{1}>(text);",
-                                    this.contentFieldName.ToFieldName(),
-                                    xsdBaseType.ToNetType(false));
-            }
-
-            this.buff.WriteLine("return true;");
-
-            this.buff.Unindent();
-            this.buff.WriteLine("}");
+            this.events.Add(new SimpleEvent(name, argType, needContent, documentation));
         }
-
-        private void BuildToString(XsdAttributes xsdAttributes, XsdType xsdBaseType)
-        {
-            // Constructor.
-            this.buff.WriteLine("public override string ToString()");
-            this.buff.WriteLine("{");
-            this.buff.Indent();
-
-            this.buff.WriteLine("System.Text.StringBuilder buff = new System.Text.StringBuilder();");
-            this.buff.WriteLine("buff.AppendLine(base.ToString());");
-
-            // Attributes.
-            foreach (XsdAttribute xsdAttribute in xsdAttributes.Content)
-            {
-                if (xsdAttribute.DefValue != null)
-                {
-                    this.buff.WriteLine("buff.Append(\"{0} = \").Append(this.{0}).AppendLine(\" defvalue = {1}\");",
-                                        xsdAttribute.Name.ToFieldName(),
-                                        xsdAttribute.DefValue);
-                }
-                else
-                {
-                    this.buff.WriteLine("buff.Append(\"{0} = \").AppendLine(this.{0});",
-                                        xsdAttribute.Name.ToFieldName());
-                }
-            }
-
-            // Content.
-            if (xsdBaseType is XsdSimpleType)
-            {
-                this.buff.WriteLine("buff.Append(\"{0} = \").AppendLine(this.{0});",
-                                    this.contentFieldName.ToFieldName());
-            }
-
-            this.buff.WriteLine("return buff.ToString();");
-
-            this.buff.Unindent();
-            this.buff.WriteLine("}");
-        }*/
 
         private static string GetElementDocumentation(XsdElement xsdElement)
         {
             return xsdElement.ToString();
+        }
+
+        private void WriteInFile(string name, Action<TextWriterEx> toWrite)
+        {
+            using (FileStream fstream = new FileInfo(System.IO.Path.Combine(this.path, name + ".cs")).Open(FileMode.Create, FileAccess.Write))
+            using (StreamWriter stream = new StreamWriter(fstream))
+            using (TextWriterEx writer = new TextWriterEx(stream))
+            {
+                toWrite(writer);
+            }
         }
 
         static XsdToNetProcess()
@@ -339,11 +209,12 @@ namespace XmlSchemaProcessor.Processors
             try
             {
                 string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string groupFile = System.IO.Path.Combine(path, @"Resources\Templates\EventTest.stg");
+                string groupFile = System.IO.Path.Combine(path, @"Resources\Templates\csharp\MainTemplateGroup.stg");
 
                 group = new TemplateGroupFile(groupFile);
+                //group.Verbose = true;
+                group.ErrorManager = new ErrorManager(new MyTemplateErrorListener());
                 group.RegisterRenderer(typeof(string), new StringNetRenderer());
-                group.RegisterRenderer(typeof(XsdAttribute), new XsdAttributeNetRenderer());
                 group.RegisterRenderer(typeof(XsdType), new XsdTypeNetRenderer());
             }
             catch (Exception exception)
@@ -354,11 +225,17 @@ namespace XmlSchemaProcessor.Processors
 
         private static readonly TemplateGroupFile group;
 
-        private readonly string contentFieldName = "content";
+        private readonly string @namespace;
+
+        private const string testTypeName = "TestLandXmlEvents";
+        private const string implementationTypeName = "LandXmlEvents";
+        private const string interfaceTypeName = "ILandXmlEvents";
+        private const string xmlReaderTypeName = "LandXmlReader";
+        private const string contentFieldName = "content";
 
         private readonly List<string> namespacesURI = new List<string>();
 
-        private readonly TextWriterEx buff = new TextWriterEx(new StringWriter());
+        private readonly string path;
 
         private readonly List<SimpleEvent> events = new List<SimpleEvent>();
 
@@ -368,49 +245,35 @@ namespace XmlSchemaProcessor.Processors
 
         public override void Process(XsdSchema schema)
         {
-            this.buff.WriteLine("// Simple types");
-            this.buff.WriteLine("// ------------");
-
             foreach (XsdSimpleType xsdType in schema.Types.OfType<XsdSimpleType>().Where(x => !x.IsBuiltIn()))
             {
                 this.Process(xsdType);
             }
-
-            this.buff.WriteLine("");
-            this.buff.WriteLine("// Complex types");
-            this.buff.WriteLine("// -------------");
 
             foreach (XsdComplexType xsdType in schema.Types.OfType<XsdComplexType>())
             {
                 this.BuildType(xsdType, xsdType.Name);
             }
 
-            this.buff.WriteLine("");
-            this.buff.WriteLine("// Elements from simple types");
-            this.buff.WriteLine("// --------------------------");
-
             foreach (XsdElement element in schema.Elements.Where(e => e.TypeDefinition is XsdSimpleType))
             {
                 this.ProcessSimpleElement(element);
             }
-
-            this.buff.WriteLine("");
-            this.buff.WriteLine("// Elements from complex types");
-            this.buff.WriteLine("// ---------------------------");
 
             foreach (XsdElement element in schema.Elements.Where(e => e.TypeDefinition is XsdComplexType))
             {
                 this.ProcessComplexElement(element);
             }
 
-            this.buff.WriteLine("");
-            this.buff.WriteLine("// Elements others");
-            this.buff.WriteLine("// ---------------");
-
             foreach (XsdElement element in schema.Elements.Where(e => e.TypeDefinition == null))
             {
-                this.buff.WriteLine("// class {0} ???", element.Name);
+                Debug.WriteLine("class {0} ???", element.Name);
             }
+
+            this.WriteEventInterface();
+            this.WriteEventImplementation();
+            this.WriteEventTest();
+            this.WriteReader();
         }
 
         private void ProcessComplexElement(XsdElement xsdElement)
@@ -418,20 +281,20 @@ namespace XmlSchemaProcessor.Processors
             Contract.Assert(xsdElement.TypeDefinition is XsdComplexType);
             if (xsdElement.TypeDefinition.TopLevel)
             {
-                this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), false, GetElementDocumentation(xsdElement));
+                this.NewEvent(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), false, GetElementDocumentation(xsdElement));
             }
             else
             {
                 this.BuildType((XsdComplexType)xsdElement.TypeDefinition, xsdElement.Name, xsdElement.GetNetDocumentation());
 
-                this.BuildEvents(xsdElement.Name, xsdElement.Name.ToTypeName(), false, GetElementDocumentation(xsdElement));
+                this.NewEvent(xsdElement.Name, xsdElement.Name.ToTypeName(), false, GetElementDocumentation(xsdElement));
             }
         }
 
         private void ProcessSimpleElement(XsdElement xsdElement)
         {
             Contract.Assert(xsdElement.TypeDefinition is XsdSimpleType);
-            this.BuildEvents(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), true, GetElementDocumentation(xsdElement));
+            this.NewEvent(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), true, GetElementDocumentation(xsdElement));
         }
 
         #region XsdSimpleType
@@ -443,76 +306,6 @@ namespace XmlSchemaProcessor.Processors
                 this.BuildEnum((XsdSimpleRestrictionType)xsdType);
             }
         }
-
-        #endregion
-
-        #region XsdComplexType
-
-        /*public override void Process(XsdComplexType xsdType)
-        {
-            XsdType xsdBaseType = xsdType.GetBaseType();
-
-            this.BuildRead(xsdType.Attributes, xsdBaseType);
-            this.BuildToString(xsdType.Attributes, xsdBaseType);
-
-            // Attributes.
-            this.Process(xsdType.Attributes);
-
-            // Content.
-            if (xsdBaseType is XsdSimpleType)
-            {
-                this.buff.WriteLine("public {0} {1};",
-                                    xsdBaseType.ToNetType(false),
-                                    this.contentFieldName.ToFieldName());
-            }
-        }*/
-
-        #endregion
-
-        #region XsdParticle
-
-        public override void Process(XsdParticleGroup xsdParticle)
-        {
-            this.buff.WriteLine("// {0} {1}", xsdParticle.GroupType, xsdParticle.SafeOccursToString());
-            this.buff.WriteLine("{");
-            this.buff.Indent();
-
-            foreach (XsdParticle xsdParticleItem in xsdParticle.Items)
-            {
-                this.Process(xsdParticleItem);
-            }
-
-            this.buff.Unindent();
-            this.buff.WriteLine("}");
-        }
-
-        public override void Process(XsdParticleAny xsdParticle)
-        {
-            this.buff.WriteLine("// <Any>");
-        }
-
-        public override void Process(XsdParticleElement xsdParticle)
-        {
-            this.buff.WriteLine("{0} {1}", xsdParticle.Element.Name, xsdParticle.SafeOccursToString());
-        }
-
-        #endregion
-
-        #region XsdAttribute
-
-        /*public override void Process(XsdAttributes xsdAttributes)
-        {
-            foreach (XsdAttribute xsdAttribute in xsdAttributes.Content)
-            {
-                XsdSimpleType xsdAttributeType = xsdAttribute.Type ?? XsdBuiltInType.String;
-
-                this.buff.Write(ProcessorUtils.PrepareNetDocumentation(xsdAttributeType.GetNetDocumentation()));
-
-                this.buff.WriteLine("public {0} {1};",
-                                    xsdAttributeType.ToNetType(xsdAttribute.Use != AttributeUse.Required),
-                                    xsdAttribute.Name.ToFieldName());
-            }
-        }*/
 
         #endregion
 
@@ -534,6 +327,50 @@ namespace XmlSchemaProcessor.Processors
             public readonly string ArgType;
             public readonly bool NeedContent;
             public readonly string Documentation;
+        }
+
+        private sealed class MyTemplateErrorListener : ITemplateErrorListener
+        {
+            public void CompiletimeError(TemplateMessage msg)
+            {
+                Debug.WriteLine(msg);
+            }
+
+            public void RuntimeError(TemplateMessage msg)
+            {
+                Debug.WriteLine(msg);
+            }
+
+            public void IOError(TemplateMessage msg)
+            {
+                Debug.WriteLine(msg);
+            }
+
+            public void InternalError(TemplateMessage msg)
+            {
+                Debug.WriteLine(msg);
+            }
+        }
+
+        private class Property
+        {
+            public Property(XsdAttribute xsdAttribute, string name)
+            {
+                XsdSimpleType attributeType = xsdAttribute.Type ?? XsdBuiltInType.String;
+                this.Documentation = attributeType.GetNetDocumentation();
+                this.AttributeName = xsdAttribute.Name;
+                this.PropertyType = attributeType;
+                this.Name = name;
+                this.DefValue = xsdAttribute.DefValue;
+                this.Optional = xsdAttribute.Use != AttributeUse.Required;
+            }
+
+            public string Documentation;
+            public string AttributeName;
+            public XsdSimpleType PropertyType; // Can't use Type in StringTemplate!
+            public string Name;
+            public string DefValue;
+            public bool Optional;
         }
 
         #endregion

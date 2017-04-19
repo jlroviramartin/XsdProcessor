@@ -19,6 +19,8 @@ namespace XmlSchemaProcessor.Processors
                     return s.FirstLower();
                 case "FieldName":
                     return s.ToFieldName();
+                case "PropertyName":
+                    return s.ToPropertyName();
                 case "MethodName":
                     return s.ToMethodName();
                 case "EnumValueName":
