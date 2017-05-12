@@ -46,7 +46,17 @@ namespace XmlSchemaProcessor.Processors
         /// </summary>
         public IPropertyMap PropertyMap { get; set; }
 
+        public void AddXsdRoot(string typeName)
+        {
+            this.xsdRoots.Add(typeName.ToUpperInvariant());
+        }
+
         #region private
+
+        private bool IsXsdRoot(string typeName)
+        {
+            return this.xsdRoots.Contains(typeName.ToUpperInvariant());
+        }
 
         private void BuildType(XsdComplexType xsdComplexType, string typeName, string docToAdd = "")
         {
@@ -75,11 +85,11 @@ namespace XmlSchemaProcessor.Processors
                 template.Add("baseType", baseType);
                 template.Add("properties", xsdComplexType.Attributes.Content.Select(attribute => new Property(attribute, this.PropertyMap.Map(xsdComplexType, typeName, attribute.Name))));
 
-                template.Add("includeContent", xsdBaseType is XsdSimpleType);
+                template.Add("includeContent", xsdBaseType is XsdSimpleType); // (xsdComplexType is XsdComplexSimpleContentType)
                 template.Add("contentType", xsdBaseType);
                 template.Add("contentFieldName", contentFieldName);
 
-                template.Add("needContent", (xsdComplexType is XsdComplexSimpleContentType));
+                template.Add("isXsdRoot", this.IsXsdRoot(typeName));
 
                 List<SimpleEvent> events = new List<SimpleEvent>();
                 if (xsdComplexType.GetParticle() != null)
@@ -154,6 +164,8 @@ namespace XmlSchemaProcessor.Processors
 
         private void WriteInFile(string name, Action<TextWriterEx> toWrite)
         {
+            System.IO.Directory.CreateDirectory(this.path);
+
             using (FileStream fstream = new FileInfo(System.IO.Path.Combine(this.path, name + ".cs")).Open(FileMode.Create, FileAccess.Write))
             using (StreamWriter stream = new StreamWriter(fstream))
             using (TextWriterEx writer = new TextWriterEx(stream))
@@ -190,6 +202,7 @@ namespace XmlSchemaProcessor.Processors
         private readonly List<string> namespacesURI = new List<string>();
 
         private readonly string path;
+        private readonly HashSet<string> xsdRoots = new HashSet<string>();
 
         #endregion
 

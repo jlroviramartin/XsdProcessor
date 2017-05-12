@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : true
-    // includeContent : false
     /// <summary>
     /// A surface point. it contains an id attribute and a space delimited "northing easting elevation" text value.
     /// The id values are referenced by the surface faces for the coordinate values.
@@ -20,6 +18,19 @@ namespace XmlSchemaProcessor.LandXml11
         {
         }
 
+        public uint Id;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -28,19 +39,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("id"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -55,13 +53,23 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public uint Id;
+        #endregion
 
+        #region object
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
+            {
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

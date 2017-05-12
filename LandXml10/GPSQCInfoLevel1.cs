@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// GPS Time = Nbr of GPS weeks * 604800 (seconds in a week) + seconds in GPS week     
     /// </summary>
@@ -18,6 +16,32 @@ namespace XmlSchemaProcessor.LandXml10
         public GPSQCInfoLevel1(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// The GPS solution type indicates the type of computed solution for a GPS vector or position
+        /// </summary>
+
+        public GPSSolutionTypeEnum? GPSSolnType;
+        /// <summary>
+        /// The GPS solution frequency indicates the GPS frequencies used in the computed solution for a GPS vector or position 
+        /// </summary>
+
+        public GPSSolutionFrequencyEnum? GPSSolnFreq;
+
+        public int? NbrSatellites;
+
+        public double? RDOP;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -36,31 +60,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("RDOP"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.GPSSolnType != null)
-            {
-                buff.AppendFormat("GPSSolnType = {0}", this.GPSSolnType).AppendLine();
-            }
-            if ((object)this.GPSSolnFreq != null)
-            {
-                buff.AppendFormat("GPSSolnFreq = {0}", this.GPSSolnFreq).AppendLine();
-            }
-            if ((object)this.NbrSatellites != null)
-            {
-                buff.AppendFormat("nbrSatellites = {0}", this.NbrSatellites).AppendLine();
-            }
-            if ((object)this.RDOP != null)
-            {
-                buff.AppendFormat("RDOP = {0}", this.RDOP).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -87,26 +86,35 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// The GPS solution type indicates the type of computed solution for a GPS vector or position
-        /// </summary>
+        #endregion
 
-        public GPSSolutionTypeEnum? GPSSolnType;
-        /// <summary>
-        /// The GPS solution frequency indicates the GPS frequencies used in the computed solution for a GPS vector or position 
-        /// </summary>
+        #region object
 
-        public GPSSolutionFrequencyEnum? GPSSolnFreq;
-
-        public int? NbrSatellites;
-
-        public double? RDOP;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.GPSSolnType != null)
+            {
+                buff.AppendFormat("GPSSolnType = {0}", this.GPSSolnType).AppendLine();
+            }
+            if ((object)this.GPSSolnFreq != null)
+            {
+                buff.AppendFormat("GPSSolnFreq = {0}", this.GPSSolnFreq).AppendLine();
+            }
+            if ((object)this.NbrSatellites != null)
+            {
+                buff.AppendFormat("nbrSatellites = {0}", this.NbrSatellites).AppendLine();
+            }
+            if ((object)this.RDOP != null)
+            {
+                buff.AppendFormat("RDOP = {0}", this.RDOP).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

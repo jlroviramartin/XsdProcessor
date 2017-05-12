@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     TargetPoint [0, 1]
@@ -22,6 +20,51 @@ namespace XmlSchemaProcessor.LandXml11
         public PointResults(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string SetupID;
+
+        public string TargetSetupID;
+
+        public double? MeanHorizAngle;
+
+        public double? HorizStdDeviation;
+        /// <summary>
+        /// Represents zenith angles with the 0 origin as
+        ///     straight up and measured in a clockwise direction in the specified
+        ///     Angular units.
+        /// </summary>
+
+        public double? MeanzenithAngle;
+
+        public double? VertStdDeviation;
+
+        public double? MeanSlopeDistance;
+
+        public double? SlopeDistanceStdDeviation;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -52,47 +95,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("slopeDistanceStdDeviation"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.SetupID != null)
-            {
-                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
-            }
-            if ((object)this.TargetSetupID != null)
-            {
-                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
-            }
-            if ((object)this.MeanHorizAngle != null)
-            {
-                buff.AppendFormat("meanHorizAngle = {0}", this.MeanHorizAngle).AppendLine();
-            }
-            if ((object)this.HorizStdDeviation != null)
-            {
-                buff.AppendFormat("horizStdDeviation = {0}", this.HorizStdDeviation).AppendLine();
-            }
-            if ((object)this.MeanzenithAngle != null)
-            {
-                buff.AppendFormat("meanzenithAngle = {0}", this.MeanzenithAngle).AppendLine();
-            }
-            if ((object)this.VertStdDeviation != null)
-            {
-                buff.AppendFormat("vertStdDeviation = {0}", this.VertStdDeviation).AppendLine();
-            }
-            if ((object)this.MeanSlopeDistance != null)
-            {
-                buff.AppendFormat("meanSlopeDistance = {0}", this.MeanSlopeDistance).AppendLine();
-            }
-            if ((object)this.SlopeDistanceStdDeviation != null)
-            {
-                buff.AppendFormat("slopeDistanceStdDeviation = {0}", this.SlopeDistanceStdDeviation).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -135,45 +137,51 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public string SetupID;
+        #endregion
 
-        public string TargetSetupID;
+        #region object
 
-        public double? MeanHorizAngle;
-
-        public double? HorizStdDeviation;
-        /// <summary>
-        /// Represents zenith angles with the 0 origin as
-        ///     straight up and measured in a clockwise direction in the specified
-        ///     Angular units.
-        /// </summary>
-
-        public double? MeanzenithAngle;
-
-        public double? VertStdDeviation;
-
-        public double? MeanSlopeDistance;
-
-        public double? SlopeDistanceStdDeviation;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.SetupID != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.TargetSetupID != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("TargetPoint"))
+            if ((object)this.MeanHorizAngle != null)
             {
-                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+                buff.AppendFormat("meanHorizAngle = {0}", this.MeanHorizAngle).AppendLine();
+            }
+            if ((object)this.HorizStdDeviation != null)
+            {
+                buff.AppendFormat("horizStdDeviation = {0}", this.HorizStdDeviation).AppendLine();
+            }
+            if ((object)this.MeanzenithAngle != null)
+            {
+                buff.AppendFormat("meanzenithAngle = {0}", this.MeanzenithAngle).AppendLine();
+            }
+            if ((object)this.VertStdDeviation != null)
+            {
+                buff.AppendFormat("vertStdDeviation = {0}", this.VertStdDeviation).AppendLine();
+            }
+            if ((object)this.MeanSlopeDistance != null)
+            {
+                buff.AppendFormat("meanSlopeDistance = {0}", this.MeanSlopeDistance).AppendLine();
+            }
+            if ((object)this.SlopeDistanceStdDeviation != null)
+            {
+                buff.AppendFormat("slopeDistanceStdDeviation = {0}", this.SlopeDistanceStdDeviation).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

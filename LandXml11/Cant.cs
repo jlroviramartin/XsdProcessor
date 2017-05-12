@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// The "Cant" element will typically represent a proposed railway cant / superelevation alignment.
     /// It is defined by a sequential series of any combination of the cant stations and speed-only stations.
@@ -29,6 +27,44 @@ namespace XmlSchemaProcessor.LandXml11
         public Cant(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+
+        public StateType? State;
+
+        public double? EquilibriumConstant;
+
+        public double? AppliedCantConstant;
+
+        public double Gauge;
+
+        public string RotationPoint;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("SpeedStation"))
+            {
+                return Tuple.Create("SpeedStation", this.NewReader<SpeedStation>());
+            }
+            if (name.EqualsIgnoreCase("CantStation"))
+            {
+                return Tuple.Create("CantStation", this.NewReader<CantStation>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -56,43 +92,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("rotationPoint"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.EquilibriumConstant != null)
-            {
-                buff.AppendFormat("equilibriumConstant = {0}", this.EquilibriumConstant).AppendLine();
-            }
-            if ((object)this.AppliedCantConstant != null)
-            {
-                buff.AppendFormat("appliedCantConstant = {0}", this.AppliedCantConstant).AppendLine();
-            }
-            if ((object)this.Gauge != null)
-            {
-                buff.AppendFormat("gauge = {0}", this.Gauge).AppendLine();
-            }
-            if ((object)this.RotationPoint != null)
-            {
-                buff.AppendFormat("rotationPoint = {0}", this.RotationPoint).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -131,38 +130,47 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
+        #region object
 
-        public StateType? State;
-
-        public double? EquilibriumConstant;
-
-        public double? AppliedCantConstant;
-
-        public double Gauge;
-
-        public string RotationPoint;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("SpeedStation"))
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("SpeedStation", this.NewReader<SpeedStation>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
-            if (name.EqualsIgnoreCase("CantStation"))
+            if ((object)this.State != null)
             {
-                return Tuple.Create("CantStation", this.NewReader<CantStation>());
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.EquilibriumConstant != null)
+            {
+                buff.AppendFormat("equilibriumConstant = {0}", this.EquilibriumConstant).AppendLine();
+            }
+            if ((object)this.AppliedCantConstant != null)
+            {
+                buff.AppendFormat("appliedCantConstant = {0}", this.AppliedCantConstant).AppendLine();
+            }
+            if ((object)this.Gauge != null)
+            {
+                buff.AppendFormat("gauge = {0}", this.Gauge).AppendLine();
+            }
+            if ((object)this.RotationPoint != null)
+            {
+                buff.AppendFormat("rotationPoint = {0}", this.RotationPoint).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

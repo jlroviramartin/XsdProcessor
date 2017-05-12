@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,34 @@ namespace XmlSchemaProcessor.LandXml10
         public Volume(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? Station;
+
+        public int? LegNumber;
+
+        public double? TurnPercent;
+
+        public double? PercentTrucks;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -37,31 +63,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("percentTrucks"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Station != null)
-            {
-                buff.AppendFormat("station = {0}", this.Station).AppendLine();
-            }
-            if ((object)this.LegNumber != null)
-            {
-                buff.AppendFormat("legNumber = {0}", this.LegNumber).AppendLine();
-            }
-            if ((object)this.TurnPercent != null)
-            {
-                buff.AppendFormat("turnPercent = {0}", this.TurnPercent).AppendLine();
-            }
-            if ((object)this.PercentTrucks != null)
-            {
-                buff.AppendFormat("percentTrucks = {0}", this.PercentTrucks).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -88,28 +89,35 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #endregion
 
-        public double? Station;
+        #region object
 
-        public int? LegNumber;
-
-        public double? TurnPercent;
-
-        public double? PercentTrucks;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Station != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("station = {0}", this.Station).AppendLine();
+            }
+            if ((object)this.LegNumber != null)
+            {
+                buff.AppendFormat("legNumber = {0}", this.LegNumber).AppendLine();
+            }
+            if ((object)this.TurnPercent != null)
+            {
+                buff.AppendFormat("turnPercent = {0}", this.TurnPercent).AppendLine();
+            }
+            if ((object)this.PercentTrucks != null)
+            {
+                buff.AppendFormat("percentTrucks = {0}", this.PercentTrucks).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

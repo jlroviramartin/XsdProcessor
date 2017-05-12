@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Annotation is a descriptive string use to describe an action on survey
     /// </summary>
@@ -18,6 +16,32 @@ namespace XmlSchemaProcessor.LandXml11
         public Annotation(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// An Annotation will be a specific type within a jurisdiction. 
+        /// </summary>
+
+        public string Type;
+
+        public string Name;
+
+        public string Desc;
+        /// <summary>
+        /// A list of reference names values refering to one or more Parcel.name attributes.
+        /// </summary>
+
+        public IList<string> PclRef;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -36,31 +60,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("pclRef"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Type != null)
-            {
-                buff.AppendFormat("type = {0}", this.Type).AppendLine();
-            }
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.PclRef != null)
-            {
-                buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -87,26 +86,35 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        /// <summary>
-        /// An Annotation will be a specific type within a jurisdiction. 
-        /// </summary>
+        #endregion
 
-        public string Type;
+        #region object
 
-        public string Name;
-
-        public string Desc;
-        /// <summary>
-        /// A list of reference names values refering to one or more Parcel.name attributes.
-        /// </summary>
-
-        public IList<string> PclRef;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Type != null)
+            {
+                buff.AppendFormat("type = {0}", this.Type).AppendLine();
+            }
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.PclRef != null)
+            {
+                buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

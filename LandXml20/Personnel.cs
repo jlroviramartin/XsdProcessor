@@ -7,13 +7,36 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     public class Personnel : XsdBaseReader
     {
         public Personnel(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+        /// <summary>
+        /// This is a jurisdictionally based list of roles that a surveyor can undertake within a survey for example field hand, authorising surveyor, technician.
+        /// </summary>
+
+        public string Role;
+        /// <summary>
+        /// This is a jurisdictionally based list of classes of registration for a surveyor.  This allows validation of the surveyors role in the survey for legal traceablity.
+        /// </summary>
+
+        public string RegType;
+
+        public string RegNumber;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -32,31 +55,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("regNumber"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Role != null)
-            {
-                buff.AppendFormat("role = {0}", this.Role).AppendLine();
-            }
-            if ((object)this.RegType != null)
-            {
-                buff.AppendFormat("regType = {0}", this.RegType).AppendLine();
-            }
-            if ((object)this.RegNumber != null)
-            {
-                buff.AppendFormat("regNumber = {0}", this.RegNumber).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -83,25 +81,35 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
-        /// <summary>
-        /// This is a jurisdictionally based list of roles that a surveyor can undertake within a survey for example field hand, authorising surveyor, technician.
-        /// </summary>
+        #endregion
 
-        public string Role;
-        /// <summary>
-        /// This is a jurisdictionally based list of classes of registration for a surveyor.  This allows validation of the surveyors role in the survey for legal traceablity.
-        /// </summary>
+        #region object
 
-        public string RegType;
-
-        public string RegNumber;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Role != null)
+            {
+                buff.AppendFormat("role = {0}", this.Role).AppendLine();
+            }
+            if ((object)this.RegType != null)
+            {
+                buff.AppendFormat("regType = {0}", this.RegType).AppendLine();
+            }
+            if ((object)this.RegNumber != null)
+            {
+                buff.AppendFormat("regNumber = {0}", this.RegNumber).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

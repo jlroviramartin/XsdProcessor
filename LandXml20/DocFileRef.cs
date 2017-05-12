@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// A reference to any external document file containing related information for the associated element.
     /// </summary>
@@ -18,6 +16,25 @@ namespace XmlSchemaProcessor.LandXml20
         public DocFileRef(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public Uri Location;
+
+        public string FileType;
+
+        public string FileFormat;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -36,31 +53,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("fileFormat"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Location != null)
-            {
-                buff.AppendFormat("location = {0}", this.Location).AppendLine();
-            }
-            if ((object)this.FileType != null)
-            {
-                buff.AppendFormat("fileType = {0}", this.FileType).AppendLine();
-            }
-            if ((object)this.FileFormat != null)
-            {
-                buff.AppendFormat("fileFormat = {0}", this.FileFormat).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -87,19 +79,35 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public Uri Location;
+        #region object
 
-        public string FileType;
-
-        public string FileFormat;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Location != null)
+            {
+                buff.AppendFormat("location = {0}", this.Location).AppendLine();
+            }
+            if ((object)this.FileType != null)
+            {
+                buff.AppendFormat("fileType = {0}", this.FileType).AppendLine();
+            }
+            if ((object)this.FileFormat != null)
+            {
+                buff.AppendFormat("fileFormat = {0}", this.FileFormat).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

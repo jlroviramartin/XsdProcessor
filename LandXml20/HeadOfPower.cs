@@ -7,13 +7,28 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     public class HeadOfPower : XsdBaseReader
     {
         public HeadOfPower(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Details the legislation or regulation under which the survey was conducted, for example the Land Title Act2003 This list will be juridictionnally specific.
+        /// </summary>
+
+        public string Name;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -23,19 +38,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("name"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -50,17 +52,23 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Details the legislation or regulation under which the survey was conducted, for example the Land Title Act2003 This list will be juridictionnally specific.
-        /// </summary>
+        #endregion
 
-        public string Name;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

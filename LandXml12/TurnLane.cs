@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,48 @@ namespace XmlSchemaProcessor.LandXml12
         public TurnLane(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? StaStart;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? StaEnd;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? BeginFullWidthSta;
+
+        public double? Width;
+
+        public SideofRoadType? SideofRoad;
+
+        public TurnLaneType? Type;
+
+        public LaneTaperType? TaperType;
+
+        public double? TaperTangentLength;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -49,47 +89,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("taperTangentLength"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.StaEnd != null)
-            {
-                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
-            }
-            if ((object)this.BeginFullWidthSta != null)
-            {
-                buff.AppendFormat("beginFullWidthSta = {0}", this.BeginFullWidthSta).AppendLine();
-            }
-            if ((object)this.Width != null)
-            {
-                buff.AppendFormat("width = {0}", this.Width).AppendLine();
-            }
-            if ((object)this.SideofRoad != null)
-            {
-                buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
-            }
-            if ((object)this.Type != null)
-            {
-                buff.AppendFormat("type = {0}", this.Type).AppendLine();
-            }
-            if ((object)this.TaperType != null)
-            {
-                buff.AppendFormat("taperType = {0}", this.TaperType).AppendLine();
-            }
-            if ((object)this.TaperTangentLength != null)
-            {
-                buff.AppendFormat("taperTangentLength = {0}", this.TaperTangentLength).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -132,42 +131,51 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
+        #endregion
 
-        public double? StaStart;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
+        #region object
 
-        public double? StaEnd;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
-
-        public double? BeginFullWidthSta;
-
-        public double? Width;
-
-        public SideofRoadType? SideofRoad;
-
-        public TurnLaneType? Type;
-
-        public LaneTaperType? TaperType;
-
-        public double? TaperTangentLength;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.StaStart != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.StaEnd != null)
+            {
+                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
+            }
+            if ((object)this.BeginFullWidthSta != null)
+            {
+                buff.AppendFormat("beginFullWidthSta = {0}", this.BeginFullWidthSta).AppendLine();
+            }
+            if ((object)this.Width != null)
+            {
+                buff.AppendFormat("width = {0}", this.Width).AppendLine();
+            }
+            if ((object)this.SideofRoad != null)
+            {
+                buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
+            }
+            if ((object)this.Type != null)
+            {
+                buff.AppendFormat("type = {0}", this.Type).AppendLine();
+            }
+            if ((object)this.TaperType != null)
+            {
+                buff.AppendFormat("taperType = {0}", this.TaperType).AppendLine();
+            }
+            if ((object)this.TaperTangentLength != null)
+            {
+                buff.AppendFormat("taperTangentLength = {0}", this.TaperTangentLength).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

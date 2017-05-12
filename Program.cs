@@ -35,11 +35,9 @@ namespace XmlSchemaProcessor
 
             using (XmlReader xmlReader = new XmlTextReader(new FileStream(@"Resources\Samples\MiddleCalmarRoad.xml", FileMode.Open, FileAccess.Read)))
             {
-                Find(xmlReader, "LandXML");
-
                 Stack<XsdBaseReader> toRead = new Stack<XsdBaseReader>();
 
-                LandXml12.LandXML land = new LandXml12.LandXML(xmlReader);
+                LandXml12.LandXML land = LandXml12.LandXML.Process(xmlReader);
 
                 Debug.Write(Tabs(land.Depth));
                 Debug.WriteLine(land.GetType().Name + " " + land.ToAttributes());
@@ -47,7 +45,7 @@ namespace XmlSchemaProcessor
                 while (toRead.Count > 0)
                 {
                     XsdBaseReader xsdReader = toRead.Pop();
-                    Tuple<string, object> tuple = xsdReader.ReadElement();
+                    Tuple<string, object> tuple = xsdReader.NextChild();
                     if (tuple != null)
                     {
                         toRead.Push(xsdReader);

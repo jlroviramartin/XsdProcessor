@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Modified to include parcel class and an official ID
     /// Sequence [1, 1]
@@ -28,6 +26,112 @@ namespace XmlSchemaProcessor.LandXml11
         public Parcel(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string OID;
+
+        public double? Area;
+
+        public string Desc;
+        /// <summary>
+        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
+        /// </summary>
+
+        public double? DirClosure;
+
+        public double? DistClosure;
+
+        public string Owner;
+
+        public string ParcelType;
+
+        public double? SetbackFront;
+
+        public double? SetbackRear;
+
+        public double? SetbackSide;
+        /// <summary>
+        /// This is an extension of the LandXML state type, but is specific to parcels
+        /// </summary>
+
+        public ParcelStateType? State;
+
+        public string TaxId;
+        /// <summary>
+        /// This is a list of parcel classes which may be jurisdictionally specific defined by regulation and legislation.
+        /// </summary>
+
+        public string Class;
+        /// <summary>
+        /// Describes what the parcel is used for.  This would be a jurisdictionally specific list.
+        /// </summary>
+
+        public string UseOfParcel;
+        /// <summary>
+        /// Parcel Format describes how the parcel is described , ie Standard (2D), Volumertric (3D)
+        /// </summary>
+
+        public string ParcelFormat;
+
+        public string BuildingNo;
+
+        public string BuildingLevelNo;
+
+        public string Volume;
+        /// <summary>
+        /// A reference name value referring to Parcel.name attribute.
+        /// </summary>
+
+        public string PclRef;
+
+        public string LotEntitlements;
+
+        public string LiabilityApportionment;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("LocationAddress"))
+            {
+                return Tuple.Create("LocationAddress", this.NewReader<LocationAddress>());
+            }
+            if (name.EqualsIgnoreCase("Exclusions"))
+            {
+                return Tuple.Create("Exclusions", this.NewReader<Exclusions>());
+            }
+            if (name.EqualsIgnoreCase("Title"))
+            {
+                return Tuple.Create("Title", this.NewReader<Title>());
+            }
+            if (name.EqualsIgnoreCase("Parcels"))
+            {
+                return Tuple.Create("Parcels", this.NewReader<Parcels>());
+            }
+            if (name.EqualsIgnoreCase("VolumeGeom"))
+            {
+                return Tuple.Create("VolumeGeom", this.NewReader<VolumeGeom>());
+            }
+            if (name.EqualsIgnoreCase("CoordGeom"))
+            {
+                return Tuple.Create("CoordGeom", this.NewReader<CoordGeom>());
+            }
+            if (name.EqualsIgnoreCase("Center"))
+            {
+                return Tuple.Create("Center", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -100,103 +204,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("liabilityApportionment"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.OID != null)
-            {
-                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
-            }
-            if ((object)this.Area != null)
-            {
-                buff.AppendFormat("area = {0}", this.Area).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.DirClosure != null)
-            {
-                buff.AppendFormat("dirClosure = {0}", this.DirClosure).AppendLine();
-            }
-            if ((object)this.DistClosure != null)
-            {
-                buff.AppendFormat("distClosure = {0}", this.DistClosure).AppendLine();
-            }
-            if ((object)this.Owner != null)
-            {
-                buff.AppendFormat("owner = {0}", this.Owner).AppendLine();
-            }
-            if ((object)this.ParcelType != null)
-            {
-                buff.AppendFormat("parcelType = {0}", this.ParcelType).AppendLine();
-            }
-            if ((object)this.SetbackFront != null)
-            {
-                buff.AppendFormat("setbackFront = {0}", this.SetbackFront).AppendLine();
-            }
-            if ((object)this.SetbackRear != null)
-            {
-                buff.AppendFormat("setbackRear = {0}", this.SetbackRear).AppendLine();
-            }
-            if ((object)this.SetbackSide != null)
-            {
-                buff.AppendFormat("setbackSide = {0}", this.SetbackSide).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.TaxId != null)
-            {
-                buff.AppendFormat("taxId = {0}", this.TaxId).AppendLine();
-            }
-            if ((object)this.Class != null)
-            {
-                buff.AppendFormat("class = {0}", this.Class).AppendLine();
-            }
-            if ((object)this.UseOfParcel != null)
-            {
-                buff.AppendFormat("useOfParcel = {0}", this.UseOfParcel).AppendLine();
-            }
-            if ((object)this.ParcelFormat != null)
-            {
-                buff.AppendFormat("parcelFormat = {0}", this.ParcelFormat).AppendLine();
-            }
-            if ((object)this.BuildingNo != null)
-            {
-                buff.AppendFormat("buildingNo = {0}", this.BuildingNo).AppendLine();
-            }
-            if ((object)this.BuildingLevelNo != null)
-            {
-                buff.AppendFormat("buildingLevelNo = {0}", this.BuildingLevelNo).AppendLine();
-            }
-            if ((object)this.Volume != null)
-            {
-                buff.AppendFormat("volume = {0}", this.Volume).AppendLine();
-            }
-            if ((object)this.PclRef != null)
-            {
-                buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
-            }
-            if ((object)this.LotEntitlements != null)
-            {
-                buff.AppendFormat("lotEntitlements = {0}", this.LotEntitlements).AppendLine();
-            }
-            if ((object)this.LiabilityApportionment != null)
-            {
-                buff.AppendFormat("liabilityApportionment = {0}", this.LiabilityApportionment).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -295,106 +302,107 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string OID;
+        #region object
 
-        public double? Area;
-
-        public string Desc;
-        /// <summary>
-        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
-        /// </summary>
-
-        public double? DirClosure;
-
-        public double? DistClosure;
-
-        public string Owner;
-
-        public string ParcelType;
-
-        public double? SetbackFront;
-
-        public double? SetbackRear;
-
-        public double? SetbackSide;
-        /// <summary>
-        /// This is an extension of the LandXML state type, but is specific to parcels
-        /// </summary>
-
-        public ParcelStateType? State;
-
-        public string TaxId;
-        /// <summary>
-        /// This is a list of parcel classes which may be jurisdictionally specific defined by regulation and legislation.
-        /// </summary>
-
-        public string Class;
-        /// <summary>
-        /// Describes what the parcel is used for.  This would be a jurisdictionally specific list.
-        /// </summary>
-
-        public string UseOfParcel;
-        /// <summary>
-        /// Parcel Format describes how the parcel is described , ie Standard (2D), Volumertric (3D)
-        /// </summary>
-
-        public string ParcelFormat;
-
-        public string BuildingNo;
-
-        public string BuildingLevelNo;
-
-        public string Volume;
-        /// <summary>
-        /// A reference name value referring to Parcel.name attribute.
-        /// </summary>
-
-        public string PclRef;
-
-        public string LotEntitlements;
-
-        public string LiabilityApportionment;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("LocationAddress"))
+            if ((object)this.OID != null)
             {
-                return Tuple.Create("LocationAddress", this.NewReader<LocationAddress>());
+                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Exclusions"))
+            if ((object)this.Area != null)
             {
-                return Tuple.Create("Exclusions", this.NewReader<Exclusions>());
+                buff.AppendFormat("area = {0}", this.Area).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Title"))
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("Title", this.NewReader<Title>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Parcels"))
+            if ((object)this.DirClosure != null)
             {
-                return Tuple.Create("Parcels", this.NewReader<Parcels>());
+                buff.AppendFormat("dirClosure = {0}", this.DirClosure).AppendLine();
             }
-            if (name.EqualsIgnoreCase("VolumeGeom"))
+            if ((object)this.DistClosure != null)
             {
-                return Tuple.Create("VolumeGeom", this.NewReader<VolumeGeom>());
+                buff.AppendFormat("distClosure = {0}", this.DistClosure).AppendLine();
             }
-            if (name.EqualsIgnoreCase("CoordGeom"))
+            if ((object)this.Owner != null)
             {
-                return Tuple.Create("CoordGeom", this.NewReader<CoordGeom>());
+                buff.AppendFormat("owner = {0}", this.Owner).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Center"))
+            if ((object)this.ParcelType != null)
             {
-                return Tuple.Create("Center", this.NewReader<PointType>());
+                buff.AppendFormat("parcelType = {0}", this.ParcelType).AppendLine();
+            }
+            if ((object)this.SetbackFront != null)
+            {
+                buff.AppendFormat("setbackFront = {0}", this.SetbackFront).AppendLine();
+            }
+            if ((object)this.SetbackRear != null)
+            {
+                buff.AppendFormat("setbackRear = {0}", this.SetbackRear).AppendLine();
+            }
+            if ((object)this.SetbackSide != null)
+            {
+                buff.AppendFormat("setbackSide = {0}", this.SetbackSide).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.TaxId != null)
+            {
+                buff.AppendFormat("taxId = {0}", this.TaxId).AppendLine();
+            }
+            if ((object)this.Class != null)
+            {
+                buff.AppendFormat("class = {0}", this.Class).AppendLine();
+            }
+            if ((object)this.UseOfParcel != null)
+            {
+                buff.AppendFormat("useOfParcel = {0}", this.UseOfParcel).AppendLine();
+            }
+            if ((object)this.ParcelFormat != null)
+            {
+                buff.AppendFormat("parcelFormat = {0}", this.ParcelFormat).AppendLine();
+            }
+            if ((object)this.BuildingNo != null)
+            {
+                buff.AppendFormat("buildingNo = {0}", this.BuildingNo).AppendLine();
+            }
+            if ((object)this.BuildingLevelNo != null)
+            {
+                buff.AppendFormat("buildingLevelNo = {0}", this.BuildingLevelNo).AppendLine();
+            }
+            if ((object)this.Volume != null)
+            {
+                buff.AppendFormat("volume = {0}", this.Volume).AppendLine();
+            }
+            if ((object)this.PclRef != null)
+            {
+                buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
+            }
+            if ((object)this.LotEntitlements != null)
+            {
+                buff.AppendFormat("lotEntitlements = {0}", this.LotEntitlements).AppendLine();
+            }
+            if ((object)this.LiabilityApportionment != null)
+            {
+                buff.AppendFormat("liabilityApportionment = {0}", this.LiabilityApportionment).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

@@ -1,15 +1,52 @@
 ﻿delimiters "$", "$"
 
-BuildType_v2(namespace, documentation, typeName, baseType, properties, includeContent, contentType, needContent, events, contentFieldName="Content") ::= <<
+BuildType_v2(namespace, documentation, typeName, baseType, properties, includeContent, contentType, events, isXsdRoot, contentFieldName="Content") ::= <<
 $Pre(namespace)$
-    // needContent    : $needContent$
-    // includeContent : $includeContent$
     $documentation; format="NetDocumentation"$
     public class $typeName; format="TypeName"$ : $baseType; format="TypeName"$
     {
+        $if(isXsdRoot)$
+        public static $typeName; format="TypeName"$ Process(System.Xml.XmlReader xmlReader)
+        {
+            while (xmlReader.Read() && (xmlReader.NodeType != System.Xml.XmlNodeType.Element))
+            {
+            }
+
+            if (xmlReader.NodeType != System.Xml.XmlNodeType.Element || !"$typeName$".EqualsIgnoreCase(xmlReader.Name))
+            {
+                throw new Exception("Fichero Xml mal construido.");
+            }
+
+            $typeName; format="TypeName"$ node = new $typeName; format="TypeName"$(xmlReader);
+            node.ReadAttributes();
+            return node;
+        }
+        $endif$
+
         public $typeName; format="TypeName"$(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        $properties:{property | $AttributeAsProperty(property)$}$
+        $if(includeContent)$
+        public $contentType; format="NetType"$ $contentFieldName; format="PropertyName"$;
+        $endif$
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            $events:{event | $Element(event)$}$
+            return null;
+        }
+
+        $if(includeContent)$
+        protected override bool NeedContent { get { return true; } }
+        $endif$
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -20,21 +57,6 @@ $Pre(namespace)$
             this.$contentFieldName; format="PropertyName"$ = XsdConverter.Instance.Convert<$contentType; format="NetType"$>(text);
             $endif$
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            $properties:{property | $AttributeToString(property)$}$
-            $if(includeContent)$
-            if ((object)this.$contentFieldName; format="PropertyName"$ != null)
-            {
-                buff.AppendFormat("$contentFieldName$ = {0}", this.$contentFieldName; format="PropertyName"$).AppendLine();
-            }
-            $endif$
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -51,19 +73,25 @@ $Pre(namespace)$
             return buff.ToString();
         }
 
-        $properties:{property | $AttributeAsProperty(property)$}$
+        #endregion
 
-        $if(includeContent)$
-        protected override bool NeedContent { get { return true; } }
+        #region object
 
-        public $contentType; format="NetType"$ $contentFieldName; format="PropertyName"$;
-        $endif$
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            $events:{event | $Element(event)$}$
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            $properties:{property | $AttributeToString(property)$}$
+            $if(includeContent)$
+            if ((object)this.$contentFieldName; format="PropertyName"$ != null)
+            {
+                buff.AppendFormat("$contentFieldName$ = {0}", this.$contentFieldName; format="PropertyName"$).AppendLine();
+            }
+            $endif$
+            return buff.ToString();
         }
+
+        #endregion
     }
 $Post()$
 

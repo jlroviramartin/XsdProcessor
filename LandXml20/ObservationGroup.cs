@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// All observations to the same point in a group should be averaged together (they have consistant orientation)
     /// Sequence [1, 1]
@@ -29,6 +27,84 @@ namespace XmlSchemaProcessor.LandXml20
         public ObservationGroup(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Id;
+        /// <summary>
+        /// Used by many of the Survey elements
+        /// </summary>
+
+        public PurposeType? Purpose;
+
+        public string SetupID;
+
+        public string TargetSetupID;
+
+        public string SetID;
+        /// <summary>
+        /// A list of reference names values refering to one or more CoordGeom.name attributes.
+        /// </summary>
+
+        public IList<string> CoordGeomRefs;
+        /// <summary>
+        /// A reference name value referring to Alignment.name attribute.
+        /// </summary>
+
+        public string AlignRef;
+
+        public string AlignStationName;
+        /// <summary>
+        /// Represents a linear offset distance. When associated with horizontal (planametric) road or coordinate geometry, the offset is a 2D distance measured perpendicular to the road centerline or coordinate geometry used as the origin. When used in cross sections of long section (profile) the offset is a 2d linear measurement from the origin of the cross section or long section. In all cases a positive value indicates an offset to the RIGHT of the origin and negative values indicate and offset to the LEFT of the origin. The value is in decimal form expressed in length units.
+        /// </summary>
+
+        public double? AlignOffset;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("RedVerticalObservation"))
+            {
+                return Tuple.Create("RedVerticalObservation", this.NewReader<RedVerticalObservation>());
+            }
+            if (name.EqualsIgnoreCase("ReducedArcObservation"))
+            {
+                return Tuple.Create("ReducedArcObservation", this.NewReader<ReducedArcObservation>());
+            }
+            if (name.EqualsIgnoreCase("RedHorizontalPosition"))
+            {
+                return Tuple.Create("RedHorizontalPosition", this.NewReader<RedHorizontalPosition>());
+            }
+            if (name.EqualsIgnoreCase("ReducedObservation"))
+            {
+                return Tuple.Create("ReducedObservation", this.NewReader<ReducedObservation>());
+            }
+            if (name.EqualsIgnoreCase("RawObservation"))
+            {
+                return Tuple.Create("RawObservation", this.NewReader<RawObservation>());
+            }
+            if (name.EqualsIgnoreCase("Backsight"))
+            {
+                return Tuple.Create("Backsight", this.NewReader<Backsight>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -62,51 +138,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("alignOffset"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.Purpose != null)
-            {
-                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
-            }
-            if ((object)this.SetupID != null)
-            {
-                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
-            }
-            if ((object)this.TargetSetupID != null)
-            {
-                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
-            }
-            if ((object)this.SetID != null)
-            {
-                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
-            }
-            if ((object)this.CoordGeomRefs != null)
-            {
-                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
-            }
-            if ((object)this.AlignRef != null)
-            {
-                buff.AppendFormat("alignRef = {0}", this.AlignRef).AppendLine();
-            }
-            if ((object)this.AlignStationName != null)
-            {
-                buff.AppendFormat("alignStationName = {0}", this.AlignStationName).AppendLine();
-            }
-            if ((object)this.AlignOffset != null)
-            {
-                buff.AppendFormat("alignOffset = {0}", this.AlignOffset).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -153,78 +184,55 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Id;
-        /// <summary>
-        /// Used by many of the Survey elements
-        /// </summary>
+        #endregion
 
-        public PurposeType? Purpose;
+        #region object
 
-        public string SetupID;
-
-        public string TargetSetupID;
-
-        public string SetID;
-        /// <summary>
-        /// A list of reference names values refering to one or more CoordGeom.name attributes.
-        /// </summary>
-
-        public IList<string> CoordGeomRefs;
-        /// <summary>
-        /// A reference name value referring to Alignment.name attribute.
-        /// </summary>
-
-        public string AlignRef;
-
-        public string AlignStationName;
-        /// <summary>
-        /// Represents a linear offset distance. When associated with horizontal (planametric) road or coordinate geometry, the offset is a 2D distance measured perpendicular to the road centerline or coordinate geometry used as the origin. When used in cross sections of long section (profile) the offset is a 2d linear measurement from the origin of the cross section or long section. In all cases a positive value indicates an offset to the RIGHT of the origin and negative values indicate and offset to the LEFT of the origin. The value is in decimal form expressed in length units.
-        /// </summary>
-
-        public double? AlignOffset;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.Purpose != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
             }
-            if (name.EqualsIgnoreCase("RedVerticalObservation"))
+            if ((object)this.SetupID != null)
             {
-                return Tuple.Create("RedVerticalObservation", this.NewReader<RedVerticalObservation>());
+                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("ReducedArcObservation"))
+            if ((object)this.TargetSetupID != null)
             {
-                return Tuple.Create("ReducedArcObservation", this.NewReader<ReducedArcObservation>());
+                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("RedHorizontalPosition"))
+            if ((object)this.SetID != null)
             {
-                return Tuple.Create("RedHorizontalPosition", this.NewReader<RedHorizontalPosition>());
+                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("ReducedObservation"))
+            if ((object)this.CoordGeomRefs != null)
             {
-                return Tuple.Create("ReducedObservation", this.NewReader<ReducedObservation>());
+                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
             }
-            if (name.EqualsIgnoreCase("RawObservation"))
+            if ((object)this.AlignRef != null)
             {
-                return Tuple.Create("RawObservation", this.NewReader<RawObservation>());
+                buff.AppendFormat("alignRef = {0}", this.AlignRef).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Backsight"))
+            if ((object)this.AlignStationName != null)
             {
-                return Tuple.Create("Backsight", this.NewReader<Backsight>());
+                buff.AppendFormat("alignStationName = {0}", this.AlignStationName).AppendLine();
             }
-            if (name.EqualsIgnoreCase("TargetPoint"))
+            if ((object)this.AlignOffset != null)
             {
-                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+                buff.AppendFormat("alignOffset = {0}", this.AlignOffset).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

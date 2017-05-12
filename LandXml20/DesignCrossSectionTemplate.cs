@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Reusable design cross section template
     /// Sequence [1, 1]
@@ -20,6 +18,30 @@ namespace XmlSchemaProcessor.LandXml20
         public DesignCrossSectionTemplate(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public int Index;
+
+        public string Desc;
+
+        public StateType? State;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("DesignCrossSectSurf"))
+            {
+                return Tuple.Create("DesignCrossSectSurf", this.NewReader<DesignCrossSectSurf>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -38,31 +60,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("state"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Index != null)
-            {
-                buff.AppendFormat("index = {0}", this.Index).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -89,24 +86,35 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public int Index;
+        #region object
 
-        public string Desc;
-
-        public StateType? State;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("DesignCrossSectSurf"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("DesignCrossSectSurf", this.NewReader<DesignCrossSectSurf>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Index != null)
+            {
+                buff.AppendFormat("index = {0}", this.Index).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

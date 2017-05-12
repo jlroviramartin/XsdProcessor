@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,39 @@ namespace XmlSchemaProcessor.LandXml12
         public DailyTrafficVolume(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? StaStart;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? StaEnd;
+
+        public double? ADT;
+
+        public DateTime? Year;
+
+        public double? EscFactor;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -40,35 +71,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("escFactor"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.StaEnd != null)
-            {
-                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
-            }
-            if ((object)this.ADT != null)
-            {
-                buff.AppendFormat("ADT = {0}", this.ADT).AppendLine();
-            }
-            if ((object)this.Year != null)
-            {
-                buff.AppendFormat("year = {0}", this.Year).AppendLine();
-            }
-            if ((object)this.EscFactor != null)
-            {
-                buff.AppendFormat("escFactor = {0}", this.EscFactor).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -99,33 +101,39 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
+        #endregion
 
-        public double? StaStart;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
+        #region object
 
-        public double? StaEnd;
-
-        public double? ADT;
-
-        public DateTime? Year;
-
-        public double? EscFactor;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.StaStart != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.StaEnd != null)
+            {
+                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
+            }
+            if ((object)this.ADT != null)
+            {
+                buff.AppendFormat("ADT = {0}", this.ADT).AppendLine();
+            }
+            if ((object)this.Year != null)
+            {
+                buff.AppendFormat("year = {0}", this.Year).AppendLine();
+            }
+            if ((object)this.EscFactor != null)
+            {
+                buff.AppendFormat("escFactor = {0}", this.EscFactor).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

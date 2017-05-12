@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// offsetInOut:   -ve = offset in towards inst, +ve = offset away from inst 
     /// offsetLeftRight:   -ve = left, +ve = right (as viewed from instrument) 
@@ -20,6 +18,23 @@ namespace XmlSchemaProcessor.LandXml10
         public OffsetVals(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double? OffsetInOut;
+
+        public double? OffsetLeftRight;
+
+        public double? OffsetUpDown;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -35,27 +50,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("offsetUpDown"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.OffsetInOut != null)
-            {
-                buff.AppendFormat("offsetInOut = {0}", this.OffsetInOut).AppendLine();
-            }
-            if ((object)this.OffsetLeftRight != null)
-            {
-                buff.AppendFormat("offsetLeftRight = {0}", this.OffsetLeftRight).AppendLine();
-            }
-            if ((object)this.OffsetUpDown != null)
-            {
-                buff.AppendFormat("offsetUpDown = {0}", this.OffsetUpDown).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -78,17 +72,31 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public double? OffsetInOut;
+        #endregion
 
-        public double? OffsetLeftRight;
+        #region object
 
-        public double? OffsetUpDown;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.OffsetInOut != null)
+            {
+                buff.AppendFormat("offsetInOut = {0}", this.OffsetInOut).AppendLine();
+            }
+            if ((object)this.OffsetLeftRight != null)
+            {
+                buff.AppendFormat("offsetLeftRight = {0}", this.OffsetLeftRight).AppendLine();
+            }
+            if ((object)this.OffsetUpDown != null)
+            {
+                buff.AppendFormat("offsetUpDown = {0}", this.OffsetUpDown).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// An Exclusion is an area which has been reserved from a tenure for a specific purpose but may have no defined spatial extent for example 10ha for road. A single parcel could have more than one eclusion for different purposes.
     /// </summary>
@@ -18,6 +16,25 @@ namespace XmlSchemaProcessor.LandXml11
         public Exclusions(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// This is a jurisdictionally based list of exclusions for a Title example would be exclusions for Road, Track, Esplanade etc 
+        /// </summary>
+
+        public string ExclusionType;
+
+        public double Area;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -30,23 +47,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("area"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.ExclusionType != null)
-            {
-                buff.AppendFormat("exclusionType = {0}", this.ExclusionType).AppendLine();
-            }
-            if ((object)this.Area != null)
-            {
-                buff.AppendFormat("area = {0}", this.Area).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -65,19 +65,27 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        /// <summary>
-        /// This is a jurisdictionally based list of exclusions for a Title example would be exclusions for Road, Track, Esplanade etc 
-        /// </summary>
+        #endregion
 
-        public string ExclusionType;
+        #region object
 
-        public double Area;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.ExclusionType != null)
+            {
+                buff.AppendFormat("exclusionType = {0}", this.ExclusionType).AppendLine();
+            }
+            if ((object)this.Area != null)
+            {
+                buff.AppendFormat("area = {0}", this.Area).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

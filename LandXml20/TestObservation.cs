@@ -7,13 +7,30 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     public class TestObservation : RawObservationType
     {
         public TestObservation(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double? Setup1RodA;
+
+        public double? Setup1RodB;
+
+        public double? Setup2RodA;
+
+        public double? Setup2RodB;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -32,31 +49,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("setup2RodB"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Setup1RodA != null)
-            {
-                buff.AppendFormat("setup1RodA = {0}", this.Setup1RodA).AppendLine();
-            }
-            if ((object)this.Setup1RodB != null)
-            {
-                buff.AppendFormat("setup1RodB = {0}", this.Setup1RodB).AppendLine();
-            }
-            if ((object)this.Setup2RodA != null)
-            {
-                buff.AppendFormat("setup2RodA = {0}", this.Setup2RodA).AppendLine();
-            }
-            if ((object)this.Setup2RodB != null)
-            {
-                buff.AppendFormat("setup2RodB = {0}", this.Setup2RodB).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -83,19 +75,35 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public double? Setup1RodA;
+        #endregion
 
-        public double? Setup1RodB;
+        #region object
 
-        public double? Setup2RodA;
-
-        public double? Setup2RodB;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Setup1RodA != null)
+            {
+                buff.AppendFormat("setup1RodA = {0}", this.Setup1RodA).AppendLine();
+            }
+            if ((object)this.Setup1RodB != null)
+            {
+                buff.AppendFormat("setup1RodB = {0}", this.Setup1RodB).AppendLine();
+            }
+            if ((object)this.Setup2RodA != null)
+            {
+                buff.AppendFormat("setup2RodA = {0}", this.Setup2RodA).AppendLine();
+            }
+            if ((object)this.Setup2RodB != null)
+            {
+                buff.AppendFormat("setup2RodB = {0}", this.Setup2RodB).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

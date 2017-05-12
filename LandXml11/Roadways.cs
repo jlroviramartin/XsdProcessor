@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [1, 1]
     ///     Roadway [1, *]
@@ -21,6 +19,36 @@ namespace XmlSchemaProcessor.LandXml11
         public Roadways(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+
+        public StateType? State;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Intersections"))
+            {
+                return Tuple.Create("Intersections", this.NewReader<Intersections>());
+            }
+            if (name.EqualsIgnoreCase("Roadway"))
+            {
+                return Tuple.Create("Roadway", this.NewReader<Roadway>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -36,27 +64,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("state"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -79,30 +86,31 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
+        #region object
 
-        public StateType? State;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Intersections"))
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("Intersections", this.NewReader<Intersections>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Roadway"))
+            if ((object)this.State != null)
             {
-                return Tuple.Create("Roadway", this.NewReader<Roadway>());
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     InstrumentPoint [0, 1]
@@ -25,85 +23,6 @@ namespace XmlSchemaProcessor.LandXml11
         {
         }
 
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            this.Id = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("id"));
-
-            this.StationName = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("stationName"));
-
-            this.InstrumentHeight = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("instrumentHeight"));
-
-            this.LaserDetailsID = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("laserDetailsID"));
-
-            this.MagDeclination = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("magDeclination"));
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.StationName != null)
-            {
-                buff.AppendFormat("stationName = {0}", this.StationName).AppendLine();
-            }
-            if ((object)this.InstrumentHeight != null)
-            {
-                buff.AppendFormat("instrumentHeight = {0}", this.InstrumentHeight).AppendLine();
-            }
-            if ((object)this.LaserDetailsID != null)
-            {
-                buff.AppendFormat("laserDetailsID = {0}", this.LaserDetailsID).AppendLine();
-            }
-            if ((object)this.MagDeclination != null)
-            {
-                buff.AppendFormat("magDeclination = {0}", this.MagDeclination).AppendLine();
-            }
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            if ((object)this.Id != null)
-            {
-                buff.Append("id", this.Id);
-            }
-            if ((object)this.StationName != null)
-            {
-                buff.Append("stationName", this.StationName);
-            }
-            if ((object)this.InstrumentHeight != null)
-            {
-                buff.Append("instrumentHeight", this.InstrumentHeight);
-            }
-            if ((object)this.LaserDetailsID != null)
-            {
-                buff.Append("laserDetailsID", this.LaserDetailsID);
-            }
-            if ((object)this.MagDeclination != null)
-            {
-                buff.Append("magDeclination", this.MagDeclination);
-            }
-
-            return buff.ToString();
-        }
-
         public string Id;
 
         public string StationName;
@@ -114,6 +33,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public double? MagDeclination;
 
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -144,6 +64,94 @@ namespace XmlSchemaProcessor.LandXml11
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            this.Id = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("id"));
+
+            this.StationName = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("stationName"));
+
+            this.InstrumentHeight = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("instrumentHeight"));
+
+            this.LaserDetailsID = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("laserDetailsID"));
+
+            this.MagDeclination = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("magDeclination"));
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            if ((object)this.Id != null)
+            {
+                buff.Append("id", this.Id);
+            }
+            if ((object)this.StationName != null)
+            {
+                buff.Append("stationName", this.StationName);
+            }
+            if ((object)this.InstrumentHeight != null)
+            {
+                buff.Append("instrumentHeight", this.InstrumentHeight);
+            }
+            if ((object)this.LaserDetailsID != null)
+            {
+                buff.Append("laserDetailsID", this.LaserDetailsID);
+            }
+            if ((object)this.MagDeclination != null)
+            {
+                buff.Append("magDeclination", this.MagDeclination);
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
+            {
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
+            }
+            if ((object)this.StationName != null)
+            {
+                buff.AppendFormat("stationName = {0}", this.StationName).AppendLine();
+            }
+            if ((object)this.InstrumentHeight != null)
+            {
+                buff.AppendFormat("instrumentHeight = {0}", this.InstrumentHeight).AppendLine();
+            }
+            if ((object)this.LaserDetailsID != null)
+            {
+                buff.AppendFormat("laserDetailsID = {0}", this.LaserDetailsID).AppendLine();
+            }
+            if ((object)this.MagDeclination != null)
+            {
+                buff.AppendFormat("magDeclination = {0}", this.MagDeclination).AppendLine();
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

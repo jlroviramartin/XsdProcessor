@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Modified to include official ID, as with all CoordGeom elements
     /// Sequence [1, 1]
@@ -22,6 +20,49 @@ namespace XmlSchemaProcessor.LandXml12
         public Line(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Desc;
+        /// <summary>
+        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
+        /// </summary>
+
+        public double? Dir;
+
+        public double? Length;
+
+        public string Name;
+
+        public double? StaStart;
+
+        public StateType? State;
+
+        public string OID;
+
+        public string Note;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("End"))
+            {
+                return Tuple.Create("End", this.NewReader<PointType>());
+            }
+            if (name.EqualsIgnoreCase("Start"))
+            {
+                return Tuple.Create("Start", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -52,47 +93,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("note"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Dir != null)
-            {
-                buff.AppendFormat("dir = {0}", this.Dir).AppendLine();
-            }
-            if ((object)this.Length != null)
-            {
-                buff.AppendFormat("length = {0}", this.Length).AppendLine();
-            }
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.OID != null)
-            {
-                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
-            }
-            if ((object)this.Note != null)
-            {
-                buff.AppendFormat("note = {0}", this.Note).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -135,43 +135,51 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public string Desc;
-        /// <summary>
-        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
-        /// </summary>
+        #endregion
 
-        public double? Dir;
+        #region object
 
-        public double? Length;
-
-        public string Name;
-
-        public double? StaStart;
-
-        public StateType? State;
-
-        public string OID;
-
-        public string Note;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
-            if (name.EqualsIgnoreCase("End"))
+            if ((object)this.Dir != null)
             {
-                return Tuple.Create("End", this.NewReader<PointType>());
+                buff.AppendFormat("dir = {0}", this.Dir).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Start"))
+            if ((object)this.Length != null)
             {
-                return Tuple.Create("Start", this.NewReader<PointType>());
+                buff.AppendFormat("length = {0}", this.Length).AppendLine();
+            }
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.StaStart != null)
+            {
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.OID != null)
+            {
+                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
+            }
+            if ((object)this.Note != null)
+            {
+                buff.AppendFormat("note = {0}", this.Note).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

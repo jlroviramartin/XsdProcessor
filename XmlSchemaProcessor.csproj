@@ -128,7 +128,6 @@
     <Compile Include="LandXml10\GradeModel.cs" />
     <Compile Include="LandXml10\GradeSurface.cs" />
     <Compile Include="LandXml10\HazardRating.cs" />
-    <Compile Include="LandXml10\ILandXmlEvents.cs" />
     <Compile Include="LandXml10\ImpArea.cs" />
     <Compile Include="LandXml10\ImpDiameter.cs" />
     <Compile Include="LandXml10\Imperial.cs" />
@@ -150,8 +149,6 @@
     <Compile Include="LandXml10\Invert.cs" />
     <Compile Include="LandXml10\IrregularLine.cs" />
     <Compile Include="LandXml10\LandXML.cs" />
-    <Compile Include="LandXml10\LandXmlEvents.cs" />
-    <Compile Include="LandXml10\LandXmlReader.cs" />
     <Compile Include="LandXml10\Lanes.cs" />
     <Compile Include="LandXml10\LaneTaperType.cs" />
     <Compile Include="LandXml10\LaserDetails.cs" />
@@ -258,7 +255,6 @@
     <Compile Include="LandXml10\SurveyType.cs" />
     <Compile Include="LandXml10\SurvPntType.cs" />
     <Compile Include="LandXml10\TargetSetup.cs" />
-    <Compile Include="LandXml10\TestLandXmlEvents.cs" />
     <Compile Include="LandXml10\ThruLane.cs" />
     <Compile Include="LandXml10\Timing.cs" />
     <Compile Include="LandXml10\Title.cs" />
@@ -396,7 +392,6 @@
     <Compile Include="LandXml11\GradeModel.cs" />
     <Compile Include="LandXml11\GradeSurface.cs" />
     <Compile Include="LandXml11\HazardRating.cs" />
-    <Compile Include="LandXml11\ILandXmlEvents.cs" />
     <Compile Include="LandXml11\ImpArea.cs" />
     <Compile Include="LandXml11\ImpDiameter.cs" />
     <Compile Include="LandXml11\Imperial.cs" />
@@ -419,8 +414,6 @@
     <Compile Include="LandXml11\Invert.cs" />
     <Compile Include="LandXml11\IrregularLine.cs" />
     <Compile Include="LandXml11\LandXML.cs" />
-    <Compile Include="LandXml11\LandXmlEvents.cs" />
-    <Compile Include="LandXml11\LandXmlReader.cs" />
     <Compile Include="LandXml11\Lanes.cs" />
     <Compile Include="LandXml11\LaneTaperType.cs" />
     <Compile Include="LandXml11\LaserDetails.cs" />
@@ -531,7 +524,6 @@
     <Compile Include="LandXml11\SurveyType.cs" />
     <Compile Include="LandXml11\SurvPntType.cs" />
     <Compile Include="LandXml11\TargetSetup.cs" />
-    <Compile Include="LandXml11\TestLandXmlEvents.cs" />
     <Compile Include="LandXml11\ThruLane.cs" />
     <Compile Include="LandXml11\Timing.cs" />
     <Compile Include="LandXml11\Title.cs" />
@@ -671,7 +663,6 @@
     <Compile Include="LandXml12\GradeSurface.cs" />
     <Compile Include="LandXml12\HazardRating.cs" />
     <Compile Include="LandXml12\HeadOfPower.cs" />
-    <Compile Include="LandXml12\ILandXmlEvents.cs" />
     <Compile Include="LandXml12\ImpArea.cs" />
     <Compile Include="LandXml12\ImpDiameter.cs" />
     <Compile Include="LandXml12\Imperial.cs" />
@@ -694,8 +685,6 @@
     <Compile Include="LandXml12\Invert.cs" />
     <Compile Include="LandXml12\IrregularLine.cs" />
     <Compile Include="LandXml12\LandXML.cs" />
-    <Compile Include="LandXml12\LandXmlEvents.cs" />
-    <Compile Include="LandXml12\LandXmlReader.cs" />
     <Compile Include="LandXml12\Lanes.cs" />
     <Compile Include="LandXml12\LaneTaperType.cs" />
     <Compile Include="LandXml12\LaserDetails.cs" />
@@ -808,7 +797,6 @@
     <Compile Include="LandXml12\SurveyType.cs" />
     <Compile Include="LandXml12\SurvPntType.cs" />
     <Compile Include="LandXml12\TargetSetup.cs" />
-    <Compile Include="LandXml12\TestLandXmlEvents.cs" />
     <Compile Include="LandXml12\TestObservation.cs" />
     <Compile Include="LandXml12\ThruLane.cs" />
     <Compile Include="LandXml12\Timing.cs" />
@@ -952,7 +940,6 @@
     <Compile Include="LandXml20\GradeSurface.cs" />
     <Compile Include="LandXml20\HazardRating.cs" />
     <Compile Include="LandXml20\HeadOfPower.cs" />
-    <Compile Include="LandXml20\ILandXmlEvents.cs" />
     <Compile Include="LandXml20\ImpArea.cs" />
     <Compile Include="LandXml20\ImpDiameter.cs" />
     <Compile Include="LandXml20\Imperial.cs" />
@@ -975,8 +962,6 @@
     <Compile Include="LandXml20\Invert.cs" />
     <Compile Include="LandXml20\IrregularLine.cs" />
     <Compile Include="LandXml20\LandXML.cs" />
-    <Compile Include="LandXml20\LandXmlEvents.cs" />
-    <Compile Include="LandXml20\LandXmlReader.cs" />
     <Compile Include="LandXml20\Lanes.cs" />
     <Compile Include="LandXml20\LaneTaperType.cs" />
     <Compile Include="LandXml20\LaserDetails.cs" />
@@ -1096,7 +1081,6 @@
     <Compile Include="LandXml20\SymbolTable.cs" />
     <Compile Include="LandXml20\SymbolType.cs" />
     <Compile Include="LandXml20\TargetSetup.cs" />
-    <Compile Include="LandXml20\TestLandXmlEvents.cs" />
     <Compile Include="LandXml20\TestObservation.cs" />
     <Compile Include="LandXml20\TextureImage.cs" />
     <Compile Include="LandXml20\TextureImageTable.cs" />
@@ -1298,9 +1282,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="LandXml\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

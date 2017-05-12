@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// The contour is defined by an elevation attribute and a 2D north/east list of points that define the geometry.
     /// is identified by the "name" attribute.
@@ -23,6 +21,33 @@ namespace XmlSchemaProcessor.LandXml20
         {
         }
 
+        public double Elev;
+        /// <summary>
+        /// A integer based index value to a table item in the material table.
+        /// </summary>
+
+        public IList<int?> M;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList2D"))
+            {
+                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -34,23 +59,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("m"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Elev != null)
-            {
-                buff.AppendFormat("elev = {0}", this.Elev).AppendLine();
-            }
-            if ((object)this.M != null)
-            {
-                buff.AppendFormat("m = {0}", this.M).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -69,27 +77,27 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public double Elev;
-        /// <summary>
-        /// A integer based index value to a table item in the material table.
-        /// </summary>
+        #endregion
 
-        public IList<int?> M;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Elev != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("elev = {0}", this.Elev).AppendLine();
             }
-            if (name.EqualsIgnoreCase("PntList2D"))
+            if ((object)this.M != null)
             {
-                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+                buff.AppendFormat("m = {0}", this.M).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

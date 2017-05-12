@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// A profile or long section
     /// Sequence [1, 1]
@@ -23,6 +21,38 @@ namespace XmlSchemaProcessor.LandXml12
         public Profile(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Desc;
+
+        public string Name;
+
+        public double? StaStart;
+
+        public StateType? State;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("ProfAlign"))
+            {
+                return Tuple.Create("ProfAlign", this.NewReader<ProfAlign>());
+            }
+            if (name.EqualsIgnoreCase("ProfSurf"))
+            {
+                return Tuple.Create("ProfSurf", this.NewReader<ProfSurf>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -41,31 +71,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("state"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -92,32 +97,35 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public string Desc;
+        #endregion
 
-        public string Name;
+        #region object
 
-        public double? StaStart;
-
-        public StateType? State;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
-            if (name.EqualsIgnoreCase("ProfAlign"))
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("ProfAlign", this.NewReader<ProfAlign>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("ProfSurf"))
+            if ((object)this.StaStart != null)
             {
-                return Tuple.Create("ProfSurf", this.NewReader<ProfSurf>());
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

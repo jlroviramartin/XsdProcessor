@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : true
-    // includeContent : true
     /// <summary>
     /// A text value that is a space delimited list of CgPoint names that form a linear connected chain. 
     ///    example: 
@@ -21,6 +19,37 @@ namespace XmlSchemaProcessor.LandXml10
         public Chain(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+
+        public string Code;
+
+        public StateType? State;
+
+        public PointGeometryType? PointGeometry;
+
+        public DTMAttributeType? DTMAttribute;
+
+        public DateTime? TimeStamp;
+
+        public SurveyRoleType? Role;
+
+        public IList<string> Content;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        protected override bool NeedContent { get { return true; } }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -52,51 +81,6 @@ namespace XmlSchemaProcessor.LandXml10
 
             this.Content = XsdConverter.Instance.Convert<IList<string>>(text);
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Code != null)
-            {
-                buff.AppendFormat("code = {0}", this.Code).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.PointGeometry != null)
-            {
-                buff.AppendFormat("pointGeometry = {0}", this.PointGeometry).AppendLine();
-            }
-            if ((object)this.DTMAttribute != null)
-            {
-                buff.AppendFormat("DTMAttribute = {0}", this.DTMAttribute).AppendLine();
-            }
-            if ((object)this.TimeStamp != null)
-            {
-                buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
-            }
-            if ((object)this.Role != null)
-            {
-                buff.AppendFormat("role = {0}", this.Role).AppendLine();
-            }
-
-            if ((object)this.Content != null)
-            {
-                buff.AppendFormat("content = {0}", this.Content).AppendLine();
-            }
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -143,31 +127,55 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
+        #region object
 
-        public string Code;
-
-        public StateType? State;
-
-        public PointGeometryType? PointGeometry;
-
-        public DTMAttributeType? DTMAttribute;
-
-        public DateTime? TimeStamp;
-
-        public SurveyRoleType? Role;
-
-
-        protected override bool NeedContent { get { return true; } }
-
-        public IList<string> Content;
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Code != null)
+            {
+                buff.AppendFormat("code = {0}", this.Code).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.PointGeometry != null)
+            {
+                buff.AppendFormat("pointGeometry = {0}", this.PointGeometry).AppendLine();
+            }
+            if ((object)this.DTMAttribute != null)
+            {
+                buff.AppendFormat("DTMAttribute = {0}", this.DTMAttribute).AppendLine();
+            }
+            if ((object)this.TimeStamp != null)
+            {
+                buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
+            }
+            if ((object)this.Role != null)
+            {
+                buff.AppendFormat("role = {0}", this.Role).AppendLine();
+            }
+
+            if ((object)this.Content != null)
+            {
+                buff.AppendFormat("content = {0}", this.Content).AppendLine();
+            }
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

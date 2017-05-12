@@ -23,18 +23,44 @@ namespace XmlSchemaProcessor.Processors
 {
     public class XsdBaseReader : XsdBaseObject
     {
-        public XsdBaseReader(XmlReader reader)
-        {
-            this.reader = reader;
-            this.depth = reader.Depth;
-        }
-
         public int Depth
         {
             get { return this.depth; }
         }
 
-        public bool ReadAttributes()
+        public Tuple<string, object> NextChild()
+        {
+            Tuple<string, object> current = null;
+            if (this.reader.Read())
+            {
+                // We only process the children ("this.depth + 1").
+                while (this.reader.Depth > this.depth + 1)
+                {
+                    this.reader.Read();
+                }
+
+                while ((this.reader.Depth == this.depth + 1) && (this.reader.NodeType != XmlNodeType.Element))
+                {
+                    this.reader.Read();
+                }
+
+                if ((this.reader.Depth == this.depth + 1) && (this.reader.NodeType == XmlNodeType.Element))
+                {
+                    current = this.NewReader(this.reader.NamespaceURI, this.reader.Name);
+                }
+            }
+            return current;
+        }
+
+        #region protected
+
+        protected XsdBaseReader(XmlReader reader)
+        {
+            this.reader = reader;
+            this.depth = reader.Depth;
+        }
+
+        protected bool ReadAttributes()
         {
             IDictionary<string, string> attributes = new Dictionary<string, string>();
             if (this.reader.MoveToFirstAttribute())
@@ -60,32 +86,6 @@ namespace XmlSchemaProcessor.Processors
             }
             return this.Read(attributes, content);
         }
-
-        public virtual Tuple<string, object> ReadElement()
-        {
-            Tuple<string, object> current = null;
-            if (this.reader.Read())
-            {
-                // We only process the children ("this.depth + 1").
-                while (this.reader.Depth > this.depth + 1)
-                {
-                    this.reader.Read();
-                }
-
-                while ((this.reader.Depth == this.depth + 1) && (this.reader.NodeType != XmlNodeType.Element))
-                {
-                    this.reader.Read();
-                }
-
-                if ((this.reader.Depth == this.depth + 1) && (this.reader.NodeType == XmlNodeType.Element))
-                {
-                    current = this.NewReader(this.reader.NamespaceURI, this.reader.Name);
-                }
-            }
-            return current;
-        }
-
-        #region protected
 
         protected virtual bool NeedContent
         {
@@ -146,6 +146,9 @@ namespace XmlSchemaProcessor.Processors
         #endregion
     }
 
+    /// <summary>
+    /// This class build a string using name-value pairs, similar to the attributes of an Xml element.
+    /// </summary>
     public class AttributesBuilder
     {
         public AttributesBuilder()

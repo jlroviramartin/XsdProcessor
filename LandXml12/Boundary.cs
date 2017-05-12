@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// The boundary region contains a 2D north/east or 3D north/east/elev list of points that define the geometry.
     /// is identified by the "name" attribute.
@@ -26,6 +24,46 @@ namespace XmlSchemaProcessor.LandXml12
         public Boundary(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Surface boundaries can be one of three types: outer, void, island
+        /// </summary>
+
+        public SurfBndType BndType;
+
+        public bool EdgeTrim;
+
+        public double? Area;
+
+        public string Desc;
+
+        public string Name;
+
+        public StateType? State;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList3D"))
+            {
+                return Tuple.Create("PntList3D", this.NewReader<IList<double>>());
+            }
+            if (name.EqualsIgnoreCase("PntList2D"))
+            {
+                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -50,39 +88,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("state"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.BndType != null)
-            {
-                buff.AppendFormat("bndType = {0}", this.BndType).AppendLine();
-            }
-            if ((object)this.EdgeTrim != null)
-            {
-                buff.AppendFormat("edgeTrim = {0}", this.EdgeTrim).AppendLine();
-            }
-            if ((object)this.Area != null)
-            {
-                buff.AppendFormat("area = {0}", this.Area).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -117,40 +122,43 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Surface boundaries can be one of three types: outer, void, island
-        /// </summary>
+        #endregion
 
-        public SurfBndType BndType;
+        #region object
 
-        public bool EdgeTrim;
-
-        public double? Area;
-
-        public string Desc;
-
-        public string Name;
-
-        public StateType? State;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.BndType != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("bndType = {0}", this.BndType).AppendLine();
             }
-            if (name.EqualsIgnoreCase("PntList3D"))
+            if ((object)this.EdgeTrim != null)
             {
-                return Tuple.Create("PntList3D", this.NewReader<IList<double>>());
+                buff.AppendFormat("edgeTrim = {0}", this.EdgeTrim).AppendLine();
             }
-            if (name.EqualsIgnoreCase("PntList2D"))
+            if ((object)this.Area != null)
             {
-                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+                buff.AppendFormat("area = {0}", this.Area).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

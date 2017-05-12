@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Feature [0, *]
@@ -19,6 +17,40 @@ namespace XmlSchemaProcessor.LandXml10
         public StructFlow(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double LossIn;
+
+        public double LossOut;
+
+        public string Desc;
+
+        public double? HglIn;
+
+        public double? HglOut;
+
+        public double? LocalDepression;
+
+        public double? SlopeSurf;
+
+        public double? SlopeGutter;
+
+        public double? WidthGutter;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -52,51 +84,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("widthGutter"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.LossIn != null)
-            {
-                buff.AppendFormat("lossIn = {0}", this.LossIn).AppendLine();
-            }
-            if ((object)this.LossOut != null)
-            {
-                buff.AppendFormat("lossOut = {0}", this.LossOut).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.HglIn != null)
-            {
-                buff.AppendFormat("hglIn = {0}", this.HglIn).AppendLine();
-            }
-            if ((object)this.HglOut != null)
-            {
-                buff.AppendFormat("hglOut = {0}", this.HglOut).AppendLine();
-            }
-            if ((object)this.LocalDepression != null)
-            {
-                buff.AppendFormat("localDepression = {0}", this.LocalDepression).AppendLine();
-            }
-            if ((object)this.SlopeSurf != null)
-            {
-                buff.AppendFormat("slopeSurf = {0}", this.SlopeSurf).AppendLine();
-            }
-            if ((object)this.SlopeGutter != null)
-            {
-                buff.AppendFormat("slopeGutter = {0}", this.SlopeGutter).AppendLine();
-            }
-            if ((object)this.WidthGutter != null)
-            {
-                buff.AppendFormat("widthGutter = {0}", this.WidthGutter).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -143,34 +130,55 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public double LossIn;
+        #endregion
 
-        public double LossOut;
+        #region object
 
-        public string Desc;
-
-        public double? HglIn;
-
-        public double? HglOut;
-
-        public double? LocalDepression;
-
-        public double? SlopeSurf;
-
-        public double? SlopeGutter;
-
-        public double? WidthGutter;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.LossIn != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("lossIn = {0}", this.LossIn).AppendLine();
+            }
+            if ((object)this.LossOut != null)
+            {
+                buff.AppendFormat("lossOut = {0}", this.LossOut).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.HglIn != null)
+            {
+                buff.AppendFormat("hglIn = {0}", this.HglIn).AppendLine();
+            }
+            if ((object)this.HglOut != null)
+            {
+                buff.AppendFormat("hglOut = {0}", this.HglOut).AppendLine();
+            }
+            if ((object)this.LocalDepression != null)
+            {
+                buff.AppendFormat("localDepression = {0}", this.LocalDepression).AppendLine();
+            }
+            if ((object)this.SlopeSurf != null)
+            {
+                buff.AppendFormat("slopeSurf = {0}", this.SlopeSurf).AppendLine();
+            }
+            if ((object)this.SlopeGutter != null)
+            {
+                buff.AppendFormat("slopeGutter = {0}", this.SlopeGutter).AppendLine();
+            }
+            if ((object)this.WidthGutter != null)
+            {
+                buff.AppendFormat("widthGutter = {0}", this.WidthGutter).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

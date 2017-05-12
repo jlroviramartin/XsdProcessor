@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Feature [0, *]
@@ -19,6 +17,44 @@ namespace XmlSchemaProcessor.LandXml12
         public PipeFlow(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double FlowIn;
+
+        public double? AreaCatchment;
+
+        public string Desc;
+
+        public double? DepthCritical;
+
+        public double? HglDown;
+
+        public double? HglUp;
+
+        public double? Intensity;
+
+        public double? RunoffCoeff;
+
+        public double? SlopeCritical;
+
+        public double? TimeInlet;
+
+        public double? VelocityCritical;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -58,59 +94,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("velocityCritical"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.FlowIn != null)
-            {
-                buff.AppendFormat("flowIn = {0}", this.FlowIn).AppendLine();
-            }
-            if ((object)this.AreaCatchment != null)
-            {
-                buff.AppendFormat("areaCatchment = {0}", this.AreaCatchment).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.DepthCritical != null)
-            {
-                buff.AppendFormat("depthCritical = {0}", this.DepthCritical).AppendLine();
-            }
-            if ((object)this.HglDown != null)
-            {
-                buff.AppendFormat("hglDown = {0}", this.HglDown).AppendLine();
-            }
-            if ((object)this.HglUp != null)
-            {
-                buff.AppendFormat("hglUp = {0}", this.HglUp).AppendLine();
-            }
-            if ((object)this.Intensity != null)
-            {
-                buff.AppendFormat("intensity = {0}", this.Intensity).AppendLine();
-            }
-            if ((object)this.RunoffCoeff != null)
-            {
-                buff.AppendFormat("runoffCoeff = {0}", this.RunoffCoeff).AppendLine();
-            }
-            if ((object)this.SlopeCritical != null)
-            {
-                buff.AppendFormat("slopeCritical = {0}", this.SlopeCritical).AppendLine();
-            }
-            if ((object)this.TimeInlet != null)
-            {
-                buff.AppendFormat("timeInlet = {0}", this.TimeInlet).AppendLine();
-            }
-            if ((object)this.VelocityCritical != null)
-            {
-                buff.AppendFormat("velocityCritical = {0}", this.VelocityCritical).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -165,38 +148,63 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public double FlowIn;
+        #endregion
 
-        public double? AreaCatchment;
+        #region object
 
-        public string Desc;
-
-        public double? DepthCritical;
-
-        public double? HglDown;
-
-        public double? HglUp;
-
-        public double? Intensity;
-
-        public double? RunoffCoeff;
-
-        public double? SlopeCritical;
-
-        public double? TimeInlet;
-
-        public double? VelocityCritical;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.FlowIn != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("flowIn = {0}", this.FlowIn).AppendLine();
+            }
+            if ((object)this.AreaCatchment != null)
+            {
+                buff.AppendFormat("areaCatchment = {0}", this.AreaCatchment).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.DepthCritical != null)
+            {
+                buff.AppendFormat("depthCritical = {0}", this.DepthCritical).AppendLine();
+            }
+            if ((object)this.HglDown != null)
+            {
+                buff.AppendFormat("hglDown = {0}", this.HglDown).AppendLine();
+            }
+            if ((object)this.HglUp != null)
+            {
+                buff.AppendFormat("hglUp = {0}", this.HglUp).AppendLine();
+            }
+            if ((object)this.Intensity != null)
+            {
+                buff.AppendFormat("intensity = {0}", this.Intensity).AppendLine();
+            }
+            if ((object)this.RunoffCoeff != null)
+            {
+                buff.AppendFormat("runoffCoeff = {0}", this.RunoffCoeff).AppendLine();
+            }
+            if ((object)this.SlopeCritical != null)
+            {
+                buff.AppendFormat("slopeCritical = {0}", this.SlopeCritical).AppendLine();
+            }
+            if ((object)this.TimeInlet != null)
+            {
+                buff.AppendFormat("timeInlet = {0}", this.TimeInlet).AppendLine();
+            }
+            if ((object)this.VelocityCritical != null)
+            {
+                buff.AppendFormat("velocityCritical = {0}", this.VelocityCritical).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

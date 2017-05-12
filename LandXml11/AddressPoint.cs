@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : true
-    // includeContent : false
     /// <summary>
     /// Represents a 2D or 3D Address Point. The Address Point is the geocoded point with which to reference an address
     /// </summary>
@@ -19,6 +17,23 @@ namespace XmlSchemaProcessor.LandXml11
         {
         }
 
+        /// <summary>
+        /// This is a string to define the type of Geocode that the address point is for examplecentroid of parcel, Access Point etc.  This will be a jurisdictionally based list.
+        /// </summary>
+
+        public string AddressPointType;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -27,19 +42,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("addressPointType"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.AddressPointType != null)
-            {
-                buff.AppendFormat("addressPointType = {0}", this.AddressPointType).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -54,17 +56,23 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        /// <summary>
-        /// This is a string to define the type of Geocode that the address point is for examplecentroid of parcel, Access Point etc.  This will be a jurisdictionally based list.
-        /// </summary>
+        #endregion
 
-        public string AddressPointType;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.AddressPointType != null)
+            {
+                buff.AppendFormat("addressPointType = {0}", this.AddressPointType).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

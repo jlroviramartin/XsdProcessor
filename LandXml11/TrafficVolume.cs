@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [1, *]
     ///     DailyTrafficVolume [1, 1]
@@ -23,28 +21,7 @@ namespace XmlSchemaProcessor.LandXml11
         {
         }
 
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            return buff.ToString();
-        }
-
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -67,6 +44,37 @@ namespace XmlSchemaProcessor.LandXml11
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

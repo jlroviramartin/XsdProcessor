@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : true
-    // includeContent : true
     /// <summary>
     /// A surface face. It contains a space delimited list of "id" references for 3 (TIN) or 4 (grid) surface "P" points. 
     /// The 3 or 4 numbers represent the vertices on the face. Each number is a reference to the ID value of a surface point "P" for the face coordinates.
@@ -50,6 +48,32 @@ namespace XmlSchemaProcessor.LandXml20
         {
         }
 
+        public int? I;
+
+        public IList<int?> N;
+
+        public uint? B;
+        /// <summary>
+        /// A integer based index value to a table item in the material table.
+        /// </summary>
+
+        public IList<int?> M;
+
+        public IList<int> Content;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        protected override bool NeedContent { get { return true; } }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -68,35 +92,6 @@ namespace XmlSchemaProcessor.LandXml20
 
             this.Content = XsdConverter.Instance.Convert<IList<int>>(text);
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.I != null)
-            {
-                buff.AppendFormat("i = {0}", this.I).AppendLine();
-            }
-            if ((object)this.N != null)
-            {
-                buff.AppendFormat("n = {0}", this.N).AppendLine();
-            }
-            if ((object)this.B != null)
-            {
-                buff.AppendFormat("b = {0}", this.B).AppendLine();
-            }
-            if ((object)this.M != null)
-            {
-                buff.AppendFormat("m = {0}", this.M).AppendLine();
-            }
-
-            if ((object)this.Content != null)
-            {
-                buff.AppendFormat("content = {0}", this.Content).AppendLine();
-            }
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -127,26 +122,39 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public int? I;
+        #endregion
 
-        public IList<int?> N;
+        #region object
 
-        public uint? B;
-        /// <summary>
-        /// A integer based index value to a table item in the material table.
-        /// </summary>
-
-        public IList<int?> M;
-
-
-        protected override bool NeedContent { get { return true; } }
-
-        public IList<int> Content;
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.I != null)
+            {
+                buff.AppendFormat("i = {0}", this.I).AppendLine();
+            }
+            if ((object)this.N != null)
+            {
+                buff.AppendFormat("n = {0}", this.N).AppendLine();
+            }
+            if ((object)this.B != null)
+            {
+                buff.AppendFormat("b = {0}", this.B).AppendLine();
+            }
+            if ((object)this.M != null)
+            {
+                buff.AppendFormat("m = {0}", this.M).AppendLine();
+            }
+
+            if ((object)this.Content != null)
+            {
+                buff.AppendFormat("content = {0}", this.Content).AppendLine();
+            }
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

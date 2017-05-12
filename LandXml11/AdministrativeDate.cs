@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// This element stores a range of Administrative dates which may vary from jurisdiction to jurisdiction.
     /// </summary>
@@ -18,6 +16,25 @@ namespace XmlSchemaProcessor.LandXml11
         public AdministrativeDate(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// This is the name of the admin date type for the Survey
+        /// </summary>
+
+        public string AdminDateType;
+
+        public DateTime AdminDate;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -30,23 +47,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("adminDate"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.AdminDateType != null)
-            {
-                buff.AppendFormat("adminDateType = {0}", this.AdminDateType).AppendLine();
-            }
-            if ((object)this.AdminDate != null)
-            {
-                buff.AppendFormat("adminDate = {0}", this.AdminDate).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -65,19 +65,27 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        /// <summary>
-        /// This is the name of the admin date type for the Survey
-        /// </summary>
+        #endregion
 
-        public string AdminDateType;
+        #region object
 
-        public DateTime AdminDate;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.AdminDateType != null)
+            {
+                buff.AppendFormat("adminDateType = {0}", this.AdminDateType).AppendLine();
+            }
+            if ((object)this.AdminDate != null)
+            {
+                buff.AppendFormat("adminDate = {0}", this.AdminDate).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

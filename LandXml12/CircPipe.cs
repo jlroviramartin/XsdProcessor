@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Feature [0, *]
@@ -19,6 +17,34 @@ namespace XmlSchemaProcessor.LandXml12
         public CircPipe(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double Diameter;
+
+        public string Desc;
+
+        public double? HazenWilliams;
+
+        public double? Mannings;
+
+        public string Material;
+
+        public double? Thickness;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -43,39 +69,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("thickness"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Diameter != null)
-            {
-                buff.AppendFormat("diameter = {0}", this.Diameter).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.HazenWilliams != null)
-            {
-                buff.AppendFormat("hazenWilliams = {0}", this.HazenWilliams).AppendLine();
-            }
-            if ((object)this.Mannings != null)
-            {
-                buff.AppendFormat("mannings = {0}", this.Mannings).AppendLine();
-            }
-            if ((object)this.Material != null)
-            {
-                buff.AppendFormat("material = {0}", this.Material).AppendLine();
-            }
-            if ((object)this.Thickness != null)
-            {
-                buff.AppendFormat("thickness = {0}", this.Thickness).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -110,28 +103,43 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public double Diameter;
+        #endregion
 
-        public string Desc;
+        #region object
 
-        public double? HazenWilliams;
-
-        public double? Mannings;
-
-        public string Material;
-
-        public double? Thickness;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Diameter != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("diameter = {0}", this.Diameter).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.HazenWilliams != null)
+            {
+                buff.AppendFormat("hazenWilliams = {0}", this.HazenWilliams).AppendLine();
+            }
+            if ((object)this.Mannings != null)
+            {
+                buff.AppendFormat("mannings = {0}", this.Mannings).AppendLine();
+            }
+            if ((object)this.Material != null)
+            {
+                buff.AppendFormat("material = {0}", this.Material).AppendLine();
+            }
+            if ((object)this.Thickness != null)
+            {
+                buff.AppendFormat("thickness = {0}", this.Thickness).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

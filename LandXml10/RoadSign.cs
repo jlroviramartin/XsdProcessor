@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,44 @@ namespace XmlSchemaProcessor.LandXml10
         public RoadSign(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string MUTCDCode;
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? Station;
+        /// <summary>
+        /// Represents a linear offset distance. When associated with horizontal (planametric) road or coordinate geometry, the offset is a 2D distance measured perpendicular to the road centerline or coordinate geometry used as the origin. When used in cross sections of long section (profile) the offset is a 2d linear measurement from the origin of the cross section or long section. In all cases a positive value indicates an offset to the RIGHT of the origin and negative values indicate and offset to the LEFT of the origin. The value is in decimal form expressed in length units.
+        /// </summary>
+
+        public double? Offset;
+
+        public SideofRoadType? SideofRoad;
+
+        public RoadSignType? Type;
+
+        public double? MountHeight;
+
+        public double? Width;
+
+        public double? Height;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -49,47 +85,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("height"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.MUTCDCode != null)
-            {
-                buff.AppendFormat("MUTCDCode = {0}", this.MUTCDCode).AppendLine();
-            }
-            if ((object)this.Station != null)
-            {
-                buff.AppendFormat("station = {0}", this.Station).AppendLine();
-            }
-            if ((object)this.Offset != null)
-            {
-                buff.AppendFormat("offset = {0}", this.Offset).AppendLine();
-            }
-            if ((object)this.SideofRoad != null)
-            {
-                buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
-            }
-            if ((object)this.Type != null)
-            {
-                buff.AppendFormat("type = {0}", this.Type).AppendLine();
-            }
-            if ((object)this.MountHeight != null)
-            {
-                buff.AppendFormat("mountHeight = {0}", this.MountHeight).AppendLine();
-            }
-            if ((object)this.Width != null)
-            {
-                buff.AppendFormat("width = {0}", this.Width).AppendLine();
-            }
-            if ((object)this.Height != null)
-            {
-                buff.AppendFormat("height = {0}", this.Height).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -132,38 +127,51 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public string MUTCDCode;
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #endregion
 
-        public double? Station;
-        /// <summary>
-        /// Represents a linear offset distance. When associated with horizontal (planametric) road or coordinate geometry, the offset is a 2D distance measured perpendicular to the road centerline or coordinate geometry used as the origin. When used in cross sections of long section (profile) the offset is a 2d linear measurement from the origin of the cross section or long section. In all cases a positive value indicates an offset to the RIGHT of the origin and negative values indicate and offset to the LEFT of the origin. The value is in decimal form expressed in length units.
-        /// </summary>
+        #region object
 
-        public double? Offset;
-
-        public SideofRoadType? SideofRoad;
-
-        public RoadSignType? Type;
-
-        public double? MountHeight;
-
-        public double? Width;
-
-        public double? Height;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.MUTCDCode != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("MUTCDCode = {0}", this.MUTCDCode).AppendLine();
+            }
+            if ((object)this.Station != null)
+            {
+                buff.AppendFormat("station = {0}", this.Station).AppendLine();
+            }
+            if ((object)this.Offset != null)
+            {
+                buff.AppendFormat("offset = {0}", this.Offset).AppendLine();
+            }
+            if ((object)this.SideofRoad != null)
+            {
+                buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
+            }
+            if ((object)this.Type != null)
+            {
+                buff.AppendFormat("type = {0}", this.Type).AppendLine();
+            }
+            if ((object)this.MountHeight != null)
+            {
+                buff.AppendFormat("mountHeight = {0}", this.MountHeight).AppendLine();
+            }
+            if ((object)this.Width != null)
+            {
+                buff.AppendFormat("width = {0}", this.Width).AppendLine();
+            }
+            if ((object)this.Height != null)
+            {
+                buff.AppendFormat("height = {0}", this.Height).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

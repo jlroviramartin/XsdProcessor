@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// This may be expanded, but the LandXML schema is not really aimed at providing title information so I think name is sufficient
     /// </summary>
@@ -19,6 +17,19 @@ namespace XmlSchemaProcessor.LandXml10
         {
         }
 
+        public string Name;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -27,19 +38,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("name"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -54,13 +52,23 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
+        #region object
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

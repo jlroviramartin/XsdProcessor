@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Records the dealing information to allow  audit trail between the survey document and the titling system
     /// Sequence [1, 1]
@@ -20,6 +18,28 @@ namespace XmlSchemaProcessor.LandXml20
         public Amendment(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string DealingNumber;
+
+        public DateTime? AmendmentDate;
+
+        public string Comments;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("AmendmentItem"))
+            {
+                return Tuple.Create("AmendmentItem", this.NewReader<AmendmentItem>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -35,27 +55,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("comments"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.DealingNumber != null)
-            {
-                buff.AppendFormat("dealingNumber = {0}", this.DealingNumber).AppendLine();
-            }
-            if ((object)this.AmendmentDate != null)
-            {
-                buff.AppendFormat("amendmentDate = {0}", this.AmendmentDate).AppendLine();
-            }
-            if ((object)this.Comments != null)
-            {
-                buff.AppendFormat("comments = {0}", this.Comments).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -78,22 +77,31 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string DealingNumber;
+        #endregion
 
-        public DateTime? AmendmentDate;
+        #region object
 
-        public string Comments;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("AmendmentItem"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.DealingNumber != null)
             {
-                return Tuple.Create("AmendmentItem", this.NewReader<AmendmentItem>());
+                buff.AppendFormat("dealingNumber = {0}", this.DealingNumber).AppendLine();
+            }
+            if ((object)this.AmendmentDate != null)
+            {
+                buff.AppendFormat("amendmentDate = {0}", this.AmendmentDate).AppendLine();
+            }
+            if ((object)this.Comments != null)
+            {
+                buff.AppendFormat("comments = {0}", this.Comments).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

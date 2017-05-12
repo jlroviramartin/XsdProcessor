@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// A cant speed-only station.
     ///             The “station” is a required double that is internal station value.
@@ -21,6 +19,21 @@ namespace XmlSchemaProcessor.LandXml12
         {
         }
 
+        public double Station;
+
+        public double Speed;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -32,23 +45,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("speed"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Station != null)
-            {
-                buff.AppendFormat("station = {0}", this.Station).AppendLine();
-            }
-            if ((object)this.Speed != null)
-            {
-                buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -67,15 +63,27 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public double Station;
+        #endregion
 
-        public double Speed;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Station != null)
+            {
+                buff.AppendFormat("station = {0}", this.Station).AppendLine();
+            }
+            if ((object)this.Speed != null)
+            {
+                buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

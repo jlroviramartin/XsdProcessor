@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,40 @@ namespace XmlSchemaProcessor.LandXml10
         public ObstructionOffset(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? StaStart;
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? StaEnd;
+        /// <summary>
+        /// Represents a linear offset distance. When associated with horizontal (planametric) road or coordinate geometry, the offset is a 2D distance measured perpendicular to the road centerline or coordinate geometry used as the origin. When used in cross sections of long section (profile) the offset is a 2d linear measurement from the origin of the cross section or long section. In all cases a positive value indicates an offset to the RIGHT of the origin and negative values indicate and offset to the LEFT of the origin. The value is in decimal form expressed in length units.
+        /// </summary>
+
+        public double? Offset;
+
+        public SideofRoadType? SideofRoad;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -37,31 +69,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("sideofRoad"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.StaEnd != null)
-            {
-                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
-            }
-            if ((object)this.Offset != null)
-            {
-                buff.AppendFormat("offset = {0}", this.Offset).AppendLine();
-            }
-            if ((object)this.SideofRoad != null)
-            {
-                buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -88,34 +95,35 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #endregion
 
-        public double? StaStart;
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #region object
 
-        public double? StaEnd;
-        /// <summary>
-        /// Represents a linear offset distance. When associated with horizontal (planametric) road or coordinate geometry, the offset is a 2D distance measured perpendicular to the road centerline or coordinate geometry used as the origin. When used in cross sections of long section (profile) the offset is a 2d linear measurement from the origin of the cross section or long section. In all cases a positive value indicates an offset to the RIGHT of the origin and negative values indicate and offset to the LEFT of the origin. The value is in decimal form expressed in length units.
-        /// </summary>
-
-        public double? Offset;
-
-        public SideofRoadType? SideofRoad;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.StaStart != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.StaEnd != null)
+            {
+                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
+            }
+            if ((object)this.Offset != null)
+            {
+                buff.AppendFormat("offset = {0}", this.Offset).AppendLine();
+            }
+            if ((object)this.SideofRoad != null)
+            {
+                buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

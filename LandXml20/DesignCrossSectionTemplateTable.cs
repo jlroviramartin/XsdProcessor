@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Reusable design cross section template
     /// Sequence [1, 1]
@@ -21,6 +19,24 @@ namespace XmlSchemaProcessor.LandXml20
         {
         }
 
+        public string Name;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("DesignCrossSectionTemplate"))
+            {
+                return Tuple.Create("DesignCrossSectionTemplate", this.NewReader<DesignCrossSectionTemplate>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -29,19 +45,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("name"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -56,18 +59,23 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
+        #region object
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("DesignCrossSectionTemplate"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("DesignCrossSectionTemplate", this.NewReader<DesignCrossSectionTemplate>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

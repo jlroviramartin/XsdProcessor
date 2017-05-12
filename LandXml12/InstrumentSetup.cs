@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// The Instrument setup location is defined by either a coordinate text value ("north east" or "north east elev") or a CgPoint number reference "pntRef" attribute.
     /// Sequence [1, 1]
@@ -27,107 +25,6 @@ namespace XmlSchemaProcessor.LandXml12
     {
         public InstrumentSetup(System.Xml.XmlReader reader) : base(reader)
         {
-        }
-
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            this.Id = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("id"));
-
-            this.InstrumentDetailsID = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("instrumentDetailsID"));
-
-            this.StationName = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("stationName"));
-
-            this.InstrumentHeight = XsdConverter.Instance.Convert<double>(
-                    attributes.GetSafe("instrumentHeight"));
-
-            this.OrientationAzimuth = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("orientationAzimuth"));
-
-            this.CircleAzimuth = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("circleAzimuth"));
-
-            this.Status = XsdConverter.Instance.Convert<ObservationStatusType?>(
-                    attributes.GetSafe("status"));
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.InstrumentDetailsID != null)
-            {
-                buff.AppendFormat("instrumentDetailsID = {0}", this.InstrumentDetailsID).AppendLine();
-            }
-            if ((object)this.StationName != null)
-            {
-                buff.AppendFormat("stationName = {0}", this.StationName).AppendLine();
-            }
-            if ((object)this.InstrumentHeight != null)
-            {
-                buff.AppendFormat("instrumentHeight = {0}", this.InstrumentHeight).AppendLine();
-            }
-            if ((object)this.OrientationAzimuth != null)
-            {
-                buff.AppendFormat("orientationAzimuth = {0}", this.OrientationAzimuth).AppendLine();
-            }
-            if ((object)this.CircleAzimuth != null)
-            {
-                buff.AppendFormat("circleAzimuth = {0}", this.CircleAzimuth).AppendLine();
-            }
-            if ((object)this.Status != null)
-            {
-                buff.AppendFormat("status = {0}", this.Status).AppendLine();
-            }
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            if ((object)this.Id != null)
-            {
-                buff.Append("id", this.Id);
-            }
-            if ((object)this.InstrumentDetailsID != null)
-            {
-                buff.Append("instrumentDetailsID", this.InstrumentDetailsID);
-            }
-            if ((object)this.StationName != null)
-            {
-                buff.Append("stationName", this.StationName);
-            }
-            if ((object)this.InstrumentHeight != null)
-            {
-                buff.Append("instrumentHeight", this.InstrumentHeight);
-            }
-            if ((object)this.OrientationAzimuth != null)
-            {
-                buff.Append("orientationAzimuth", this.OrientationAzimuth);
-            }
-            if ((object)this.CircleAzimuth != null)
-            {
-                buff.Append("circleAzimuth", this.CircleAzimuth);
-            }
-            if ((object)this.Status != null)
-            {
-                buff.Append("status", this.Status);
-            }
-
-            return buff.ToString();
         }
 
         public string Id;
@@ -150,6 +47,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public ObservationStatusType? Status;
 
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -188,6 +86,116 @@ namespace XmlSchemaProcessor.LandXml12
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            this.Id = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("id"));
+
+            this.InstrumentDetailsID = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("instrumentDetailsID"));
+
+            this.StationName = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("stationName"));
+
+            this.InstrumentHeight = XsdConverter.Instance.Convert<double>(
+                    attributes.GetSafe("instrumentHeight"));
+
+            this.OrientationAzimuth = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("orientationAzimuth"));
+
+            this.CircleAzimuth = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("circleAzimuth"));
+
+            this.Status = XsdConverter.Instance.Convert<ObservationStatusType?>(
+                    attributes.GetSafe("status"));
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            if ((object)this.Id != null)
+            {
+                buff.Append("id", this.Id);
+            }
+            if ((object)this.InstrumentDetailsID != null)
+            {
+                buff.Append("instrumentDetailsID", this.InstrumentDetailsID);
+            }
+            if ((object)this.StationName != null)
+            {
+                buff.Append("stationName", this.StationName);
+            }
+            if ((object)this.InstrumentHeight != null)
+            {
+                buff.Append("instrumentHeight", this.InstrumentHeight);
+            }
+            if ((object)this.OrientationAzimuth != null)
+            {
+                buff.Append("orientationAzimuth", this.OrientationAzimuth);
+            }
+            if ((object)this.CircleAzimuth != null)
+            {
+                buff.Append("circleAzimuth", this.CircleAzimuth);
+            }
+            if ((object)this.Status != null)
+            {
+                buff.Append("status", this.Status);
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
+            {
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
+            }
+            if ((object)this.InstrumentDetailsID != null)
+            {
+                buff.AppendFormat("instrumentDetailsID = {0}", this.InstrumentDetailsID).AppendLine();
+            }
+            if ((object)this.StationName != null)
+            {
+                buff.AppendFormat("stationName = {0}", this.StationName).AppendLine();
+            }
+            if ((object)this.InstrumentHeight != null)
+            {
+                buff.AppendFormat("instrumentHeight = {0}", this.InstrumentHeight).AppendLine();
+            }
+            if ((object)this.OrientationAzimuth != null)
+            {
+                buff.AppendFormat("orientationAzimuth = {0}", this.OrientationAzimuth).AppendLine();
+            }
+            if ((object)this.CircleAzimuth != null)
+            {
+                buff.AppendFormat("circleAzimuth = {0}", this.CircleAzimuth).AppendLine();
+            }
+            if ((object)this.Status != null)
+            {
+                buff.AppendFormat("status = {0}", this.Status).AppendLine();
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Used to describe specific Feature code / property type values. DocFileRef points to reference documentation
     /// Each Property element defines one piece of data.
@@ -22,6 +20,26 @@ namespace XmlSchemaProcessor.LandXml12
         {
         }
 
+        public string Name;
+
+        public string Version;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("DocFileRef"))
+            {
+                return Tuple.Create("DocFileRef", this.NewReader<DocFileRef>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -33,23 +51,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("version"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Version != null)
-            {
-                buff.AppendFormat("version = {0}", this.Version).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -68,20 +69,27 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Version;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("DocFileRef"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("DocFileRef", this.NewReader<DocFileRef>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Version != null)
+            {
+                buff.AppendFormat("version = {0}", this.Version).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,30 @@ namespace XmlSchemaProcessor.LandXml10
         public DecisionSightDistance(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? Station;
+
+        public ManeuverType? Maneuver;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -31,23 +53,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("maneuver"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Station != null)
-            {
-                buff.AppendFormat("station = {0}", this.Station).AppendLine();
-            }
-            if ((object)this.Maneuver != null)
-            {
-                buff.AppendFormat("maneuver = {0}", this.Maneuver).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -66,24 +71,27 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #endregion
 
-        public double? Station;
+        #region object
 
-        public ManeuverType? Maneuver;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Station != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("station = {0}", this.Station).AppendLine();
+            }
+            if ((object)this.Maneuver != null)
+            {
+                buff.AppendFormat("maneuver = {0}", this.Maneuver).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

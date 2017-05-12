@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// This element stores the administrative boundaries for a survey
     /// </summary>
@@ -18,6 +16,32 @@ namespace XmlSchemaProcessor.LandXml20
         public AdministrativeArea(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// This is a jurdictionally specific list of types and may include parish, town, local government, locality etc
+        /// </summary>
+
+        public string AdminAreaType;
+
+        public string AdminAreaName;
+
+        public string AdminAreaCode;
+        /// <summary>
+        /// A list of reference names values refering to one or more Parcel.name attributes.
+        /// </summary>
+
+        public IList<string> PclRef;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -36,31 +60,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("pclRef"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.AdminAreaType != null)
-            {
-                buff.AppendFormat("adminAreaType = {0}", this.AdminAreaType).AppendLine();
-            }
-            if ((object)this.AdminAreaName != null)
-            {
-                buff.AppendFormat("adminAreaName = {0}", this.AdminAreaName).AppendLine();
-            }
-            if ((object)this.AdminAreaCode != null)
-            {
-                buff.AppendFormat("adminAreaCode = {0}", this.AdminAreaCode).AppendLine();
-            }
-            if ((object)this.PclRef != null)
-            {
-                buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -87,26 +86,35 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        /// <summary>
-        /// This is a jurdictionally specific list of types and may include parish, town, local government, locality etc
-        /// </summary>
+        #endregion
 
-        public string AdminAreaType;
+        #region object
 
-        public string AdminAreaName;
-
-        public string AdminAreaCode;
-        /// <summary>
-        /// A list of reference names values refering to one or more Parcel.name attributes.
-        /// </summary>
-
-        public IList<string> PclRef;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.AdminAreaType != null)
+            {
+                buff.AppendFormat("adminAreaType = {0}", this.AdminAreaType).AppendLine();
+            }
+            if ((object)this.AdminAreaName != null)
+            {
+                buff.AppendFormat("adminAreaName = {0}", this.AdminAreaName).AppendLine();
+            }
+            if ((object)this.AdminAreaCode != null)
+            {
+                buff.AppendFormat("adminAreaCode = {0}", this.AdminAreaCode).AppendLine();
+            }
+            if ((object)this.PclRef != null)
+            {
+                buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

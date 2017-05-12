@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// This has been modified to include new fields such as accuracy, date, class and adoption. I've added in bearing (azimuth is in terms of true north whereas bearing is the projection north) 
     ///  - maybe this doesn't matter, may need to discuss
@@ -25,6 +23,107 @@ namespace XmlSchemaProcessor.LandXml10
         public ReducedObservation(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Used by many of the Survey elements
+        /// </summary>
+
+        public PurposeType? Purpose;
+
+        public string SetupID;
+
+        public string TargetSetupID;
+
+        public string SetID;
+
+        public double? TargetHeight;
+        /// <summary>
+        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees =  north
+        /// </summary>
+
+        public double? Azimuth;
+
+        public double? HorizDistance;
+
+        public double? VertDistance;
+        /// <summary>
+        /// Represents a normalized angular value in the specified Angular units.
+        /// </summary>
+
+        public double? HorizAngle;
+
+        public double? SlopeDistance;
+        /// <summary>
+        /// Represents a normalized angular value in the specified Angular units.
+        /// </summary>
+
+        public double? ZenithAngle;
+        /// <summary>
+        /// This is a rough indication of the type of equipment
+        /// </summary>
+
+        public EquipmentType? EquipmentUsed;
+
+        public double? AzimuthAccuracy;
+
+        public double? DistanceAccuracy;
+
+        public DateTime? Date;
+        /// <summary>
+        /// This enumeration indicates whether the reduced observation information provided was actually measured (observed), calculated or deduced from observations, or adopted from another survey
+        /// </summary>
+
+        public ObservationType? DistanceType;
+        /// <summary>
+        /// This enumeration indicates whether the reduced observation information provided was actually measured (observed), calculated or deduced from observations, or adopted from another survey
+        /// </summary>
+
+        public ObservationType? AzimuthType;
+
+        public string AdoptedAzimuthSurvey;
+
+        public string AdoptedDistanceSurvey;
+
+        public string DistanceAccClass;
+
+        public string AzimuthAccClass;
+
+        public double? AzimuthAdoptionFactor;
+
+        public double? DistanceAdoptionFactor;
+        /// <summary>
+        /// A list of reference names values refering to one or more CoordGeom.name attributes.
+        /// </summary>
+
+        public IList<string> CoordGeomRefs;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("OffsetVals"))
+            {
+                return Tuple.Create("OffsetVals", this.NewReader<OffsetVals>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -103,111 +202,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("coordGeomRefs"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Purpose != null)
-            {
-                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
-            }
-            if ((object)this.SetupID != null)
-            {
-                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
-            }
-            if ((object)this.TargetSetupID != null)
-            {
-                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
-            }
-            if ((object)this.SetID != null)
-            {
-                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
-            }
-            if ((object)this.TargetHeight != null)
-            {
-                buff.AppendFormat("targetHeight = {0}", this.TargetHeight).AppendLine();
-            }
-            if ((object)this.Azimuth != null)
-            {
-                buff.AppendFormat("azimuth = {0}", this.Azimuth).AppendLine();
-            }
-            if ((object)this.HorizDistance != null)
-            {
-                buff.AppendFormat("horizDistance = {0}", this.HorizDistance).AppendLine();
-            }
-            if ((object)this.VertDistance != null)
-            {
-                buff.AppendFormat("vertDistance = {0}", this.VertDistance).AppendLine();
-            }
-            if ((object)this.HorizAngle != null)
-            {
-                buff.AppendFormat("horizAngle = {0}", this.HorizAngle).AppendLine();
-            }
-            if ((object)this.SlopeDistance != null)
-            {
-                buff.AppendFormat("slopeDistance = {0}", this.SlopeDistance).AppendLine();
-            }
-            if ((object)this.ZenithAngle != null)
-            {
-                buff.AppendFormat("zenithAngle = {0}", this.ZenithAngle).AppendLine();
-            }
-            if ((object)this.EquipmentUsed != null)
-            {
-                buff.AppendFormat("equipmentUsed = {0}", this.EquipmentUsed).AppendLine();
-            }
-            if ((object)this.AzimuthAccuracy != null)
-            {
-                buff.AppendFormat("azimuthAccuracy = {0}", this.AzimuthAccuracy).AppendLine();
-            }
-            if ((object)this.DistanceAccuracy != null)
-            {
-                buff.AppendFormat("distanceAccuracy = {0}", this.DistanceAccuracy).AppendLine();
-            }
-            if ((object)this.Date != null)
-            {
-                buff.AppendFormat("date = {0}", this.Date).AppendLine();
-            }
-            if ((object)this.DistanceType != null)
-            {
-                buff.AppendFormat("distanceType = {0}", this.DistanceType).AppendLine();
-            }
-            if ((object)this.AzimuthType != null)
-            {
-                buff.AppendFormat("azimuthType = {0}", this.AzimuthType).AppendLine();
-            }
-            if ((object)this.AdoptedAzimuthSurvey != null)
-            {
-                buff.AppendFormat("adoptedAzimuthSurvey = {0}", this.AdoptedAzimuthSurvey).AppendLine();
-            }
-            if ((object)this.AdoptedDistanceSurvey != null)
-            {
-                buff.AppendFormat("adoptedDistanceSurvey = {0}", this.AdoptedDistanceSurvey).AppendLine();
-            }
-            if ((object)this.DistanceAccClass != null)
-            {
-                buff.AppendFormat("distanceAccClass = {0}", this.DistanceAccClass).AppendLine();
-            }
-            if ((object)this.AzimuthAccClass != null)
-            {
-                buff.AppendFormat("azimuthAccClass = {0}", this.AzimuthAccClass).AppendLine();
-            }
-            if ((object)this.AzimuthAdoptionFactor != null)
-            {
-                buff.AppendFormat("azimuthAdoptionFactor = {0}", this.AzimuthAdoptionFactor).AppendLine();
-            }
-            if ((object)this.DistanceAdoptionFactor != null)
-            {
-                buff.AppendFormat("distanceAdoptionFactor = {0}", this.DistanceAdoptionFactor).AppendLine();
-            }
-            if ((object)this.CoordGeomRefs != null)
-            {
-                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -314,101 +308,115 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Used by many of the Survey elements
-        /// </summary>
+        #endregion
 
-        public PurposeType? Purpose;
+        #region object
 
-        public string SetupID;
-
-        public string TargetSetupID;
-
-        public string SetID;
-
-        public double? TargetHeight;
-        /// <summary>
-        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees =  north
-        /// </summary>
-
-        public double? Azimuth;
-
-        public double? HorizDistance;
-
-        public double? VertDistance;
-        /// <summary>
-        /// Represents a normalized angular value in the specified Angular units.
-        /// </summary>
-
-        public double? HorizAngle;
-
-        public double? SlopeDistance;
-        /// <summary>
-        /// Represents a normalized angular value in the specified Angular units.
-        /// </summary>
-
-        public double? ZenithAngle;
-        /// <summary>
-        /// This is a rough indication of the type of equipment
-        /// </summary>
-
-        public EquipmentType? EquipmentUsed;
-
-        public double? AzimuthAccuracy;
-
-        public double? DistanceAccuracy;
-
-        public DateTime? Date;
-        /// <summary>
-        /// This enumeration indicates whether the reduced observation information provided was actually measured (observed), calculated or deduced from observations, or adopted from another survey
-        /// </summary>
-
-        public ObservationType? DistanceType;
-        /// <summary>
-        /// This enumeration indicates whether the reduced observation information provided was actually measured (observed), calculated or deduced from observations, or adopted from another survey
-        /// </summary>
-
-        public ObservationType? AzimuthType;
-
-        public string AdoptedAzimuthSurvey;
-
-        public string AdoptedDistanceSurvey;
-
-        public string DistanceAccClass;
-
-        public string AzimuthAccClass;
-
-        public double? AzimuthAdoptionFactor;
-
-        public double? DistanceAdoptionFactor;
-        /// <summary>
-        /// A list of reference names values refering to one or more CoordGeom.name attributes.
-        /// </summary>
-
-        public IList<string> CoordGeomRefs;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Purpose != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.SetupID != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("OffsetVals"))
+            if ((object)this.TargetSetupID != null)
             {
-                return Tuple.Create("OffsetVals", this.NewReader<OffsetVals>());
+                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("TargetPoint"))
+            if ((object)this.SetID != null)
             {
-                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
+            }
+            if ((object)this.TargetHeight != null)
+            {
+                buff.AppendFormat("targetHeight = {0}", this.TargetHeight).AppendLine();
+            }
+            if ((object)this.Azimuth != null)
+            {
+                buff.AppendFormat("azimuth = {0}", this.Azimuth).AppendLine();
+            }
+            if ((object)this.HorizDistance != null)
+            {
+                buff.AppendFormat("horizDistance = {0}", this.HorizDistance).AppendLine();
+            }
+            if ((object)this.VertDistance != null)
+            {
+                buff.AppendFormat("vertDistance = {0}", this.VertDistance).AppendLine();
+            }
+            if ((object)this.HorizAngle != null)
+            {
+                buff.AppendFormat("horizAngle = {0}", this.HorizAngle).AppendLine();
+            }
+            if ((object)this.SlopeDistance != null)
+            {
+                buff.AppendFormat("slopeDistance = {0}", this.SlopeDistance).AppendLine();
+            }
+            if ((object)this.ZenithAngle != null)
+            {
+                buff.AppendFormat("zenithAngle = {0}", this.ZenithAngle).AppendLine();
+            }
+            if ((object)this.EquipmentUsed != null)
+            {
+                buff.AppendFormat("equipmentUsed = {0}", this.EquipmentUsed).AppendLine();
+            }
+            if ((object)this.AzimuthAccuracy != null)
+            {
+                buff.AppendFormat("azimuthAccuracy = {0}", this.AzimuthAccuracy).AppendLine();
+            }
+            if ((object)this.DistanceAccuracy != null)
+            {
+                buff.AppendFormat("distanceAccuracy = {0}", this.DistanceAccuracy).AppendLine();
+            }
+            if ((object)this.Date != null)
+            {
+                buff.AppendFormat("date = {0}", this.Date).AppendLine();
+            }
+            if ((object)this.DistanceType != null)
+            {
+                buff.AppendFormat("distanceType = {0}", this.DistanceType).AppendLine();
+            }
+            if ((object)this.AzimuthType != null)
+            {
+                buff.AppendFormat("azimuthType = {0}", this.AzimuthType).AppendLine();
+            }
+            if ((object)this.AdoptedAzimuthSurvey != null)
+            {
+                buff.AppendFormat("adoptedAzimuthSurvey = {0}", this.AdoptedAzimuthSurvey).AppendLine();
+            }
+            if ((object)this.AdoptedDistanceSurvey != null)
+            {
+                buff.AppendFormat("adoptedDistanceSurvey = {0}", this.AdoptedDistanceSurvey).AppendLine();
+            }
+            if ((object)this.DistanceAccClass != null)
+            {
+                buff.AppendFormat("distanceAccClass = {0}", this.DistanceAccClass).AppendLine();
+            }
+            if ((object)this.AzimuthAccClass != null)
+            {
+                buff.AppendFormat("azimuthAccClass = {0}", this.AzimuthAccClass).AppendLine();
+            }
+            if ((object)this.AzimuthAdoptionFactor != null)
+            {
+                buff.AppendFormat("azimuthAdoptionFactor = {0}", this.AzimuthAdoptionFactor).AppendLine();
+            }
+            if ((object)this.DistanceAdoptionFactor != null)
+            {
+                buff.AppendFormat("distanceAdoptionFactor = {0}", this.DistanceAdoptionFactor).AppendLine();
+            }
+            if ((object)this.CoordGeomRefs != null)
+            {
+                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

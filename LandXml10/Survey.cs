@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// I've added state here as a safety net
     /// Sequence [1, 1]
@@ -36,107 +34,6 @@ namespace XmlSchemaProcessor.LandXml10
         {
         }
 
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            this.Desc = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("desc"));
-
-            this.Date = XsdConverter.Instance.Convert<DateTime?>(
-                    attributes.GetSafe("date"));
-
-            this.StartTime = XsdConverter.Instance.Convert<DateTime?>(
-                    attributes.GetSafe("startTime"));
-
-            this.EndTime = XsdConverter.Instance.Convert<DateTime?>(
-                    attributes.GetSafe("endTime"));
-
-            this.State = XsdConverter.Instance.Convert<StateType?>(
-                    attributes.GetSafe("state"));
-
-            this.HorizontalAccuracy = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("horizontalAccuracy"));
-
-            this.VerticalAccuracy = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("verticalAccuracy"));
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Date != null)
-            {
-                buff.AppendFormat("date = {0}", this.Date).AppendLine();
-            }
-            if ((object)this.StartTime != null)
-            {
-                buff.AppendFormat("startTime = {0}", this.StartTime).AppendLine();
-            }
-            if ((object)this.EndTime != null)
-            {
-                buff.AppendFormat("endTime = {0}", this.EndTime).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.HorizontalAccuracy != null)
-            {
-                buff.AppendFormat("horizontalAccuracy = {0}", this.HorizontalAccuracy).AppendLine();
-            }
-            if ((object)this.VerticalAccuracy != null)
-            {
-                buff.AppendFormat("verticalAccuracy = {0}", this.VerticalAccuracy).AppendLine();
-            }
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            if ((object)this.Desc != null)
-            {
-                buff.Append("desc", this.Desc);
-            }
-            if ((object)this.Date != null)
-            {
-                buff.Append("date", this.Date);
-            }
-            if ((object)this.StartTime != null)
-            {
-                buff.Append("startTime", this.StartTime);
-            }
-            if ((object)this.EndTime != null)
-            {
-                buff.Append("endTime", this.EndTime);
-            }
-            if ((object)this.State != null)
-            {
-                buff.Append("state", this.State);
-            }
-            if ((object)this.HorizontalAccuracy != null)
-            {
-                buff.Append("horizontalAccuracy", this.HorizontalAccuracy);
-            }
-            if ((object)this.VerticalAccuracy != null)
-            {
-                buff.Append("verticalAccuracy", this.VerticalAccuracy);
-            }
-
-            return buff.ToString();
-        }
-
         public string Desc;
 
         public DateTime? Date;
@@ -151,6 +48,7 @@ namespace XmlSchemaProcessor.LandXml10
 
         public string VerticalAccuracy;
 
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -213,6 +111,116 @@ namespace XmlSchemaProcessor.LandXml10
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            this.Desc = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("desc"));
+
+            this.Date = XsdConverter.Instance.Convert<DateTime?>(
+                    attributes.GetSafe("date"));
+
+            this.StartTime = XsdConverter.Instance.Convert<DateTime?>(
+                    attributes.GetSafe("startTime"));
+
+            this.EndTime = XsdConverter.Instance.Convert<DateTime?>(
+                    attributes.GetSafe("endTime"));
+
+            this.State = XsdConverter.Instance.Convert<StateType?>(
+                    attributes.GetSafe("state"));
+
+            this.HorizontalAccuracy = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("horizontalAccuracy"));
+
+            this.VerticalAccuracy = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("verticalAccuracy"));
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            if ((object)this.Desc != null)
+            {
+                buff.Append("desc", this.Desc);
+            }
+            if ((object)this.Date != null)
+            {
+                buff.Append("date", this.Date);
+            }
+            if ((object)this.StartTime != null)
+            {
+                buff.Append("startTime", this.StartTime);
+            }
+            if ((object)this.EndTime != null)
+            {
+                buff.Append("endTime", this.EndTime);
+            }
+            if ((object)this.State != null)
+            {
+                buff.Append("state", this.State);
+            }
+            if ((object)this.HorizontalAccuracy != null)
+            {
+                buff.Append("horizontalAccuracy", this.HorizontalAccuracy);
+            }
+            if ((object)this.VerticalAccuracy != null)
+            {
+                buff.Append("verticalAccuracy", this.VerticalAccuracy);
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Date != null)
+            {
+                buff.AppendFormat("date = {0}", this.Date).AppendLine();
+            }
+            if ((object)this.StartTime != null)
+            {
+                buff.AppendFormat("startTime = {0}", this.StartTime).AppendLine();
+            }
+            if ((object)this.EndTime != null)
+            {
+                buff.AppendFormat("endTime = {0}", this.EndTime).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.HorizontalAccuracy != null)
+            {
+                buff.AppendFormat("horizontalAccuracy = {0}", this.HorizontalAccuracy).AppendLine();
+            }
+            if ((object)this.VerticalAccuracy != null)
+            {
+                buff.AppendFormat("verticalAccuracy = {0}", this.VerticalAccuracy).AppendLine();
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

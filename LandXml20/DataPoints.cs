@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// The sub element PntList3D is group of points is defined by a 3D
     ///  north/east/elev list of points that define the geometry.
@@ -22,6 +20,43 @@ namespace XmlSchemaProcessor.LandXml20
         public DataPoints(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+
+        public string Code;
+
+        public StateType? State;
+        /// <summary>
+        /// A reference name value referring to a PointType derived name attribute. An attribute if this type contains the value of a PointType derived element "name" attribute that exists elsewhere the instance data.
+        /// </summary>
+
+        public string PntRef;
+
+        public PointGeometryType? PointGeometry;
+
+        public DTMAttributeType? DTMAttribute;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList3D"))
+            {
+                return Tuple.Create("PntList3D", this.NewReader<IList<double>>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -49,43 +84,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("DTMAttribute"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Code != null)
-            {
-                buff.AppendFormat("code = {0}", this.Code).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.PntRef != null)
-            {
-                buff.AppendFormat("pntRef = {0}", this.PntRef).AppendLine();
-            }
-            if ((object)this.PointGeometry != null)
-            {
-                buff.AppendFormat("pointGeometry = {0}", this.PointGeometry).AppendLine();
-            }
-            if ((object)this.DTMAttribute != null)
-            {
-                buff.AppendFormat("DTMAttribute = {0}", this.DTMAttribute).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -124,37 +122,47 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
+        #region object
 
-        public string Code;
-
-        public StateType? State;
-        /// <summary>
-        /// A reference name value referring to a PointType derived name attribute. An attribute if this type contains the value of a PointType derived element "name" attribute that exists elsewhere the instance data.
-        /// </summary>
-
-        public string PntRef;
-
-        public PointGeometryType? PointGeometry;
-
-        public DTMAttributeType? DTMAttribute;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("PntList3D"))
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("PntList3D", this.NewReader<IList<double>>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Code != null)
+            {
+                buff.AppendFormat("code = {0}", this.Code).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.PntRef != null)
+            {
+                buff.AppendFormat("pntRef = {0}", this.PntRef).AppendLine();
+            }
+            if ((object)this.PointGeometry != null)
+            {
+                buff.AppendFormat("pointGeometry = {0}", this.PointGeometry).AppendLine();
+            }
+            if ((object)this.DTMAttribute != null)
+            {
+                buff.AppendFormat("DTMAttribute = {0}", this.DTMAttribute).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

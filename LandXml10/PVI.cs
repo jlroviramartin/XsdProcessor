@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : true
-    // includeContent : true
     /// <summary>
     /// Represents a  Point of Vertical Intersection with a space delimited "station elevation" text value
     /// </summary>
@@ -19,6 +17,23 @@ namespace XmlSchemaProcessor.LandXml10
         {
         }
 
+        public string Desc;
+
+        public IList<double> Content;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        protected override bool NeedContent { get { return true; } }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -28,23 +43,6 @@ namespace XmlSchemaProcessor.LandXml10
 
             this.Content = XsdConverter.Instance.Convert<IList<double>>(text);
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-
-            if ((object)this.Content != null)
-            {
-                buff.AppendFormat("content = {0}", this.Content).AppendLine();
-            }
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -63,17 +61,27 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public string Desc;
+        #endregion
 
+        #region object
 
-        protected override bool NeedContent { get { return true; } }
-
-        public IList<double> Content;
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+
+            if ((object)this.Content != null)
+            {
+                buff.AppendFormat("content = {0}", this.Content).AppendLine();
+            }
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

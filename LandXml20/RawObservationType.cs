@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     TargetPoint [1, 1]
@@ -23,6 +21,103 @@ namespace XmlSchemaProcessor.LandXml20
         public RawObservationType(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string SetupID;
+
+        public string TargetSetupID;
+
+        public string SetID;
+        /// <summary>
+        /// Used by many of the Survey elements
+        /// </summary>
+
+        public PurposeType? Purpose;
+
+        public double? TargetHeight;
+        /// <summary>
+        /// Represents a normalized angular value in the specified Angular units. Assume 0 degrees = east
+        /// </summary>
+
+        public double? HorizAngle;
+
+        public double? SlopeDistance;
+        /// <summary>
+        /// Represents zenith angles with the 0 origin as
+        ///     straight up and measured in a clockwise direction in the specified
+        ///     Angular units.
+        /// </summary>
+
+        public double? ZenithAngle;
+
+        public double? HorizDistance;
+
+        public double? VertDistance;
+        /// <summary>
+        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
+        /// </summary>
+
+        public double? Azimuth;
+
+        public bool? Unused;
+
+        public bool? DirectFace;
+        /// <summary>
+        /// A list of reference names values refering to one or more CoordGeom.name attributes.
+        /// </summary>
+
+        public IList<string> CoordGeomRefs;
+
+        public DateTime? TimeStamp;
+        /// <summary>
+        /// A reference name value referring to Alignment.name attribute.
+        /// </summary>
+
+        public string AlignRef;
+
+        public string AlignStationName;
+        /// <summary>
+        /// Represents a linear offset distance. When associated with horizontal (planametric) road or coordinate geometry, the offset is a 2D distance measured perpendicular to the road centerline or coordinate geometry used as the origin. When used in cross sections of long section (profile) the offset is a 2d linear measurement from the origin of the cross section or long section. In all cases a positive value indicates an offset to the RIGHT of the origin and negative values indicate and offset to the LEFT of the origin. The value is in decimal form expressed in length units.
+        /// </summary>
+
+        public double? AlignOffset;
+
+        public double? UpperStadia;
+
+        public double? Rod;
+
+        public double? LowerStadia;
+
+        public double? CirclePositionSet;
+
+        public ObservationStatusType? Status;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("OffsetVals"))
+            {
+                return Tuple.Create("OffsetVals", this.NewReader<OffsetVals>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -98,107 +193,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("status"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.SetupID != null)
-            {
-                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
-            }
-            if ((object)this.TargetSetupID != null)
-            {
-                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
-            }
-            if ((object)this.SetID != null)
-            {
-                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
-            }
-            if ((object)this.Purpose != null)
-            {
-                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
-            }
-            if ((object)this.TargetHeight != null)
-            {
-                buff.AppendFormat("targetHeight = {0}", this.TargetHeight).AppendLine();
-            }
-            if ((object)this.HorizAngle != null)
-            {
-                buff.AppendFormat("horizAngle = {0}", this.HorizAngle).AppendLine();
-            }
-            if ((object)this.SlopeDistance != null)
-            {
-                buff.AppendFormat("slopeDistance = {0}", this.SlopeDistance).AppendLine();
-            }
-            if ((object)this.ZenithAngle != null)
-            {
-                buff.AppendFormat("zenithAngle = {0}", this.ZenithAngle).AppendLine();
-            }
-            if ((object)this.HorizDistance != null)
-            {
-                buff.AppendFormat("horizDistance = {0}", this.HorizDistance).AppendLine();
-            }
-            if ((object)this.VertDistance != null)
-            {
-                buff.AppendFormat("vertDistance = {0}", this.VertDistance).AppendLine();
-            }
-            if ((object)this.Azimuth != null)
-            {
-                buff.AppendFormat("azimuth = {0}", this.Azimuth).AppendLine();
-            }
-            if ((object)this.Unused != null)
-            {
-                buff.AppendFormat("unused = {0}", this.Unused).AppendLine();
-            }
-            if ((object)this.DirectFace != null)
-            {
-                buff.AppendFormat("directFace = {0}", this.DirectFace).AppendLine();
-            }
-            if ((object)this.CoordGeomRefs != null)
-            {
-                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
-            }
-            if ((object)this.TimeStamp != null)
-            {
-                buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
-            }
-            if ((object)this.AlignRef != null)
-            {
-                buff.AppendFormat("alignRef = {0}", this.AlignRef).AppendLine();
-            }
-            if ((object)this.AlignStationName != null)
-            {
-                buff.AppendFormat("alignStationName = {0}", this.AlignStationName).AppendLine();
-            }
-            if ((object)this.AlignOffset != null)
-            {
-                buff.AppendFormat("alignOffset = {0}", this.AlignOffset).AppendLine();
-            }
-            if ((object)this.UpperStadia != null)
-            {
-                buff.AppendFormat("upperStadia = {0}", this.UpperStadia).AppendLine();
-            }
-            if ((object)this.Rod != null)
-            {
-                buff.AppendFormat("rod = {0}", this.Rod).AppendLine();
-            }
-            if ((object)this.LowerStadia != null)
-            {
-                buff.AppendFormat("lowerStadia = {0}", this.LowerStadia).AppendLine();
-            }
-            if ((object)this.CirclePositionSet != null)
-            {
-                buff.AppendFormat("circlePositionSet = {0}", this.CirclePositionSet).AppendLine();
-            }
-            if ((object)this.Status != null)
-            {
-                buff.AppendFormat("status = {0}", this.Status).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -301,97 +295,111 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string SetupID;
+        #endregion
 
-        public string TargetSetupID;
+        #region object
 
-        public string SetID;
-        /// <summary>
-        /// Used by many of the Survey elements
-        /// </summary>
-
-        public PurposeType? Purpose;
-
-        public double? TargetHeight;
-        /// <summary>
-        /// Represents a normalized angular value in the specified Angular units. Assume 0 degrees = east
-        /// </summary>
-
-        public double? HorizAngle;
-
-        public double? SlopeDistance;
-        /// <summary>
-        /// Represents zenith angles with the 0 origin as
-        ///     straight up and measured in a clockwise direction in the specified
-        ///     Angular units.
-        /// </summary>
-
-        public double? ZenithAngle;
-
-        public double? HorizDistance;
-
-        public double? VertDistance;
-        /// <summary>
-        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
-        /// </summary>
-
-        public double? Azimuth;
-
-        public bool? Unused;
-
-        public bool? DirectFace;
-        /// <summary>
-        /// A list of reference names values refering to one or more CoordGeom.name attributes.
-        /// </summary>
-
-        public IList<string> CoordGeomRefs;
-
-        public DateTime? TimeStamp;
-        /// <summary>
-        /// A reference name value referring to Alignment.name attribute.
-        /// </summary>
-
-        public string AlignRef;
-
-        public string AlignStationName;
-        /// <summary>
-        /// Represents a linear offset distance. When associated with horizontal (planametric) road or coordinate geometry, the offset is a 2D distance measured perpendicular to the road centerline or coordinate geometry used as the origin. When used in cross sections of long section (profile) the offset is a 2d linear measurement from the origin of the cross section or long section. In all cases a positive value indicates an offset to the RIGHT of the origin and negative values indicate and offset to the LEFT of the origin. The value is in decimal form expressed in length units.
-        /// </summary>
-
-        public double? AlignOffset;
-
-        public double? UpperStadia;
-
-        public double? Rod;
-
-        public double? LowerStadia;
-
-        public double? CirclePositionSet;
-
-        public ObservationStatusType? Status;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.SetupID != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.TargetSetupID != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("OffsetVals"))
+            if ((object)this.SetID != null)
             {
-                return Tuple.Create("OffsetVals", this.NewReader<OffsetVals>());
+                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("TargetPoint"))
+            if ((object)this.Purpose != null)
             {
-                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
+            }
+            if ((object)this.TargetHeight != null)
+            {
+                buff.AppendFormat("targetHeight = {0}", this.TargetHeight).AppendLine();
+            }
+            if ((object)this.HorizAngle != null)
+            {
+                buff.AppendFormat("horizAngle = {0}", this.HorizAngle).AppendLine();
+            }
+            if ((object)this.SlopeDistance != null)
+            {
+                buff.AppendFormat("slopeDistance = {0}", this.SlopeDistance).AppendLine();
+            }
+            if ((object)this.ZenithAngle != null)
+            {
+                buff.AppendFormat("zenithAngle = {0}", this.ZenithAngle).AppendLine();
+            }
+            if ((object)this.HorizDistance != null)
+            {
+                buff.AppendFormat("horizDistance = {0}", this.HorizDistance).AppendLine();
+            }
+            if ((object)this.VertDistance != null)
+            {
+                buff.AppendFormat("vertDistance = {0}", this.VertDistance).AppendLine();
+            }
+            if ((object)this.Azimuth != null)
+            {
+                buff.AppendFormat("azimuth = {0}", this.Azimuth).AppendLine();
+            }
+            if ((object)this.Unused != null)
+            {
+                buff.AppendFormat("unused = {0}", this.Unused).AppendLine();
+            }
+            if ((object)this.DirectFace != null)
+            {
+                buff.AppendFormat("directFace = {0}", this.DirectFace).AppendLine();
+            }
+            if ((object)this.CoordGeomRefs != null)
+            {
+                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
+            }
+            if ((object)this.TimeStamp != null)
+            {
+                buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
+            }
+            if ((object)this.AlignRef != null)
+            {
+                buff.AppendFormat("alignRef = {0}", this.AlignRef).AppendLine();
+            }
+            if ((object)this.AlignStationName != null)
+            {
+                buff.AppendFormat("alignStationName = {0}", this.AlignStationName).AppendLine();
+            }
+            if ((object)this.AlignOffset != null)
+            {
+                buff.AppendFormat("alignOffset = {0}", this.AlignOffset).AppendLine();
+            }
+            if ((object)this.UpperStadia != null)
+            {
+                buff.AppendFormat("upperStadia = {0}", this.UpperStadia).AppendLine();
+            }
+            if ((object)this.Rod != null)
+            {
+                buff.AppendFormat("rod = {0}", this.Rod).AppendLine();
+            }
+            if ((object)this.LowerStadia != null)
+            {
+                buff.AppendFormat("lowerStadia = {0}", this.LowerStadia).AppendLine();
+            }
+            if ((object)this.CirclePositionSet != null)
+            {
+                buff.AppendFormat("circlePositionSet = {0}", this.CirclePositionSet).AppendLine();
+            }
+            if ((object)this.Status != null)
+            {
+                buff.AppendFormat("status = {0}", this.Status).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

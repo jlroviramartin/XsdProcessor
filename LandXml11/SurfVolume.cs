@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// volume calculation results between two surfaces
     /// Sequence [1, 1]
@@ -20,6 +18,43 @@ namespace XmlSchemaProcessor.LandXml11
         public SurfVolume(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// A reference name value referring to Surface.name attribute.
+        /// </summary>
+
+        public string SurfBase;
+        /// <summary>
+        /// A reference name value referring to Surface.name attribute.
+        /// </summary>
+
+        public string SurfCompare;
+
+        public double VolCut;
+
+        public double VolFill;
+
+        public double VolTotal;
+
+        public string Desc;
+
+        public string Name;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -47,43 +82,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("name"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.SurfBase != null)
-            {
-                buff.AppendFormat("surfBase = {0}", this.SurfBase).AppendLine();
-            }
-            if ((object)this.SurfCompare != null)
-            {
-                buff.AppendFormat("surfCompare = {0}", this.SurfCompare).AppendLine();
-            }
-            if ((object)this.VolCut != null)
-            {
-                buff.AppendFormat("volCut = {0}", this.VolCut).AppendLine();
-            }
-            if ((object)this.VolFill != null)
-            {
-                buff.AppendFormat("volFill = {0}", this.VolFill).AppendLine();
-            }
-            if ((object)this.VolTotal != null)
-            {
-                buff.AppendFormat("volTotal = {0}", this.VolTotal).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -122,37 +120,47 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        /// <summary>
-        /// A reference name value referring to Surface.name attribute.
-        /// </summary>
+        #endregion
 
-        public string SurfBase;
-        /// <summary>
-        /// A reference name value referring to Surface.name attribute.
-        /// </summary>
+        #region object
 
-        public string SurfCompare;
-
-        public double VolCut;
-
-        public double VolFill;
-
-        public double VolTotal;
-
-        public string Desc;
-
-        public string Name;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.SurfBase != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("surfBase = {0}", this.SurfBase).AppendLine();
+            }
+            if ((object)this.SurfCompare != null)
+            {
+                buff.AppendFormat("surfCompare = {0}", this.SurfCompare).AppendLine();
+            }
+            if ((object)this.VolCut != null)
+            {
+                buff.AppendFormat("volCut = {0}", this.VolCut).AppendLine();
+            }
+            if ((object)this.VolFill != null)
+            {
+                buff.AppendFormat("volFill = {0}", this.VolFill).AppendLine();
+            }
+            if ((object)this.VolTotal != null)
+            {
+                buff.AppendFormat("volTotal = {0}", this.VolTotal).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

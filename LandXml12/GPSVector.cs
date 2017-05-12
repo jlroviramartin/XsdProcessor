@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     TargetPoint [1, 1]
@@ -24,6 +22,70 @@ namespace XmlSchemaProcessor.LandXml12
         public GPSVector(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double DX;
+
+        public double DY;
+
+        public double DZ;
+
+        public string SetupID_A;
+
+        public string SetupID_B;
+
+        public DateTime? StartTime;
+
+        public DateTime? EndTime;
+
+        public double? HorizontalPrecision;
+
+        public double? VerticalPrecision;
+        /// <summary>
+        /// Used by many of the Survey elements
+        /// </summary>
+
+        public PurposeType? Purpose;
+
+        public string SetID;
+
+        public string SolutionDataLink;
+        /// <summary>
+        /// A list of reference names values refering to one or more CoordGeom.name attributes.
+        /// </summary>
+
+        public IList<string> CoordGeomRefs;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("GPSQCInfoLevel2"))
+            {
+                return Tuple.Create("GPSQCInfoLevel2", this.NewReader<GPSQCInfoLevel2>());
+            }
+            if (name.EqualsIgnoreCase("GPSQCInfoLevel1"))
+            {
+                return Tuple.Create("GPSQCInfoLevel1", this.NewReader<GPSQCInfoLevel1>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -69,67 +131,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("coordGeomRefs"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.DX != null)
-            {
-                buff.AppendFormat("dX = {0}", this.DX).AppendLine();
-            }
-            if ((object)this.DY != null)
-            {
-                buff.AppendFormat("dY = {0}", this.DY).AppendLine();
-            }
-            if ((object)this.DZ != null)
-            {
-                buff.AppendFormat("dZ = {0}", this.DZ).AppendLine();
-            }
-            if ((object)this.SetupID_A != null)
-            {
-                buff.AppendFormat("setupID_A = {0}", this.SetupID_A).AppendLine();
-            }
-            if ((object)this.SetupID_B != null)
-            {
-                buff.AppendFormat("setupID_B = {0}", this.SetupID_B).AppendLine();
-            }
-            if ((object)this.StartTime != null)
-            {
-                buff.AppendFormat("startTime = {0}", this.StartTime).AppendLine();
-            }
-            if ((object)this.EndTime != null)
-            {
-                buff.AppendFormat("endTime = {0}", this.EndTime).AppendLine();
-            }
-            if ((object)this.HorizontalPrecision != null)
-            {
-                buff.AppendFormat("horizontalPrecision = {0}", this.HorizontalPrecision).AppendLine();
-            }
-            if ((object)this.VerticalPrecision != null)
-            {
-                buff.AppendFormat("verticalPrecision = {0}", this.VerticalPrecision).AppendLine();
-            }
-            if ((object)this.Purpose != null)
-            {
-                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
-            }
-            if ((object)this.SetID != null)
-            {
-                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
-            }
-            if ((object)this.SolutionDataLink != null)
-            {
-                buff.AppendFormat("solutionDataLink = {0}", this.SolutionDataLink).AppendLine();
-            }
-            if ((object)this.CoordGeomRefs != null)
-            {
-                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -192,64 +193,71 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public double DX;
+        #endregion
 
-        public double DY;
+        #region object
 
-        public double DZ;
-
-        public string SetupID_A;
-
-        public string SetupID_B;
-
-        public DateTime? StartTime;
-
-        public DateTime? EndTime;
-
-        public double? HorizontalPrecision;
-
-        public double? VerticalPrecision;
-        /// <summary>
-        /// Used by many of the Survey elements
-        /// </summary>
-
-        public PurposeType? Purpose;
-
-        public string SetID;
-
-        public string SolutionDataLink;
-        /// <summary>
-        /// A list of reference names values refering to one or more CoordGeom.name attributes.
-        /// </summary>
-
-        public IList<string> CoordGeomRefs;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.DX != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("dX = {0}", this.DX).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.DY != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("dY = {0}", this.DY).AppendLine();
             }
-            if (name.EqualsIgnoreCase("GPSQCInfoLevel2"))
+            if ((object)this.DZ != null)
             {
-                return Tuple.Create("GPSQCInfoLevel2", this.NewReader<GPSQCInfoLevel2>());
+                buff.AppendFormat("dZ = {0}", this.DZ).AppendLine();
             }
-            if (name.EqualsIgnoreCase("GPSQCInfoLevel1"))
+            if ((object)this.SetupID_A != null)
             {
-                return Tuple.Create("GPSQCInfoLevel1", this.NewReader<GPSQCInfoLevel1>());
+                buff.AppendFormat("setupID_A = {0}", this.SetupID_A).AppendLine();
             }
-            if (name.EqualsIgnoreCase("TargetPoint"))
+            if ((object)this.SetupID_B != null)
             {
-                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+                buff.AppendFormat("setupID_B = {0}", this.SetupID_B).AppendLine();
+            }
+            if ((object)this.StartTime != null)
+            {
+                buff.AppendFormat("startTime = {0}", this.StartTime).AppendLine();
+            }
+            if ((object)this.EndTime != null)
+            {
+                buff.AppendFormat("endTime = {0}", this.EndTime).AppendLine();
+            }
+            if ((object)this.HorizontalPrecision != null)
+            {
+                buff.AppendFormat("horizontalPrecision = {0}", this.HorizontalPrecision).AppendLine();
+            }
+            if ((object)this.VerticalPrecision != null)
+            {
+                buff.AppendFormat("verticalPrecision = {0}", this.VerticalPrecision).AppendLine();
+            }
+            if ((object)this.Purpose != null)
+            {
+                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
+            }
+            if ((object)this.SetID != null)
+            {
+                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
+            }
+            if ((object)this.SolutionDataLink != null)
+            {
+                buff.AppendFormat("solutionDataLink = {0}", this.SolutionDataLink).AppendLine();
+            }
+            if ((object)this.CoordGeomRefs != null)
+            {
+                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

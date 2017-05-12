@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Classification [0, *]
@@ -28,129 +26,6 @@ namespace XmlSchemaProcessor.LandXml12
     {
         public Roadway(System.Xml.XmlReader reader) : base(reader)
         {
-        }
-
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            this.Name = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("name"));
-
-            this.AlignmentRefs = XsdConverter.Instance.Convert<IList<string>>(
-                    attributes.GetSafe("alignmentRefs"));
-
-            this.SurfaceRefs = XsdConverter.Instance.Convert<IList<string>>(
-                    attributes.GetSafe("surfaceRefs"));
-
-            this.GradeModelRefs = XsdConverter.Instance.Convert<IList<string>>(
-                    attributes.GetSafe("gradeModelRefs"));
-
-            this.StaStart = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("staStart"));
-
-            this.StaEnd = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("staEnd"));
-
-            this.Desc = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("desc"));
-
-            this.RoadTerrain = XsdConverter.Instance.Convert<RoadTerrainType?>(
-                    attributes.GetSafe("roadTerrain"));
-
-            this.State = XsdConverter.Instance.Convert<StateType?>(
-                    attributes.GetSafe("state"));
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.AlignmentRefs != null)
-            {
-                buff.AppendFormat("alignmentRefs = {0}", this.AlignmentRefs).AppendLine();
-            }
-            if ((object)this.SurfaceRefs != null)
-            {
-                buff.AppendFormat("surfaceRefs = {0}", this.SurfaceRefs).AppendLine();
-            }
-            if ((object)this.GradeModelRefs != null)
-            {
-                buff.AppendFormat("gradeModelRefs = {0}", this.GradeModelRefs).AppendLine();
-            }
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.StaEnd != null)
-            {
-                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.RoadTerrain != null)
-            {
-                buff.AppendFormat("roadTerrain = {0}", this.RoadTerrain).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            if ((object)this.Name != null)
-            {
-                buff.Append("name", this.Name);
-            }
-            if ((object)this.AlignmentRefs != null)
-            {
-                buff.Append("alignmentRefs", this.AlignmentRefs);
-            }
-            if ((object)this.SurfaceRefs != null)
-            {
-                buff.Append("surfaceRefs", this.SurfaceRefs);
-            }
-            if ((object)this.GradeModelRefs != null)
-            {
-                buff.Append("gradeModelRefs", this.GradeModelRefs);
-            }
-            if ((object)this.StaStart != null)
-            {
-                buff.Append("staStart", this.StaStart);
-            }
-            if ((object)this.StaEnd != null)
-            {
-                buff.Append("staEnd", this.StaEnd);
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.Append("desc", this.Desc);
-            }
-            if ((object)this.RoadTerrain != null)
-            {
-                buff.Append("roadTerrain", this.RoadTerrain);
-            }
-            if ((object)this.State != null)
-            {
-                buff.Append("state", this.State);
-            }
-
-            return buff.ToString();
         }
 
         public string Name;
@@ -186,6 +61,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public StateType? State;
 
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -236,6 +112,138 @@ namespace XmlSchemaProcessor.LandXml12
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            this.Name = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("name"));
+
+            this.AlignmentRefs = XsdConverter.Instance.Convert<IList<string>>(
+                    attributes.GetSafe("alignmentRefs"));
+
+            this.SurfaceRefs = XsdConverter.Instance.Convert<IList<string>>(
+                    attributes.GetSafe("surfaceRefs"));
+
+            this.GradeModelRefs = XsdConverter.Instance.Convert<IList<string>>(
+                    attributes.GetSafe("gradeModelRefs"));
+
+            this.StaStart = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("staStart"));
+
+            this.StaEnd = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("staEnd"));
+
+            this.Desc = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("desc"));
+
+            this.RoadTerrain = XsdConverter.Instance.Convert<RoadTerrainType?>(
+                    attributes.GetSafe("roadTerrain"));
+
+            this.State = XsdConverter.Instance.Convert<StateType?>(
+                    attributes.GetSafe("state"));
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            if ((object)this.Name != null)
+            {
+                buff.Append("name", this.Name);
+            }
+            if ((object)this.AlignmentRefs != null)
+            {
+                buff.Append("alignmentRefs", this.AlignmentRefs);
+            }
+            if ((object)this.SurfaceRefs != null)
+            {
+                buff.Append("surfaceRefs", this.SurfaceRefs);
+            }
+            if ((object)this.GradeModelRefs != null)
+            {
+                buff.Append("gradeModelRefs", this.GradeModelRefs);
+            }
+            if ((object)this.StaStart != null)
+            {
+                buff.Append("staStart", this.StaStart);
+            }
+            if ((object)this.StaEnd != null)
+            {
+                buff.Append("staEnd", this.StaEnd);
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.Append("desc", this.Desc);
+            }
+            if ((object)this.RoadTerrain != null)
+            {
+                buff.Append("roadTerrain", this.RoadTerrain);
+            }
+            if ((object)this.State != null)
+            {
+                buff.Append("state", this.State);
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.AlignmentRefs != null)
+            {
+                buff.AppendFormat("alignmentRefs = {0}", this.AlignmentRefs).AppendLine();
+            }
+            if ((object)this.SurfaceRefs != null)
+            {
+                buff.AppendFormat("surfaceRefs = {0}", this.SurfaceRefs).AppendLine();
+            }
+            if ((object)this.GradeModelRefs != null)
+            {
+                buff.AppendFormat("gradeModelRefs = {0}", this.GradeModelRefs).AppendLine();
+            }
+            if ((object)this.StaStart != null)
+            {
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.StaEnd != null)
+            {
+                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.RoadTerrain != null)
+            {
+                buff.AppendFormat("roadTerrain = {0}", this.RoadTerrain).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

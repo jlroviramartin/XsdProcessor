@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     CrossSectPnt [0, *]
@@ -20,6 +18,52 @@ namespace XmlSchemaProcessor.LandXml12
         public DesignCrossSectSurf(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+
+        public StateType? State;
+
+        public SideofRoadType? Side;
+
+        public string Material;
+
+        public bool? ClosedArea;
+
+        public double? TypicalThickness;
+
+        public double? TypicalWidth;
+        /// <summary>
+        /// Represents the cross sectional surface area in numeric decimal form expressed in area units
+        /// </summary>
+
+        public double? Area;
+        /// <summary>
+        /// Represents the cross section surface volume from the previous station to the current station in numeric decimal form expressed in volume units
+        /// </summary>
+
+        public double? Volume;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("CrossSectPnt"))
+            {
+                return Tuple.Create("CrossSectPnt", this.NewReader<CrossSectPnt>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -56,55 +100,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("volume"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.Side != null)
-            {
-                buff.AppendFormat("side = {0}", this.Side).AppendLine();
-            }
-            if ((object)this.Material != null)
-            {
-                buff.AppendFormat("material = {0}", this.Material).AppendLine();
-            }
-            if ((object)this.ClosedArea != null)
-            {
-                buff.AppendFormat("closedArea = {0}", this.ClosedArea).AppendLine();
-            }
-            if ((object)this.TypicalThickness != null)
-            {
-                buff.AppendFormat("typicalThickness = {0}", this.TypicalThickness).AppendLine();
-            }
-            if ((object)this.TypicalWidth != null)
-            {
-                buff.AppendFormat("typicalWidth = {0}", this.TypicalWidth).AppendLine();
-            }
-            if ((object)this.Area != null)
-            {
-                buff.AppendFormat("area = {0}", this.Area).AppendLine();
-            }
-            if ((object)this.Volume != null)
-            {
-                buff.AppendFormat("volume = {0}", this.Volume).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -155,46 +150,59 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
+        #region object
 
-        public StateType? State;
-
-        public SideofRoadType? Side;
-
-        public string Material;
-
-        public bool? ClosedArea;
-
-        public double? TypicalThickness;
-
-        public double? TypicalWidth;
-        /// <summary>
-        /// Represents the cross sectional surface area in numeric decimal form expressed in area units
-        /// </summary>
-
-        public double? Area;
-        /// <summary>
-        /// Represents the cross section surface volume from the previous station to the current station in numeric decimal form expressed in volume units
-        /// </summary>
-
-        public double? Volume;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("CrossSectPnt"))
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("CrossSectPnt", this.NewReader<CrossSectPnt>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.Side != null)
+            {
+                buff.AppendFormat("side = {0}", this.Side).AppendLine();
+            }
+            if ((object)this.Material != null)
+            {
+                buff.AppendFormat("material = {0}", this.Material).AppendLine();
+            }
+            if ((object)this.ClosedArea != null)
+            {
+                buff.AppendFormat("closedArea = {0}", this.ClosedArea).AppendLine();
+            }
+            if ((object)this.TypicalThickness != null)
+            {
+                buff.AppendFormat("typicalThickness = {0}", this.TypicalThickness).AppendLine();
+            }
+            if ((object)this.TypicalWidth != null)
+            {
+                buff.AppendFormat("typicalWidth = {0}", this.TypicalWidth).AppendLine();
+            }
+            if ((object)this.Area != null)
+            {
+                buff.AppendFormat("area = {0}", this.Area).AppendLine();
+            }
+            if ((object)this.Volume != null)
+            {
+                buff.AppendFormat("volume = {0}", this.Volume).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

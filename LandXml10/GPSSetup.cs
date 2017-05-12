@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Choice [0, *]
@@ -23,6 +21,58 @@ namespace XmlSchemaProcessor.LandXml10
         public GPSSetup(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Id;
+
+        public double AntennaHeight;
+
+        public string StationName;
+
+        public string GPSAntennaDetailsID;
+
+        public string GPSReceiverDetailsID;
+
+        public string ObservationDataLink;
+
+        public string StationDescription;
+        /// <summary>
+        ///  GPS Time = Nbr of GPS weeks * 604800 (seconds in a week) + seconds in GPS week.
+        /// </summary>
+
+        public double? StartTime;
+        /// <summary>
+        ///  GPS Time = Nbr of GPS weeks * 604800 (seconds in a week) + seconds in GPS week.
+        /// </summary>
+
+        public double? StopTime;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("GPSPosition"))
+            {
+                return Tuple.Create("GPSPosition", this.NewReader<GPSPosition>());
+            }
+            if (name.EqualsIgnoreCase("TargetSetup"))
+            {
+                return Tuple.Create("TargetSetup", this.NewReader<TargetSetup>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -56,51 +106,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("stopTime"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.AntennaHeight != null)
-            {
-                buff.AppendFormat("antennaHeight = {0}", this.AntennaHeight).AppendLine();
-            }
-            if ((object)this.StationName != null)
-            {
-                buff.AppendFormat("stationName = {0}", this.StationName).AppendLine();
-            }
-            if ((object)this.GPSAntennaDetailsID != null)
-            {
-                buff.AppendFormat("GPSAntennaDetailsID = {0}", this.GPSAntennaDetailsID).AppendLine();
-            }
-            if ((object)this.GPSReceiverDetailsID != null)
-            {
-                buff.AppendFormat("GPSReceiverDetailsID = {0}", this.GPSReceiverDetailsID).AppendLine();
-            }
-            if ((object)this.ObservationDataLink != null)
-            {
-                buff.AppendFormat("observationDataLink = {0}", this.ObservationDataLink).AppendLine();
-            }
-            if ((object)this.StationDescription != null)
-            {
-                buff.AppendFormat("stationDescription = {0}", this.StationDescription).AppendLine();
-            }
-            if ((object)this.StartTime != null)
-            {
-                buff.AppendFormat("startTime = {0}", this.StartTime).AppendLine();
-            }
-            if ((object)this.StopTime != null)
-            {
-                buff.AppendFormat("stopTime = {0}", this.StopTime).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -147,52 +152,55 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public string Id;
+        #endregion
 
-        public double AntennaHeight;
+        #region object
 
-        public string StationName;
-
-        public string GPSAntennaDetailsID;
-
-        public string GPSReceiverDetailsID;
-
-        public string ObservationDataLink;
-
-        public string StationDescription;
-        /// <summary>
-        ///  GPS Time = Nbr of GPS weeks * 604800 (seconds in a week) + seconds in GPS week.
-        /// </summary>
-
-        public double? StartTime;
-        /// <summary>
-        ///  GPS Time = Nbr of GPS weeks * 604800 (seconds in a week) + seconds in GPS week.
-        /// </summary>
-
-        public double? StopTime;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.AntennaHeight != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("antennaHeight = {0}", this.AntennaHeight).AppendLine();
             }
-            if (name.EqualsIgnoreCase("GPSPosition"))
+            if ((object)this.StationName != null)
             {
-                return Tuple.Create("GPSPosition", this.NewReader<GPSPosition>());
+                buff.AppendFormat("stationName = {0}", this.StationName).AppendLine();
             }
-            if (name.EqualsIgnoreCase("TargetSetup"))
+            if ((object)this.GPSAntennaDetailsID != null)
             {
-                return Tuple.Create("TargetSetup", this.NewReader<TargetSetup>());
+                buff.AppendFormat("GPSAntennaDetailsID = {0}", this.GPSAntennaDetailsID).AppendLine();
+            }
+            if ((object)this.GPSReceiverDetailsID != null)
+            {
+                buff.AppendFormat("GPSReceiverDetailsID = {0}", this.GPSReceiverDetailsID).AppendLine();
+            }
+            if ((object)this.ObservationDataLink != null)
+            {
+                buff.AppendFormat("observationDataLink = {0}", this.ObservationDataLink).AppendLine();
+            }
+            if ((object)this.StationDescription != null)
+            {
+                buff.AppendFormat("stationDescription = {0}", this.StationDescription).AppendLine();
+            }
+            if ((object)this.StartTime != null)
+            {
+                buff.AppendFormat("startTime = {0}", this.StartTime).AppendLine();
+            }
+            if ((object)this.StopTime != null)
+            {
+                buff.AppendFormat("stopTime = {0}", this.StopTime).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

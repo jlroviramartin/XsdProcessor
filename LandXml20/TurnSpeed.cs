@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,32 @@ namespace XmlSchemaProcessor.LandXml20
         public TurnSpeed(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? Station;
+
+        public int? LegNumber;
+
+        public double? Speed;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -34,27 +58,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("speed"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Station != null)
-            {
-                buff.AppendFormat("station = {0}", this.Station).AppendLine();
-            }
-            if ((object)this.LegNumber != null)
-            {
-                buff.AppendFormat("legNumber = {0}", this.LegNumber).AppendLine();
-            }
-            if ((object)this.Speed != null)
-            {
-                buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -77,26 +80,31 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
+        #endregion
 
-        public double? Station;
+        #region object
 
-        public int? LegNumber;
-
-        public double? Speed;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Station != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("station = {0}", this.Station).AppendLine();
+            }
+            if ((object)this.LegNumber != null)
+            {
+                buff.AppendFormat("legNumber = {0}", this.LegNumber).AppendLine();
+            }
+            if ((object)this.Speed != null)
+            {
+                buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

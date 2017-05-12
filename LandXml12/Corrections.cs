@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Choice [0, *]
@@ -21,6 +19,34 @@ namespace XmlSchemaProcessor.LandXml12
         public Corrections(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double? RefractionCoefficient;
+
+        public bool? ApplyRefractionCoefficient;
+
+        public double? Sphericity;
+
+        public double? PrismEccentricity;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -39,31 +65,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("prismEccentricity"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.RefractionCoefficient != null)
-            {
-                buff.AppendFormat("refractionCoefficient = {0}", this.RefractionCoefficient).AppendLine();
-            }
-            if ((object)this.ApplyRefractionCoefficient != null)
-            {
-                buff.AppendFormat("applyRefractionCoefficient = {0}", this.ApplyRefractionCoefficient).AppendLine();
-            }
-            if ((object)this.Sphericity != null)
-            {
-                buff.AppendFormat("sphericity = {0}", this.Sphericity).AppendLine();
-            }
-            if ((object)this.PrismEccentricity != null)
-            {
-                buff.AppendFormat("prismEccentricity = {0}", this.PrismEccentricity).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -90,28 +91,35 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public double? RefractionCoefficient;
+        #endregion
 
-        public bool? ApplyRefractionCoefficient;
+        #region object
 
-        public double? Sphericity;
-
-        public double? PrismEccentricity;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.RefractionCoefficient != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("refractionCoefficient = {0}", this.RefractionCoefficient).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.ApplyRefractionCoefficient != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("applyRefractionCoefficient = {0}", this.ApplyRefractionCoefficient).AppendLine();
+            }
+            if ((object)this.Sphericity != null)
+            {
+                buff.AppendFormat("sphericity = {0}", this.Sphericity).AppendLine();
+            }
+            if ((object)this.PrismEccentricity != null)
+            {
+                buff.AppendFormat("prismEccentricity = {0}", this.PrismEccentricity).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

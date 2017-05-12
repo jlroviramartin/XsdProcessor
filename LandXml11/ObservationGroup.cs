@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// All observations to the same point in a group should be averaged together (they have consistant orientation)
     /// Sequence [1, 1]
@@ -30,96 +28,6 @@ namespace XmlSchemaProcessor.LandXml11
         {
         }
 
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            this.Id = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("id"));
-
-            this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
-                    attributes.GetSafe("purpose"));
-
-            this.SetupID = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("setupID"));
-
-            this.TargetSetupID = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("targetSetupID"));
-
-            this.SetID = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("setID"));
-
-            this.CoordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(
-                    attributes.GetSafe("coordGeomRefs"));
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.Purpose != null)
-            {
-                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
-            }
-            if ((object)this.SetupID != null)
-            {
-                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
-            }
-            if ((object)this.TargetSetupID != null)
-            {
-                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
-            }
-            if ((object)this.SetID != null)
-            {
-                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
-            }
-            if ((object)this.CoordGeomRefs != null)
-            {
-                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
-            }
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            if ((object)this.Id != null)
-            {
-                buff.Append("id", this.Id);
-            }
-            if ((object)this.Purpose != null)
-            {
-                buff.Append("purpose", this.Purpose);
-            }
-            if ((object)this.SetupID != null)
-            {
-                buff.Append("setupID", this.SetupID);
-            }
-            if ((object)this.TargetSetupID != null)
-            {
-                buff.Append("targetSetupID", this.TargetSetupID);
-            }
-            if ((object)this.SetID != null)
-            {
-                buff.Append("setID", this.SetID);
-            }
-            if ((object)this.CoordGeomRefs != null)
-            {
-                buff.Append("coordGeomRefs", this.CoordGeomRefs);
-            }
-
-            return buff.ToString();
-        }
-
         public string Id;
         /// <summary>
         /// Used by many of the Survey elements
@@ -138,6 +46,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public IList<string> CoordGeomRefs;
 
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -180,6 +89,105 @@ namespace XmlSchemaProcessor.LandXml11
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            this.Id = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("id"));
+
+            this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
+                    attributes.GetSafe("purpose"));
+
+            this.SetupID = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("setupID"));
+
+            this.TargetSetupID = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("targetSetupID"));
+
+            this.SetID = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("setID"));
+
+            this.CoordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(
+                    attributes.GetSafe("coordGeomRefs"));
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            if ((object)this.Id != null)
+            {
+                buff.Append("id", this.Id);
+            }
+            if ((object)this.Purpose != null)
+            {
+                buff.Append("purpose", this.Purpose);
+            }
+            if ((object)this.SetupID != null)
+            {
+                buff.Append("setupID", this.SetupID);
+            }
+            if ((object)this.TargetSetupID != null)
+            {
+                buff.Append("targetSetupID", this.TargetSetupID);
+            }
+            if ((object)this.SetID != null)
+            {
+                buff.Append("setID", this.SetID);
+            }
+            if ((object)this.CoordGeomRefs != null)
+            {
+                buff.Append("coordGeomRefs", this.CoordGeomRefs);
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
+            {
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
+            }
+            if ((object)this.Purpose != null)
+            {
+                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
+            }
+            if ((object)this.SetupID != null)
+            {
+                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
+            }
+            if ((object)this.TargetSetupID != null)
+            {
+                buff.AppendFormat("targetSetupID = {0}", this.TargetSetupID).AppendLine();
+            }
+            if ((object)this.SetID != null)
+            {
+                buff.AppendFormat("setID = {0}", this.SetID).AppendLine();
+            }
+            if ((object)this.CoordGeomRefs != null)
+            {
+                buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

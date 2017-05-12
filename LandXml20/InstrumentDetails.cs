@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Corrections [1, 1]
@@ -22,6 +20,58 @@ namespace XmlSchemaProcessor.LandXml20
         public InstrumentDetails(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Id;
+
+        public double? EdmAccuracyConstant;
+
+        public double? EdmAccuracyppm;
+
+        public double? EdmVertOffset;
+
+        public double? HorizAnglePrecision;
+
+        public string Manufacturer;
+
+        public string Model;
+
+        public string SerialNumber;
+
+        public double? ZenithAnglePrecision;
+
+        public double? CarrierWavelength;
+
+        public double? RefractiveIndex;
+
+        public double? HorizCollimation;
+
+        public double? VertCollimation;
+
+        public double? StadiaFactor;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("Corrections"))
+            {
+                return Tuple.Create("Corrections", this.NewReader<Corrections>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -70,71 +120,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("stadiaFactor"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.EdmAccuracyConstant != null)
-            {
-                buff.AppendFormat("edmAccuracyConstant = {0}", this.EdmAccuracyConstant).AppendLine();
-            }
-            if ((object)this.EdmAccuracyppm != null)
-            {
-                buff.AppendFormat("edmAccuracyppm = {0}", this.EdmAccuracyppm).AppendLine();
-            }
-            if ((object)this.EdmVertOffset != null)
-            {
-                buff.AppendFormat("edmVertOffset = {0}", this.EdmVertOffset).AppendLine();
-            }
-            if ((object)this.HorizAnglePrecision != null)
-            {
-                buff.AppendFormat("horizAnglePrecision = {0}", this.HorizAnglePrecision).AppendLine();
-            }
-            if ((object)this.Manufacturer != null)
-            {
-                buff.AppendFormat("manufacturer = {0}", this.Manufacturer).AppendLine();
-            }
-            if ((object)this.Model != null)
-            {
-                buff.AppendFormat("model = {0}", this.Model).AppendLine();
-            }
-            if ((object)this.SerialNumber != null)
-            {
-                buff.AppendFormat("serialNumber = {0}", this.SerialNumber).AppendLine();
-            }
-            if ((object)this.ZenithAnglePrecision != null)
-            {
-                buff.AppendFormat("zenithAnglePrecision = {0}", this.ZenithAnglePrecision).AppendLine();
-            }
-            if ((object)this.CarrierWavelength != null)
-            {
-                buff.AppendFormat("carrierWavelength = {0}", this.CarrierWavelength).AppendLine();
-            }
-            if ((object)this.RefractiveIndex != null)
-            {
-                buff.AppendFormat("refractiveIndex = {0}", this.RefractiveIndex).AppendLine();
-            }
-            if ((object)this.HorizCollimation != null)
-            {
-                buff.AppendFormat("horizCollimation = {0}", this.HorizCollimation).AppendLine();
-            }
-            if ((object)this.VertCollimation != null)
-            {
-                buff.AppendFormat("vertCollimation = {0}", this.VertCollimation).AppendLine();
-            }
-            if ((object)this.StadiaFactor != null)
-            {
-                buff.AppendFormat("stadiaFactor = {0}", this.StadiaFactor).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -201,52 +186,75 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Id;
+        #endregion
 
-        public double? EdmAccuracyConstant;
+        #region object
 
-        public double? EdmAccuracyppm;
-
-        public double? EdmVertOffset;
-
-        public double? HorizAnglePrecision;
-
-        public string Manufacturer;
-
-        public string Model;
-
-        public string SerialNumber;
-
-        public double? ZenithAnglePrecision;
-
-        public double? CarrierWavelength;
-
-        public double? RefractiveIndex;
-
-        public double? HorizCollimation;
-
-        public double? VertCollimation;
-
-        public double? StadiaFactor;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.EdmAccuracyConstant != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("edmAccuracyConstant = {0}", this.EdmAccuracyConstant).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Corrections"))
+            if ((object)this.EdmAccuracyppm != null)
             {
-                return Tuple.Create("Corrections", this.NewReader<Corrections>());
+                buff.AppendFormat("edmAccuracyppm = {0}", this.EdmAccuracyppm).AppendLine();
+            }
+            if ((object)this.EdmVertOffset != null)
+            {
+                buff.AppendFormat("edmVertOffset = {0}", this.EdmVertOffset).AppendLine();
+            }
+            if ((object)this.HorizAnglePrecision != null)
+            {
+                buff.AppendFormat("horizAnglePrecision = {0}", this.HorizAnglePrecision).AppendLine();
+            }
+            if ((object)this.Manufacturer != null)
+            {
+                buff.AppendFormat("manufacturer = {0}", this.Manufacturer).AppendLine();
+            }
+            if ((object)this.Model != null)
+            {
+                buff.AppendFormat("model = {0}", this.Model).AppendLine();
+            }
+            if ((object)this.SerialNumber != null)
+            {
+                buff.AppendFormat("serialNumber = {0}", this.SerialNumber).AppendLine();
+            }
+            if ((object)this.ZenithAnglePrecision != null)
+            {
+                buff.AppendFormat("zenithAnglePrecision = {0}", this.ZenithAnglePrecision).AppendLine();
+            }
+            if ((object)this.CarrierWavelength != null)
+            {
+                buff.AppendFormat("carrierWavelength = {0}", this.CarrierWavelength).AppendLine();
+            }
+            if ((object)this.RefractiveIndex != null)
+            {
+                buff.AppendFormat("refractiveIndex = {0}", this.RefractiveIndex).AppendLine();
+            }
+            if ((object)this.HorizCollimation != null)
+            {
+                buff.AppendFormat("horizCollimation = {0}", this.HorizCollimation).AppendLine();
+            }
+            if ((object)this.VertCollimation != null)
+            {
+                buff.AppendFormat("vertCollimation = {0}", this.VertCollimation).AppendLine();
+            }
+            if ((object)this.StadiaFactor != null)
+            {
+                buff.AppendFormat("stadiaFactor = {0}", this.StadiaFactor).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

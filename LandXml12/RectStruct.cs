@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Feature [0, *]
@@ -19,6 +17,41 @@ namespace XmlSchemaProcessor.LandXml12
         public RectStruct(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double Length;
+        /// <summary>
+        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
+        /// </summary>
+
+        public double? LengthDir;
+
+        public double Width;
+
+        public string Desc;
+
+        public string InletCase;
+
+        public double? LossCoeff;
+
+        public string Material;
+
+        public double? Thickness;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -49,47 +82,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("thickness"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Length != null)
-            {
-                buff.AppendFormat("length = {0}", this.Length).AppendLine();
-            }
-            if ((object)this.LengthDir != null)
-            {
-                buff.AppendFormat("lengthDir = {0}", this.LengthDir).AppendLine();
-            }
-            if ((object)this.Width != null)
-            {
-                buff.AppendFormat("width = {0}", this.Width).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.InletCase != null)
-            {
-                buff.AppendFormat("inletCase = {0}", this.InletCase).AppendLine();
-            }
-            if ((object)this.LossCoeff != null)
-            {
-                buff.AppendFormat("lossCoeff = {0}", this.LossCoeff).AppendLine();
-            }
-            if ((object)this.Material != null)
-            {
-                buff.AppendFormat("material = {0}", this.Material).AppendLine();
-            }
-            if ((object)this.Thickness != null)
-            {
-                buff.AppendFormat("thickness = {0}", this.Thickness).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -132,35 +124,51 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public double Length;
-        /// <summary>
-        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
-        /// </summary>
+        #endregion
 
-        public double? LengthDir;
+        #region object
 
-        public double Width;
-
-        public string Desc;
-
-        public string InletCase;
-
-        public double? LossCoeff;
-
-        public string Material;
-
-        public double? Thickness;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Length != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("length = {0}", this.Length).AppendLine();
+            }
+            if ((object)this.LengthDir != null)
+            {
+                buff.AppendFormat("lengthDir = {0}", this.LengthDir).AppendLine();
+            }
+            if ((object)this.Width != null)
+            {
+                buff.AppendFormat("width = {0}", this.Width).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.InletCase != null)
+            {
+                buff.AppendFormat("inletCase = {0}", this.InletCase).AppendLine();
+            }
+            if ((object)this.LossCoeff != null)
+            {
+                buff.AppendFormat("lossCoeff = {0}", this.LossCoeff).AppendLine();
+            }
+            if ((object)this.Material != null)
+            {
+                buff.AppendFormat("material = {0}", this.Material).AppendLine();
+            }
+            if ((object)this.Thickness != null)
+            {
+                buff.AppendFormat("thickness = {0}", this.Thickness).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

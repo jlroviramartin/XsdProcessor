@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,35 @@ namespace XmlSchemaProcessor.LandXml10
         public ZoneMaterial(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double StaStart;
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double StaEnd;
+
+        public ZoneMaterialType Material;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -34,27 +61,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("material"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.StaEnd != null)
-            {
-                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
-            }
-            if ((object)this.Material != null)
-            {
-                buff.AppendFormat("material = {0}", this.Material).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -77,29 +83,31 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #endregion
 
-        public double StaStart;
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #region object
 
-        public double StaEnd;
-
-        public ZoneMaterialType Material;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.StaStart != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.StaEnd != null)
+            {
+                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
+            }
+            if ((object)this.Material != null)
+            {
+                buff.AppendFormat("material = {0}", this.Material).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

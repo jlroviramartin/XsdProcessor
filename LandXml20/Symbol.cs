@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// This element value contains a OBJ or DXF ascii or hex encoded string that represents a 2D or 3D CAD symbol
     /// type = format type of symbol, values are dxf or obj
@@ -25,6 +23,30 @@ namespace XmlSchemaProcessor.LandXml20
         {
         }
 
+        public string Name;
+
+        public SymbolType Type;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("TextureImageNameRef"))
+            {
+                return Tuple.Create("TextureImageNameRef", this.NewReader<string>());
+            }
+            if (name.EqualsIgnoreCase("SymbolHexString"))
+            {
+                return Tuple.Create("SymbolHexString", this.NewReader<byte[]>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -36,23 +58,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("type"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Type != null)
-            {
-                buff.AppendFormat("type = {0}", this.Type).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -71,24 +76,27 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public SymbolType Type;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("TextureImageNameRef"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("TextureImageNameRef", this.NewReader<string>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("SymbolHexString"))
+            if ((object)this.Type != null)
             {
-                return Tuple.Create("SymbolHexString", this.NewReader<byte[]>());
+                buff.AppendFormat("type = {0}", this.Type).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

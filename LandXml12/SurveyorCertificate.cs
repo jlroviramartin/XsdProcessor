@@ -7,13 +7,30 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : false
-    // includeContent : false
     public class SurveyorCertificate : XsdBaseReader
     {
         public SurveyorCertificate(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string CertificateType;
+
+        public string TextCertificate;
+
+        public DateTime? SurveyDate;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -32,31 +49,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("surveyDate"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.CertificateType != null)
-            {
-                buff.AppendFormat("certificateType = {0}", this.CertificateType).AppendLine();
-            }
-            if ((object)this.TextCertificate != null)
-            {
-                buff.AppendFormat("textCertificate = {0}", this.TextCertificate).AppendLine();
-            }
-            if ((object)this.SurveyDate != null)
-            {
-                buff.AppendFormat("surveyDate = {0}", this.SurveyDate).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -83,19 +75,35 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string CertificateType;
+        #region object
 
-        public string TextCertificate;
-
-        public DateTime? SurveyDate;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.CertificateType != null)
+            {
+                buff.AppendFormat("certificateType = {0}", this.CertificateType).AppendLine();
+            }
+            if ((object)this.TextCertificate != null)
+            {
+                buff.AppendFormat("textCertificate = {0}", this.TextCertificate).AppendLine();
+            }
+            if ((object)this.SurveyDate != null)
+            {
+                buff.AppendFormat("surveyDate = {0}", this.SurveyDate).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

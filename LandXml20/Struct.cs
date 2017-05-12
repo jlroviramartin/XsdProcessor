@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Each Struct within a Structs collection element must have a unique  "name" attribute.
     /// The structure type is determined by the existance of one of the following elements: CircStruct or RectStruct.
@@ -34,107 +32,6 @@ namespace XmlSchemaProcessor.LandXml20
         {
         }
 
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            this.Name = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("name"));
-
-            this.Desc = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("desc"));
-
-            this.ElevRim = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("elevRim"));
-
-            this.ElevSump = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("elevSump"));
-
-            this.OID = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("oID"));
-
-            this.State = XsdConverter.Instance.Convert<StateType?>(
-                    attributes.GetSafe("state"));
-
-            this.M = XsdConverter.Instance.Convert<IList<int?>>(
-                    attributes.GetSafe("m"));
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.ElevRim != null)
-            {
-                buff.AppendFormat("elevRim = {0}", this.ElevRim).AppendLine();
-            }
-            if ((object)this.ElevSump != null)
-            {
-                buff.AppendFormat("elevSump = {0}", this.ElevSump).AppendLine();
-            }
-            if ((object)this.OID != null)
-            {
-                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.M != null)
-            {
-                buff.AppendFormat("m = {0}", this.M).AppendLine();
-            }
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            if ((object)this.Name != null)
-            {
-                buff.Append("name", this.Name);
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.Append("desc", this.Desc);
-            }
-            if ((object)this.ElevRim != null)
-            {
-                buff.Append("elevRim", this.ElevRim);
-            }
-            if ((object)this.ElevSump != null)
-            {
-                buff.Append("elevSump", this.ElevSump);
-            }
-            if ((object)this.OID != null)
-            {
-                buff.Append("oID", this.OID);
-            }
-            if ((object)this.State != null)
-            {
-                buff.Append("state", this.State);
-            }
-            if ((object)this.M != null)
-            {
-                buff.Append("m", this.M);
-            }
-
-            return buff.ToString();
-        }
-
         public string Name;
 
         public string Desc;
@@ -152,6 +49,7 @@ namespace XmlSchemaProcessor.LandXml20
 
         public IList<int?> M;
 
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -198,6 +96,116 @@ namespace XmlSchemaProcessor.LandXml20
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            this.Name = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("name"));
+
+            this.Desc = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("desc"));
+
+            this.ElevRim = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("elevRim"));
+
+            this.ElevSump = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("elevSump"));
+
+            this.OID = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("oID"));
+
+            this.State = XsdConverter.Instance.Convert<StateType?>(
+                    attributes.GetSafe("state"));
+
+            this.M = XsdConverter.Instance.Convert<IList<int?>>(
+                    attributes.GetSafe("m"));
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            if ((object)this.Name != null)
+            {
+                buff.Append("name", this.Name);
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.Append("desc", this.Desc);
+            }
+            if ((object)this.ElevRim != null)
+            {
+                buff.Append("elevRim", this.ElevRim);
+            }
+            if ((object)this.ElevSump != null)
+            {
+                buff.Append("elevSump", this.ElevSump);
+            }
+            if ((object)this.OID != null)
+            {
+                buff.Append("oID", this.OID);
+            }
+            if ((object)this.State != null)
+            {
+                buff.Append("state", this.State);
+            }
+            if ((object)this.M != null)
+            {
+                buff.Append("m", this.M);
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.ElevRim != null)
+            {
+                buff.AppendFormat("elevRim = {0}", this.ElevRim).AppendLine();
+            }
+            if ((object)this.ElevSump != null)
+            {
+                buff.AppendFormat("elevSump = {0}", this.ElevSump).AppendLine();
+            }
+            if ((object)this.OID != null)
+            {
+                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.M != null)
+            {
+                buff.AppendFormat("m = {0}", this.M).AppendLine();
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

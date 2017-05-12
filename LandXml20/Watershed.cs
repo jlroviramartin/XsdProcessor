@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// The watershed region contains a 2D north/east or 3D north/east/elev list of points that define the boundary.
     /// A watershed is identified by the "name" attribute.
@@ -27,69 +25,13 @@ namespace XmlSchemaProcessor.LandXml20
         {
         }
 
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            this.Name = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("name"));
-
-            this.Area = XsdConverter.Instance.Convert<double?>(
-                    attributes.GetSafe("area"));
-
-            this.Desc = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("desc"));
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Area != null)
-            {
-                buff.AppendFormat("area = {0}", this.Area).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            if ((object)this.Name != null)
-            {
-                buff.Append("name", this.Name);
-            }
-            if ((object)this.Area != null)
-            {
-                buff.Append("area", this.Area);
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.Append("desc", this.Desc);
-            }
-
-            return buff.ToString();
-        }
-
         public string Name;
 
         public double? Area;
 
         public string Desc;
 
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -112,6 +54,72 @@ namespace XmlSchemaProcessor.LandXml20
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            this.Name = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("name"));
+
+            this.Area = XsdConverter.Instance.Convert<double?>(
+                    attributes.GetSafe("area"));
+
+            this.Desc = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("desc"));
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            if ((object)this.Name != null)
+            {
+                buff.Append("name", this.Name);
+            }
+            if ((object)this.Area != null)
+            {
+                buff.Append("area", this.Area);
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.Append("desc", this.Desc);
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Area != null)
+            {
+                buff.AppendFormat("area = {0}", this.Area).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

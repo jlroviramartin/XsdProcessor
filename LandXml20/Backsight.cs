@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     BacksightPoint [0, 1]
@@ -22,6 +20,46 @@ namespace XmlSchemaProcessor.LandXml20
         public Backsight(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Id;
+        /// <summary>
+        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
+        /// </summary>
+
+        public double? Azimuth;
+
+        public double? TargetHeight;
+        /// <summary>
+        /// Represents a normalized angular value in the specified Angular units. Assume 0 degrees = east
+        /// </summary>
+
+        public double Circle;
+
+        public string SetupID;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("BacksightPoint"))
+            {
+                return Tuple.Create("BacksightPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -43,35 +81,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("setupID"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.Azimuth != null)
-            {
-                buff.AppendFormat("azimuth = {0}", this.Azimuth).AppendLine();
-            }
-            if ((object)this.TargetHeight != null)
-            {
-                buff.AppendFormat("targetHeight = {0}", this.TargetHeight).AppendLine();
-            }
-            if ((object)this.Circle != null)
-            {
-                buff.AppendFormat("circle = {0}", this.Circle).AppendLine();
-            }
-            if ((object)this.SetupID != null)
-            {
-                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -102,40 +111,39 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Id;
-        /// <summary>
-        /// Represents a normalized angular value that indicates a horizontal direction, expressed in the specified Direction units. Assume 0 degrees = north
-        /// </summary>
+        #endregion
 
-        public double? Azimuth;
+        #region object
 
-        public double? TargetHeight;
-        /// <summary>
-        /// Represents a normalized angular value in the specified Angular units. Assume 0 degrees = east
-        /// </summary>
-
-        public double Circle;
-
-        public string SetupID;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.Azimuth != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("azimuth = {0}", this.Azimuth).AppendLine();
             }
-            if (name.EqualsIgnoreCase("BacksightPoint"))
+            if ((object)this.TargetHeight != null)
             {
-                return Tuple.Create("BacksightPoint", this.NewReader<PointType>());
+                buff.AppendFormat("targetHeight = {0}", this.TargetHeight).AppendLine();
+            }
+            if ((object)this.Circle != null)
+            {
+                buff.AppendFormat("circle = {0}", this.Circle).AppendLine();
+            }
+            if ((object)this.SetupID != null)
+            {
+                buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

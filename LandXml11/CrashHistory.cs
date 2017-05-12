@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,43 @@ namespace XmlSchemaProcessor.LandXml11
         public CrashHistory(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public DateTime? Year;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? Location1;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? Location2;
+
+        public CrashSeverityType? Severity;
+
+        public CrashIntersectionRelation? IntersectionRelation;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? IntersectionLocation;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -43,39 +78,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("intersectionLocation"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Year != null)
-            {
-                buff.AppendFormat("year = {0}", this.Year).AppendLine();
-            }
-            if ((object)this.Location1 != null)
-            {
-                buff.AppendFormat("location-1 = {0}", this.Location1).AppendLine();
-            }
-            if ((object)this.Location2 != null)
-            {
-                buff.AppendFormat("location-2 = {0}", this.Location2).AppendLine();
-            }
-            if ((object)this.Severity != null)
-            {
-                buff.AppendFormat("severity = {0}", this.Severity).AppendLine();
-            }
-            if ((object)this.IntersectionRelation != null)
-            {
-                buff.AppendFormat("intersectionRelation = {0}", this.IntersectionRelation).AppendLine();
-            }
-            if ((object)this.IntersectionLocation != null)
-            {
-                buff.AppendFormat("intersectionLocation = {0}", this.IntersectionLocation).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -110,37 +112,43 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public DateTime? Year;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
+        #endregion
 
-        public double? Location1;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
+        #region object
 
-        public double? Location2;
-
-        public CrashSeverityType? Severity;
-
-        public CrashIntersectionRelation? IntersectionRelation;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
-
-        public double? IntersectionLocation;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Year != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("year = {0}", this.Year).AppendLine();
+            }
+            if ((object)this.Location1 != null)
+            {
+                buff.AppendFormat("location-1 = {0}", this.Location1).AppendLine();
+            }
+            if ((object)this.Location2 != null)
+            {
+                buff.AppendFormat("location-2 = {0}", this.Location2).AppendLine();
+            }
+            if ((object)this.Severity != null)
+            {
+                buff.AppendFormat("severity = {0}", this.Severity).AppendLine();
+            }
+            if ((object)this.IntersectionRelation != null)
+            {
+                buff.AppendFormat("intersectionRelation = {0}", this.IntersectionRelation).AppendLine();
+            }
+            if ((object)this.IntersectionLocation != null)
+            {
+                buff.AppendFormat("intersectionLocation = {0}", this.IntersectionLocation).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Choice [0, *]
@@ -21,6 +19,34 @@ namespace XmlSchemaProcessor.LandXml11
         public TargetSetup(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Id;
+
+        public double? TargetHeight;
+
+        public double? EdmTargetVertOffset;
+
+        public double? PrismConstant;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -39,31 +65,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("prismConstant"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.TargetHeight != null)
-            {
-                buff.AppendFormat("targetHeight = {0}", this.TargetHeight).AppendLine();
-            }
-            if ((object)this.EdmTargetVertOffset != null)
-            {
-                buff.AppendFormat("edmTargetVertOffset = {0}", this.EdmTargetVertOffset).AppendLine();
-            }
-            if ((object)this.PrismConstant != null)
-            {
-                buff.AppendFormat("prismConstant = {0}", this.PrismConstant).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -90,28 +91,35 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public string Id;
+        #endregion
 
-        public double? TargetHeight;
+        #region object
 
-        public double? EdmTargetVertOffset;
-
-        public double? PrismConstant;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.TargetHeight != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("targetHeight = {0}", this.TargetHeight).AppendLine();
+            }
+            if ((object)this.EdmTargetVertOffset != null)
+            {
+                buff.AppendFormat("edmTargetVertOffset = {0}", this.EdmTargetVertOffset).AppendLine();
+            }
+            if ((object)this.PrismConstant != null)
+            {
+                buff.AppendFormat("prismConstant = {0}", this.PrismConstant).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

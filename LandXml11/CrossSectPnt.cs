@@ -7,13 +7,54 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : true
-    // includeContent : false
     public class CrossSectPnt : PointType
     {
         public CrossSectPnt(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public DataFormatType? DataFormat;
+        /// <summary>
+        /// A reference name value referring to Alignment.name attribute.
+        /// </summary>
+
+        public string AlignRef;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? AlignRefStation;
+        /// <summary>
+        /// A reference name value referring to PlanFeature.name attribute.
+        /// </summary>
+
+        public string PlanFeatureRef;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? PlanFeatureRefStation;
+        /// <summary>
+        /// A reference name value referring to Parcel.name attribute.
+        /// </summary>
+
+        public string ParcelRef;
+        /// <summary>
+        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
+        /// </summary>
+
+        public double? ParcelRefStation;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -42,43 +83,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("parcelRefStation"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.DataFormat != null)
-            {
-                buff.AppendFormat("dataFormat = {0} defvalue = {1}", this.DataFormat, "Offset Elevation").AppendLine();
-            }
-            if ((object)this.AlignRef != null)
-            {
-                buff.AppendFormat("alignRef = {0}", this.AlignRef).AppendLine();
-            }
-            if ((object)this.AlignRefStation != null)
-            {
-                buff.AppendFormat("alignRefStation = {0}", this.AlignRefStation).AppendLine();
-            }
-            if ((object)this.PlanFeatureRef != null)
-            {
-                buff.AppendFormat("planFeatureRef = {0}", this.PlanFeatureRef).AppendLine();
-            }
-            if ((object)this.PlanFeatureRefStation != null)
-            {
-                buff.AppendFormat("planFeatureRefStation = {0}", this.PlanFeatureRefStation).AppendLine();
-            }
-            if ((object)this.ParcelRef != null)
-            {
-                buff.AppendFormat("parcelRef = {0}", this.ParcelRef).AppendLine();
-            }
-            if ((object)this.ParcelRefStation != null)
-            {
-                buff.AppendFormat("parcelRefStation = {0}", this.ParcelRefStation).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -117,43 +121,47 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public DataFormatType? DataFormat;
-        /// <summary>
-        /// A reference name value referring to Alignment.name attribute.
-        /// </summary>
+        #endregion
 
-        public string AlignRef;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
+        #region object
 
-        public double? AlignRefStation;
-        /// <summary>
-        /// A reference name value referring to PlanFeature.name attribute.
-        /// </summary>
-
-        public string PlanFeatureRef;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
-
-        public double? PlanFeatureRefStation;
-        /// <summary>
-        /// A reference name value referring to Parcel.name attribute.
-        /// </summary>
-
-        public string ParcelRef;
-        /// <summary>
-        /// Represents the actual measured distance along the geometry in numeric decimal form expressed in linear units. Also known as the internal station value where no station equations are applied.
-        /// </summary>
-
-        public double? ParcelRefStation;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.DataFormat != null)
+            {
+                buff.AppendFormat("dataFormat = {0} defvalue = {1}", this.DataFormat, "Offset Elevation").AppendLine();
+            }
+            if ((object)this.AlignRef != null)
+            {
+                buff.AppendFormat("alignRef = {0}", this.AlignRef).AppendLine();
+            }
+            if ((object)this.AlignRefStation != null)
+            {
+                buff.AppendFormat("alignRefStation = {0}", this.AlignRefStation).AppendLine();
+            }
+            if ((object)this.PlanFeatureRef != null)
+            {
+                buff.AppendFormat("planFeatureRef = {0}", this.PlanFeatureRef).AppendLine();
+            }
+            if ((object)this.PlanFeatureRefStation != null)
+            {
+                buff.AppendFormat("planFeatureRefStation = {0}", this.PlanFeatureRefStation).AppendLine();
+            }
+            if ((object)this.ParcelRef != null)
+            {
+                buff.AppendFormat("parcelRef = {0}", this.ParcelRef).AppendLine();
+            }
+            if ((object)this.ParcelRefStation != null)
+            {
+                buff.AppendFormat("parcelRefStation = {0}", this.ParcelRefStation).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

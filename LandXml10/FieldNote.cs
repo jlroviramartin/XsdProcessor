@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Place the note as a text value between the FieldNote element tags.
     ///    You may also place any valid XML structure inside this tag.
@@ -22,19 +20,22 @@ namespace XmlSchemaProcessor.LandXml10
         {
         }
 
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -44,11 +45,18 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
+        #endregion
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        #region object
+
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

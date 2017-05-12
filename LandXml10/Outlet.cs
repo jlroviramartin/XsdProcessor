@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : true
-    // includeContent : false
     /// <summary>
     /// Identifies a drain point from the watershed with a space delimited "northing easting elevation" value.
     /// If it drains to another known watershed, then the name of that watershed is identified by the "refWs" attribute.
@@ -20,6 +18,23 @@ namespace XmlSchemaProcessor.LandXml10
         {
         }
 
+        /// <summary>
+        /// A reference name value referring to WaterShed.name attribute.
+        /// </summary>
+
+        public string RefWS;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -28,19 +43,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("refWS"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.RefWS != null)
-            {
-                buff.AppendFormat("refWS = {0}", this.RefWS).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -55,17 +57,23 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// A reference name value referring to WaterShed.name attribute.
-        /// </summary>
+        #endregion
 
-        public string RefWS;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.RefWS != null)
+            {
+                buff.AppendFormat("refWS = {0}", this.RefWS).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

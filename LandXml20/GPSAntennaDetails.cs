@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Choice [0, *]
@@ -22,6 +20,48 @@ namespace XmlSchemaProcessor.LandXml20
         public GPSAntennaDetails(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Id;
+
+        public string Manufacturer;
+
+        public string Model;
+
+        public string SerialNumber;
+
+        public double? Latitude;
+
+        public double? Longitude;
+
+        public double? Altitude;
+
+        public double? EllipsiodalHeight;
+
+        public double? OrthometricHeight;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("Monument"))
+            {
+                return Tuple.Create("Monument", this.NewReader<Monument>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -55,51 +95,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("orthometricHeight"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Id != null)
-            {
-                buff.AppendFormat("id = {0}", this.Id).AppendLine();
-            }
-            if ((object)this.Manufacturer != null)
-            {
-                buff.AppendFormat("manufacturer = {0}", this.Manufacturer).AppendLine();
-            }
-            if ((object)this.Model != null)
-            {
-                buff.AppendFormat("model = {0}", this.Model).AppendLine();
-            }
-            if ((object)this.SerialNumber != null)
-            {
-                buff.AppendFormat("serialNumber = {0}", this.SerialNumber).AppendLine();
-            }
-            if ((object)this.Latitude != null)
-            {
-                buff.AppendFormat("latitude = {0}", this.Latitude).AppendLine();
-            }
-            if ((object)this.Longitude != null)
-            {
-                buff.AppendFormat("longitude = {0}", this.Longitude).AppendLine();
-            }
-            if ((object)this.Altitude != null)
-            {
-                buff.AppendFormat("altitude = {0}", this.Altitude).AppendLine();
-            }
-            if ((object)this.EllipsiodalHeight != null)
-            {
-                buff.AppendFormat("ellipsiodalHeight = {0}", this.EllipsiodalHeight).AppendLine();
-            }
-            if ((object)this.OrthometricHeight != null)
-            {
-                buff.AppendFormat("orthometricHeight = {0}", this.OrthometricHeight).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -146,42 +141,55 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Id;
+        #endregion
 
-        public string Manufacturer;
+        #region object
 
-        public string Model;
-
-        public string SerialNumber;
-
-        public double? Latitude;
-
-        public double? Longitude;
-
-        public double? Altitude;
-
-        public double? EllipsiodalHeight;
-
-        public double? OrthometricHeight;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Id != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("id = {0}", this.Id).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.Manufacturer != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("manufacturer = {0}", this.Manufacturer).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Monument"))
+            if ((object)this.Model != null)
             {
-                return Tuple.Create("Monument", this.NewReader<Monument>());
+                buff.AppendFormat("model = {0}", this.Model).AppendLine();
+            }
+            if ((object)this.SerialNumber != null)
+            {
+                buff.AppendFormat("serialNumber = {0}", this.SerialNumber).AppendLine();
+            }
+            if ((object)this.Latitude != null)
+            {
+                buff.AppendFormat("latitude = {0}", this.Latitude).AppendLine();
+            }
+            if ((object)this.Longitude != null)
+            {
+                buff.AppendFormat("longitude = {0}", this.Longitude).AppendLine();
+            }
+            if ((object)this.Altitude != null)
+            {
+                buff.AppendFormat("altitude = {0}", this.Altitude).AppendLine();
+            }
+            if ((object)this.EllipsiodalHeight != null)
+            {
+                buff.AppendFormat("ellipsiodalHeight = {0}", this.EllipsiodalHeight).AppendLine();
+            }
+            if ((object)this.OrthometricHeight != null)
+            {
+                buff.AppendFormat("orthometricHeight = {0}", this.OrthometricHeight).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

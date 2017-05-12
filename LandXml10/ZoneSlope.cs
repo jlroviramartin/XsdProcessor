@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,51 @@ namespace XmlSchemaProcessor.LandXml10
         public ZoneSlope(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double StaStart;
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double StaEnd;
+
+        public double? StartVertValue;
+
+        public ZoneVertType? StartVertType;
+
+        public double EndVertValue;
+
+        public ZoneVertType EndVertType;
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? ParabolicStartStation;
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? ParabolicEndStation;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -49,47 +92,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("parabolicEndStation"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.StaEnd != null)
-            {
-                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
-            }
-            if ((object)this.StartVertValue != null)
-            {
-                buff.AppendFormat("startVertValue = {0}", this.StartVertValue).AppendLine();
-            }
-            if ((object)this.StartVertType != null)
-            {
-                buff.AppendFormat("startVertType = {0}", this.StartVertType).AppendLine();
-            }
-            if ((object)this.EndVertValue != null)
-            {
-                buff.AppendFormat("endVertValue = {0}", this.EndVertValue).AppendLine();
-            }
-            if ((object)this.EndVertType != null)
-            {
-                buff.AppendFormat("endVertType = {0}", this.EndVertType).AppendLine();
-            }
-            if ((object)this.ParabolicStartStation != null)
-            {
-                buff.AppendFormat("parabolicStartStation = {0}", this.ParabolicStartStation).AppendLine();
-            }
-            if ((object)this.ParabolicEndStation != null)
-            {
-                buff.AppendFormat("parabolicEndStation = {0}", this.ParabolicEndStation).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -132,45 +134,51 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #endregion
 
-        public double StaStart;
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #region object
 
-        public double StaEnd;
-
-        public double? StartVertValue;
-
-        public ZoneVertType? StartVertType;
-
-        public double EndVertValue;
-
-        public ZoneVertType EndVertType;
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
-
-        public double? ParabolicStartStation;
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
-
-        public double? ParabolicEndStation;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.StaStart != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.StaEnd != null)
+            {
+                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
+            }
+            if ((object)this.StartVertValue != null)
+            {
+                buff.AppendFormat("startVertValue = {0}", this.StartVertValue).AppendLine();
+            }
+            if ((object)this.StartVertType != null)
+            {
+                buff.AppendFormat("startVertType = {0}", this.StartVertType).AppendLine();
+            }
+            if ((object)this.EndVertValue != null)
+            {
+                buff.AppendFormat("endVertValue = {0}", this.EndVertValue).AppendLine();
+            }
+            if ((object)this.EndVertType != null)
+            {
+                buff.AppendFormat("endVertType = {0}", this.EndVertType).AppendLine();
+            }
+            if ((object)this.ParabolicStartStation != null)
+            {
+                buff.AppendFormat("parabolicStartStation = {0}", this.ParabolicStartStation).AppendLine();
+            }
+            if ((object)this.ParabolicEndStation != null)
+            {
+                buff.AppendFormat("parabolicEndStation = {0}", this.ParabolicEndStation).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

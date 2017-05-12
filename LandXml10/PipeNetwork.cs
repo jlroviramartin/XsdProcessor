@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// This element contains one "Structs" collection element and one "Pipes" collection element.
     /// keyRef is a Schema validation mechanism that ensures that the "structRef" and "pipeRef" attribute values have corresponding Pipe and Struct "name" values"
@@ -23,6 +21,45 @@ namespace XmlSchemaProcessor.LandXml10
         public PipeNetwork(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public PipeNetworkType PipeNetType;
+        /// <summary>
+        /// A reference name value referring to Alignment.name attribute.
+        /// </summary>
+
+        public string AlignmentRef;
+
+        public string Desc;
+
+        public string OID;
+
+        public StateType? State;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Pipes"))
+            {
+                return Tuple.Create("Pipes", this.NewReader<Pipes>());
+            }
+            if (name.EqualsIgnoreCase("Structs"))
+            {
+                return Tuple.Create("Structs", this.NewReader<Structs>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -47,39 +84,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("state"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.PipeNetType != null)
-            {
-                buff.AppendFormat("pipeNetType = {0}", this.PipeNetType).AppendLine();
-            }
-            if ((object)this.AlignmentRef != null)
-            {
-                buff.AppendFormat("alignmentRef = {0}", this.AlignmentRef).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.OID != null)
-            {
-                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -114,39 +118,43 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public PipeNetworkType PipeNetType;
-        /// <summary>
-        /// A reference name value referring to Alignment.name attribute.
-        /// </summary>
+        #region object
 
-        public string AlignmentRef;
-
-        public string Desc;
-
-        public string OID;
-
-        public StateType? State;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Pipes"))
+            if ((object)this.PipeNetType != null)
             {
-                return Tuple.Create("Pipes", this.NewReader<Pipes>());
+                buff.AppendFormat("pipeNetType = {0}", this.PipeNetType).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Structs"))
+            if ((object)this.AlignmentRef != null)
             {
-                return Tuple.Create("Structs", this.NewReader<Structs>());
+                buff.AppendFormat("alignmentRef = {0}", this.AlignmentRef).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.OID != null)
+            {
+                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

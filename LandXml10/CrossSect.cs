@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     CrossSectSurf [1, *]
@@ -20,6 +18,51 @@ namespace XmlSchemaProcessor.LandXml10
         public CrossSect(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double Sta;
+        /// <summary>
+        /// Represents a normalized angular value in the specified Angular units.
+        /// </summary>
+
+        public double? AngleSkew;
+
+        public double? AreaCut;
+
+        public double? AreaFill;
+
+        public double? CentroidCut;
+
+        public double? CentroidFill;
+
+        public string Desc;
+
+        public string Name;
+
+        public string SectType;
+
+        public double? VolumeCut;
+
+        public double? VolumeFill;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("CrossSectSurf"))
+            {
+                return Tuple.Create("CrossSectSurf", this.NewReader<CrossSectSurf>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -59,59 +102,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("volumeFill"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Sta != null)
-            {
-                buff.AppendFormat("sta = {0}", this.Sta).AppendLine();
-            }
-            if ((object)this.AngleSkew != null)
-            {
-                buff.AppendFormat("angleSkew = {0}", this.AngleSkew).AppendLine();
-            }
-            if ((object)this.AreaCut != null)
-            {
-                buff.AppendFormat("areaCut = {0}", this.AreaCut).AppendLine();
-            }
-            if ((object)this.AreaFill != null)
-            {
-                buff.AppendFormat("areaFill = {0}", this.AreaFill).AppendLine();
-            }
-            if ((object)this.CentroidCut != null)
-            {
-                buff.AppendFormat("centroidCut = {0}", this.CentroidCut).AppendLine();
-            }
-            if ((object)this.CentroidFill != null)
-            {
-                buff.AppendFormat("centroidFill = {0}", this.CentroidFill).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.SectType != null)
-            {
-                buff.AppendFormat("sectType = {0}", this.SectType).AppendLine();
-            }
-            if ((object)this.VolumeCut != null)
-            {
-                buff.AppendFormat("volumeCut = {0}", this.VolumeCut).AppendLine();
-            }
-            if ((object)this.VolumeFill != null)
-            {
-                buff.AppendFormat("volumeFill = {0}", this.VolumeFill).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -166,45 +156,63 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public double Sta;
-        /// <summary>
-        /// Represents a normalized angular value in the specified Angular units.
-        /// </summary>
+        #endregion
 
-        public double? AngleSkew;
+        #region object
 
-        public double? AreaCut;
-
-        public double? AreaFill;
-
-        public double? CentroidCut;
-
-        public double? CentroidFill;
-
-        public string Desc;
-
-        public string Name;
-
-        public string SectType;
-
-        public double? VolumeCut;
-
-        public double? VolumeFill;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Sta != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("sta = {0}", this.Sta).AppendLine();
             }
-            if (name.EqualsIgnoreCase("CrossSectSurf"))
+            if ((object)this.AngleSkew != null)
             {
-                return Tuple.Create("CrossSectSurf", this.NewReader<CrossSectSurf>());
+                buff.AppendFormat("angleSkew = {0}", this.AngleSkew).AppendLine();
+            }
+            if ((object)this.AreaCut != null)
+            {
+                buff.AppendFormat("areaCut = {0}", this.AreaCut).AppendLine();
+            }
+            if ((object)this.AreaFill != null)
+            {
+                buff.AppendFormat("areaFill = {0}", this.AreaFill).AppendLine();
+            }
+            if ((object)this.CentroidCut != null)
+            {
+                buff.AppendFormat("centroidCut = {0}", this.CentroidCut).AppendLine();
+            }
+            if ((object)this.CentroidFill != null)
+            {
+                buff.AppendFormat("centroidFill = {0}", this.CentroidFill).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.SectType != null)
+            {
+                buff.AppendFormat("sectType = {0}", this.SectType).AppendLine();
+            }
+            if ((object)this.VolumeCut != null)
+            {
+                buff.AppendFormat("volumeCut = {0}", this.VolumeCut).AppendLine();
+            }
+            if ((object)this.VolumeFill != null)
+            {
+                buff.AppendFormat("volumeFill = {0}", this.VolumeFill).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

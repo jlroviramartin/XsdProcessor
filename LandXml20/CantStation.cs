@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// A cant station.
     ///             The “station” is a required double that is internal station value.
@@ -31,6 +29,43 @@ namespace XmlSchemaProcessor.LandXml20
         public CantStation(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public double Station;
+
+        public double? EquilibriumCant;
+
+        public double AppliedCant;
+
+        public double? CantDeficiency;
+
+        public double? CantExcess;
+
+        public double? RateOfChangeOfAppliedCantOverTime;
+
+        public double? RateOfChangeOfAppliedCantOverLength;
+
+        public double? RateOfChangeOfCantDeficiencyOverTime;
+
+        public double? CantGradient;
+
+        public double? Speed;
+
+        public SpiralType? TransitionType;
+
+        public Clockwise Curvature;
+
+        public bool? Adverse;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -76,67 +111,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("adverse"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Station != null)
-            {
-                buff.AppendFormat("station = {0}", this.Station).AppendLine();
-            }
-            if ((object)this.EquilibriumCant != null)
-            {
-                buff.AppendFormat("equilibriumCant = {0}", this.EquilibriumCant).AppendLine();
-            }
-            if ((object)this.AppliedCant != null)
-            {
-                buff.AppendFormat("appliedCant = {0}", this.AppliedCant).AppendLine();
-            }
-            if ((object)this.CantDeficiency != null)
-            {
-                buff.AppendFormat("cantDeficiency = {0}", this.CantDeficiency).AppendLine();
-            }
-            if ((object)this.CantExcess != null)
-            {
-                buff.AppendFormat("cantExcess = {0}", this.CantExcess).AppendLine();
-            }
-            if ((object)this.RateOfChangeOfAppliedCantOverTime != null)
-            {
-                buff.AppendFormat("rateOfChangeOfAppliedCantOverTime = {0}", this.RateOfChangeOfAppliedCantOverTime).AppendLine();
-            }
-            if ((object)this.RateOfChangeOfAppliedCantOverLength != null)
-            {
-                buff.AppendFormat("rateOfChangeOfAppliedCantOverLength = {0}", this.RateOfChangeOfAppliedCantOverLength).AppendLine();
-            }
-            if ((object)this.RateOfChangeOfCantDeficiencyOverTime != null)
-            {
-                buff.AppendFormat("rateOfChangeOfCantDeficiencyOverTime = {0}", this.RateOfChangeOfCantDeficiencyOverTime).AppendLine();
-            }
-            if ((object)this.CantGradient != null)
-            {
-                buff.AppendFormat("cantGradient = {0}", this.CantGradient).AppendLine();
-            }
-            if ((object)this.Speed != null)
-            {
-                buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
-            }
-            if ((object)this.TransitionType != null)
-            {
-                buff.AppendFormat("transitionType = {0}", this.TransitionType).AppendLine();
-            }
-            if ((object)this.Curvature != null)
-            {
-                buff.AppendFormat("curvature = {0}", this.Curvature).AppendLine();
-            }
-            if ((object)this.Adverse != null)
-            {
-                buff.AppendFormat("adverse = {0}", this.Adverse).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -199,37 +173,71 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public double Station;
+        #endregion
 
-        public double? EquilibriumCant;
+        #region object
 
-        public double AppliedCant;
-
-        public double? CantDeficiency;
-
-        public double? CantExcess;
-
-        public double? RateOfChangeOfAppliedCantOverTime;
-
-        public double? RateOfChangeOfAppliedCantOverLength;
-
-        public double? RateOfChangeOfCantDeficiencyOverTime;
-
-        public double? CantGradient;
-
-        public double? Speed;
-
-        public SpiralType? TransitionType;
-
-        public Clockwise Curvature;
-
-        public bool? Adverse;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Station != null)
+            {
+                buff.AppendFormat("station = {0}", this.Station).AppendLine();
+            }
+            if ((object)this.EquilibriumCant != null)
+            {
+                buff.AppendFormat("equilibriumCant = {0}", this.EquilibriumCant).AppendLine();
+            }
+            if ((object)this.AppliedCant != null)
+            {
+                buff.AppendFormat("appliedCant = {0}", this.AppliedCant).AppendLine();
+            }
+            if ((object)this.CantDeficiency != null)
+            {
+                buff.AppendFormat("cantDeficiency = {0}", this.CantDeficiency).AppendLine();
+            }
+            if ((object)this.CantExcess != null)
+            {
+                buff.AppendFormat("cantExcess = {0}", this.CantExcess).AppendLine();
+            }
+            if ((object)this.RateOfChangeOfAppliedCantOverTime != null)
+            {
+                buff.AppendFormat("rateOfChangeOfAppliedCantOverTime = {0}", this.RateOfChangeOfAppliedCantOverTime).AppendLine();
+            }
+            if ((object)this.RateOfChangeOfAppliedCantOverLength != null)
+            {
+                buff.AppendFormat("rateOfChangeOfAppliedCantOverLength = {0}", this.RateOfChangeOfAppliedCantOverLength).AppendLine();
+            }
+            if ((object)this.RateOfChangeOfCantDeficiencyOverTime != null)
+            {
+                buff.AppendFormat("rateOfChangeOfCantDeficiencyOverTime = {0}", this.RateOfChangeOfCantDeficiencyOverTime).AppendLine();
+            }
+            if ((object)this.CantGradient != null)
+            {
+                buff.AppendFormat("cantGradient = {0}", this.CantGradient).AppendLine();
+            }
+            if ((object)this.Speed != null)
+            {
+                buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
+            }
+            if ((object)this.TransitionType != null)
+            {
+                buff.AppendFormat("transitionType = {0}", this.TransitionType).AppendLine();
+            }
+            if ((object)this.Curvature != null)
+            {
+                buff.AppendFormat("curvature = {0}", this.Curvature).AppendLine();
+            }
+            if ((object)this.Adverse != null)
+            {
+                buff.AppendFormat("adverse = {0}", this.Adverse).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

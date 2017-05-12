@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// This element represents graphical and material characteristics for elements, such as Surface faces groups, individual surface face elements, CgPoints groups, CgPoint, CoordGeom, Pipe, Struct, Parcel and planFeature elements
     /// Attribute values:
@@ -30,6 +28,49 @@ namespace XmlSchemaProcessor.LandXml20
         public Material(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public int Index;
+
+        public string LayerName;
+
+        public string Desc;
+
+        public string Color;
+        /// <summary>
+        /// basic CAD style line types
+        /// </summary>
+
+        public LineTypes? LineType;
+
+        public string TextureImageRef;
+
+        public double? TextureImageScale;
+
+        public double? SymbolXScale;
+
+        public double? SymbolYScale;
+
+        public double? SymbolZScale;
+        /// <summary>
+        /// Represents a normalized angular value in the specified Angular units. Assume 0 degrees = east
+        /// </summary>
+
+        public double? SymbolRotation;
+
+        public string SymbolRef;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -75,67 +116,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("symbolRef"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Index != null)
-            {
-                buff.AppendFormat("index = {0}", this.Index).AppendLine();
-            }
-            if ((object)this.LayerName != null)
-            {
-                buff.AppendFormat("layerName = {0}", this.LayerName).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Color != null)
-            {
-                buff.AppendFormat("color = {0}", this.Color).AppendLine();
-            }
-            if ((object)this.LineType != null)
-            {
-                buff.AppendFormat("lineType = {0}", this.LineType).AppendLine();
-            }
-            if ((object)this.TextureImageRef != null)
-            {
-                buff.AppendFormat("textureImageRef = {0}", this.TextureImageRef).AppendLine();
-            }
-            if ((object)this.TextureImageScale != null)
-            {
-                buff.AppendFormat("textureImageScale = {0}", this.TextureImageScale).AppendLine();
-            }
-            if ((object)this.SymbolXScale != null)
-            {
-                buff.AppendFormat("symbolXScale = {0}", this.SymbolXScale).AppendLine();
-            }
-            if ((object)this.SymbolYScale != null)
-            {
-                buff.AppendFormat("symbolYScale = {0}", this.SymbolYScale).AppendLine();
-            }
-            if ((object)this.SymbolZScale != null)
-            {
-                buff.AppendFormat("symbolZScale = {0}", this.SymbolZScale).AppendLine();
-            }
-            if ((object)this.SymbolRotation != null)
-            {
-                buff.AppendFormat("symbolRotation = {0}", this.SymbolRotation).AppendLine();
-            }
-            if ((object)this.SymbolRef != null)
-            {
-                buff.AppendFormat("symbolRef = {0}", this.SymbolRef).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -198,43 +178,71 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public int Index;
+        #region object
 
-        public string LayerName;
-
-        public string Desc;
-
-        public string Color;
-        /// <summary>
-        /// basic CAD style line types
-        /// </summary>
-
-        public LineTypes? LineType;
-
-        public string TextureImageRef;
-
-        public double? TextureImageScale;
-
-        public double? SymbolXScale;
-
-        public double? SymbolYScale;
-
-        public double? SymbolZScale;
-        /// <summary>
-        /// Represents a normalized angular value in the specified Angular units. Assume 0 degrees = east
-        /// </summary>
-
-        public double? SymbolRotation;
-
-        public string SymbolRef;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Index != null)
+            {
+                buff.AppendFormat("index = {0}", this.Index).AppendLine();
+            }
+            if ((object)this.LayerName != null)
+            {
+                buff.AppendFormat("layerName = {0}", this.LayerName).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Color != null)
+            {
+                buff.AppendFormat("color = {0}", this.Color).AppendLine();
+            }
+            if ((object)this.LineType != null)
+            {
+                buff.AppendFormat("lineType = {0}", this.LineType).AppendLine();
+            }
+            if ((object)this.TextureImageRef != null)
+            {
+                buff.AppendFormat("textureImageRef = {0}", this.TextureImageRef).AppendLine();
+            }
+            if ((object)this.TextureImageScale != null)
+            {
+                buff.AppendFormat("textureImageScale = {0}", this.TextureImageScale).AppendLine();
+            }
+            if ((object)this.SymbolXScale != null)
+            {
+                buff.AppendFormat("symbolXScale = {0}", this.SymbolXScale).AppendLine();
+            }
+            if ((object)this.SymbolYScale != null)
+            {
+                buff.AppendFormat("symbolYScale = {0}", this.SymbolYScale).AppendLine();
+            }
+            if ((object)this.SymbolZScale != null)
+            {
+                buff.AppendFormat("symbolZScale = {0}", this.SymbolZScale).AppendLine();
+            }
+            if ((object)this.SymbolRotation != null)
+            {
+                buff.AppendFormat("symbolRotation = {0}", this.SymbolRotation).AppendLine();
+            }
+            if ((object)this.SymbolRef != null)
+            {
+                buff.AppendFormat("symbolRef = {0}", this.SymbolRef).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

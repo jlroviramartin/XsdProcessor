@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [1, *]
     ///     Units [1, 1]
@@ -30,109 +28,24 @@ namespace XmlSchemaProcessor.LandXml10
 
     public class LandXML : XsdBaseReader
     {
+        public static LandXML Process(System.Xml.XmlReader xmlReader)
+        {
+            while (xmlReader.Read() && (xmlReader.NodeType != System.Xml.XmlNodeType.Element))
+            {
+            }
+
+            if (xmlReader.NodeType != System.Xml.XmlNodeType.Element || !"LandXML".EqualsIgnoreCase(xmlReader.Name))
+            {
+                throw new Exception("Fichero Xml mal construido.");
+            }
+
+            LandXML node = new LandXML(xmlReader);
+            node.ReadAttributes();
+            return node;
+        }
+
         public LandXML(System.Xml.XmlReader reader) : base(reader)
         {
-        }
-
-        public override bool Read(IDictionary<string, string> attributes, string text)
-        {
-            base.Read(attributes, text);
-
-            this.Date = XsdConverter.Instance.Convert<DateTime>(
-                    attributes.GetSafe("date"));
-
-            this.Time = XsdConverter.Instance.Convert<DateTime>(
-                    attributes.GetSafe("time"));
-
-            this.Version = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("version"));
-
-            this.Language = XsdConverter.Instance.Convert<string>(
-                    attributes.GetSafe("language"));
-
-            this.ReadOnly = XsdConverter.Instance.Convert<bool?>(
-                    attributes.GetSafe("readOnly"));
-
-            this.LandXMLId = XsdConverter.Instance.Convert<int?>(
-                    attributes.GetSafe("LandXMLId"));
-
-            this.Crc = XsdConverter.Instance.Convert<int?>(
-                    attributes.GetSafe("crc"));
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Date != null)
-            {
-                buff.AppendFormat("date = {0}", this.Date).AppendLine();
-            }
-            if ((object)this.Time != null)
-            {
-                buff.AppendFormat("time = {0}", this.Time).AppendLine();
-            }
-            if ((object)this.Version != null)
-            {
-                buff.AppendFormat("version = {0}", this.Version).AppendLine();
-            }
-            if ((object)this.Language != null)
-            {
-                buff.AppendFormat("language = {0}", this.Language).AppendLine();
-            }
-            if ((object)this.ReadOnly != null)
-            {
-                buff.AppendFormat("readOnly = {0}", this.ReadOnly).AppendLine();
-            }
-            if ((object)this.LandXMLId != null)
-            {
-                buff.AppendFormat("LandXMLId = {0}", this.LandXMLId).AppendLine();
-            }
-            if ((object)this.Crc != null)
-            {
-                buff.AppendFormat("crc = {0}", this.Crc).AppendLine();
-            }
-
-            return buff.ToString();
-        }
-
-        public override string ToAttributes()
-        {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
-
-            if ((object)this.Date != null)
-            {
-                buff.Append("date", this.Date);
-            }
-            if ((object)this.Time != null)
-            {
-                buff.Append("time", this.Time);
-            }
-            if ((object)this.Version != null)
-            {
-                buff.Append("version", this.Version);
-            }
-            if ((object)this.Language != null)
-            {
-                buff.Append("language", this.Language);
-            }
-            if ((object)this.ReadOnly != null)
-            {
-                buff.Append("readOnly", this.ReadOnly);
-            }
-            if ((object)this.LandXMLId != null)
-            {
-                buff.Append("LandXMLId", this.LandXMLId);
-            }
-            if ((object)this.Crc != null)
-            {
-                buff.Append("crc", this.Crc);
-            }
-
-            return buff.ToString();
         }
 
         public DateTime Date;
@@ -149,6 +62,7 @@ namespace XmlSchemaProcessor.LandXml10
 
         public int? Crc;
 
+        #region XsdBaseReader
 
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
@@ -211,6 +125,116 @@ namespace XmlSchemaProcessor.LandXml10
 
             return null;
         }
+
+        #endregion
+
+        #region XsdBaseObject
+
+        public override bool Read(IDictionary<string, string> attributes, string text)
+        {
+            base.Read(attributes, text);
+
+            this.Date = XsdConverter.Instance.Convert<DateTime>(
+                    attributes.GetSafe("date"));
+
+            this.Time = XsdConverter.Instance.Convert<DateTime>(
+                    attributes.GetSafe("time"));
+
+            this.Version = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("version"));
+
+            this.Language = XsdConverter.Instance.Convert<string>(
+                    attributes.GetSafe("language"));
+
+            this.ReadOnly = XsdConverter.Instance.Convert<bool?>(
+                    attributes.GetSafe("readOnly"));
+
+            this.LandXMLId = XsdConverter.Instance.Convert<int?>(
+                    attributes.GetSafe("LandXMLId"));
+
+            this.Crc = XsdConverter.Instance.Convert<int?>(
+                    attributes.GetSafe("crc"));
+
+            return true;
+        }
+
+        public override string ToAttributes()
+        {
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+
+            if ((object)this.Date != null)
+            {
+                buff.Append("date", this.Date);
+            }
+            if ((object)this.Time != null)
+            {
+                buff.Append("time", this.Time);
+            }
+            if ((object)this.Version != null)
+            {
+                buff.Append("version", this.Version);
+            }
+            if ((object)this.Language != null)
+            {
+                buff.Append("language", this.Language);
+            }
+            if ((object)this.ReadOnly != null)
+            {
+                buff.Append("readOnly", this.ReadOnly);
+            }
+            if ((object)this.LandXMLId != null)
+            {
+                buff.Append("LandXMLId", this.LandXMLId);
+            }
+            if ((object)this.Crc != null)
+            {
+                buff.Append("crc", this.Crc);
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
+
+        #region object
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Date != null)
+            {
+                buff.AppendFormat("date = {0}", this.Date).AppendLine();
+            }
+            if ((object)this.Time != null)
+            {
+                buff.AppendFormat("time = {0}", this.Time).AppendLine();
+            }
+            if ((object)this.Version != null)
+            {
+                buff.AppendFormat("version = {0}", this.Version).AppendLine();
+            }
+            if ((object)this.Language != null)
+            {
+                buff.AppendFormat("language = {0}", this.Language).AppendLine();
+            }
+            if ((object)this.ReadOnly != null)
+            {
+                buff.AppendFormat("readOnly = {0}", this.ReadOnly).AppendLine();
+            }
+            if ((object)this.LandXMLId != null)
+            {
+                buff.AppendFormat("LandXMLId = {0}", this.LandXMLId).AppendLine();
+            }
+            if ((object)this.Crc != null)
+            {
+                buff.AppendFormat("crc = {0}", this.Crc).AppendLine();
+            }
+
+            return buff.ToString();
+        }
+
+        #endregion
     }
 }
 #endif

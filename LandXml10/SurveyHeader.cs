@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// We seemed to have doubled up on the survey purpose here, but the two are quite different - maybe need a different name
     /// Choice [0, *]
@@ -25,6 +23,88 @@ namespace XmlSchemaProcessor.LandXml10
         public SurveyHeader(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+        /// <summary>
+        /// Used by many of the Survey elements
+        /// </summary>
+
+        public PurposeType? Purpose;
+
+        public DateTime? StartTime;
+
+        public DateTime? EndTime;
+
+        public string Surveyor;
+
+        public string SurveyorFirm;
+
+        public string SurveyorReference;
+
+        public string SurveyorRegistration;
+
+        public string SurveyPurpose;
+        /// <summary>
+        /// This enumeration indicates whether the survey was acutally performed in the field, compiled from a series of existing surveys, or simply computed using known observations and maths
+        /// </summary>
+
+        public SurveyType? Type;
+
+        public string Class;
+
+        public string County;
+
+        public bool? ApplyAtmosphericCorrection;
+
+        public double? Pressure;
+
+        public double? Temperature;
+
+        public bool? ApplySeaLevelCorrection;
+
+        public double? ScaleFactor;
+
+        public double? SeaLevelCorrectionFactor;
+
+        public double? CombinedFactor;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("Personnel"))
+            {
+                return Tuple.Create("Personnel", this.NewReader<Personnel>());
+            }
+            if (name.EqualsIgnoreCase("MapPoint"))
+            {
+                return Tuple.Create("MapPoint", this.NewReader<PointType>());
+            }
+            if (name.EqualsIgnoreCase("Units"))
+            {
+                return Tuple.Create("Units", this.NewReader<Units>());
+            }
+            if (name.EqualsIgnoreCase("CoordinateSystem"))
+            {
+                return Tuple.Create("CoordinateSystem", this.NewReader<CoordinateSystem>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -91,95 +171,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("combinedFactor"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Purpose != null)
-            {
-                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
-            }
-            if ((object)this.StartTime != null)
-            {
-                buff.AppendFormat("startTime = {0}", this.StartTime).AppendLine();
-            }
-            if ((object)this.EndTime != null)
-            {
-                buff.AppendFormat("endTime = {0}", this.EndTime).AppendLine();
-            }
-            if ((object)this.Surveyor != null)
-            {
-                buff.AppendFormat("surveyor = {0}", this.Surveyor).AppendLine();
-            }
-            if ((object)this.SurveyorFirm != null)
-            {
-                buff.AppendFormat("surveyorFirm = {0}", this.SurveyorFirm).AppendLine();
-            }
-            if ((object)this.SurveyorReference != null)
-            {
-                buff.AppendFormat("surveyorReference = {0}", this.SurveyorReference).AppendLine();
-            }
-            if ((object)this.SurveyorRegistration != null)
-            {
-                buff.AppendFormat("surveyorRegistration = {0}", this.SurveyorRegistration).AppendLine();
-            }
-            if ((object)this.SurveyPurpose != null)
-            {
-                buff.AppendFormat("surveyPurpose = {0}", this.SurveyPurpose).AppendLine();
-            }
-            if ((object)this.Type != null)
-            {
-                buff.AppendFormat("type = {0}", this.Type).AppendLine();
-            }
-            if ((object)this.Class != null)
-            {
-                buff.AppendFormat("class = {0}", this.Class).AppendLine();
-            }
-            if ((object)this.County != null)
-            {
-                buff.AppendFormat("county = {0}", this.County).AppendLine();
-            }
-            if ((object)this.ApplyAtmosphericCorrection != null)
-            {
-                buff.AppendFormat("applyAtmosphericCorrection = {0}", this.ApplyAtmosphericCorrection).AppendLine();
-            }
-            if ((object)this.Pressure != null)
-            {
-                buff.AppendFormat("pressure = {0}", this.Pressure).AppendLine();
-            }
-            if ((object)this.Temperature != null)
-            {
-                buff.AppendFormat("temperature = {0}", this.Temperature).AppendLine();
-            }
-            if ((object)this.ApplySeaLevelCorrection != null)
-            {
-                buff.AppendFormat("applySeaLevelCorrection = {0}", this.ApplySeaLevelCorrection).AppendLine();
-            }
-            if ((object)this.ScaleFactor != null)
-            {
-                buff.AppendFormat("scaleFactor = {0}", this.ScaleFactor).AppendLine();
-            }
-            if ((object)this.SeaLevelCorrectionFactor != null)
-            {
-                buff.AppendFormat("seaLevelCorrectionFactor = {0}", this.SeaLevelCorrectionFactor).AppendLine();
-            }
-            if ((object)this.CombinedFactor != null)
-            {
-                buff.AppendFormat("combinedFactor = {0}", this.CombinedFactor).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -270,82 +261,99 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
-        /// <summary>
-        /// Used by many of the Survey elements
-        /// </summary>
+        #region object
 
-        public PurposeType? Purpose;
-
-        public DateTime? StartTime;
-
-        public DateTime? EndTime;
-
-        public string Surveyor;
-
-        public string SurveyorFirm;
-
-        public string SurveyorReference;
-
-        public string SurveyorRegistration;
-
-        public string SurveyPurpose;
-        /// <summary>
-        /// This enumeration indicates whether the survey was acutally performed in the field, compiled from a series of existing surveys, or simply computed using known observations and maths
-        /// </summary>
-
-        public SurveyType? Type;
-
-        public string Class;
-
-        public string County;
-
-        public bool? ApplyAtmosphericCorrection;
-
-        public double? Pressure;
-
-        public double? Temperature;
-
-        public bool? ApplySeaLevelCorrection;
-
-        public double? ScaleFactor;
-
-        public double? SeaLevelCorrectionFactor;
-
-        public double? CombinedFactor;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("FieldNote"))
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Personnel"))
+            if ((object)this.Purpose != null)
             {
-                return Tuple.Create("Personnel", this.NewReader<Personnel>());
+                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
             }
-            if (name.EqualsIgnoreCase("MapPoint"))
+            if ((object)this.StartTime != null)
             {
-                return Tuple.Create("MapPoint", this.NewReader<PointType>());
+                buff.AppendFormat("startTime = {0}", this.StartTime).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Units"))
+            if ((object)this.EndTime != null)
             {
-                return Tuple.Create("Units", this.NewReader<Units>());
+                buff.AppendFormat("endTime = {0}", this.EndTime).AppendLine();
             }
-            if (name.EqualsIgnoreCase("CoordinateSystem"))
+            if ((object)this.Surveyor != null)
             {
-                return Tuple.Create("CoordinateSystem", this.NewReader<CoordinateSystem>());
+                buff.AppendFormat("surveyor = {0}", this.Surveyor).AppendLine();
+            }
+            if ((object)this.SurveyorFirm != null)
+            {
+                buff.AppendFormat("surveyorFirm = {0}", this.SurveyorFirm).AppendLine();
+            }
+            if ((object)this.SurveyorReference != null)
+            {
+                buff.AppendFormat("surveyorReference = {0}", this.SurveyorReference).AppendLine();
+            }
+            if ((object)this.SurveyorRegistration != null)
+            {
+                buff.AppendFormat("surveyorRegistration = {0}", this.SurveyorRegistration).AppendLine();
+            }
+            if ((object)this.SurveyPurpose != null)
+            {
+                buff.AppendFormat("surveyPurpose = {0}", this.SurveyPurpose).AppendLine();
+            }
+            if ((object)this.Type != null)
+            {
+                buff.AppendFormat("type = {0}", this.Type).AppendLine();
+            }
+            if ((object)this.Class != null)
+            {
+                buff.AppendFormat("class = {0}", this.Class).AppendLine();
+            }
+            if ((object)this.County != null)
+            {
+                buff.AppendFormat("county = {0}", this.County).AppendLine();
+            }
+            if ((object)this.ApplyAtmosphericCorrection != null)
+            {
+                buff.AppendFormat("applyAtmosphericCorrection = {0}", this.ApplyAtmosphericCorrection).AppendLine();
+            }
+            if ((object)this.Pressure != null)
+            {
+                buff.AppendFormat("pressure = {0}", this.Pressure).AppendLine();
+            }
+            if ((object)this.Temperature != null)
+            {
+                buff.AppendFormat("temperature = {0}", this.Temperature).AppendLine();
+            }
+            if ((object)this.ApplySeaLevelCorrection != null)
+            {
+                buff.AppendFormat("applySeaLevelCorrection = {0}", this.ApplySeaLevelCorrection).AppendLine();
+            }
+            if ((object)this.ScaleFactor != null)
+            {
+                buff.AppendFormat("scaleFactor = {0}", this.ScaleFactor).AppendLine();
+            }
+            if ((object)this.SeaLevelCorrectionFactor != null)
+            {
+                buff.AppendFormat("seaLevelCorrectionFactor = {0}", this.SeaLevelCorrectionFactor).AppendLine();
+            }
+            if ((object)this.CombinedFactor != null)
+            {
+                buff.AppendFormat("combinedFactor = {0}", this.CombinedFactor).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

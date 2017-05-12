@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Sequence [1, 1]
     ///     Feature [0, *]
@@ -19,6 +17,47 @@ namespace XmlSchemaProcessor.LandXml20
         public Pond(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+        /// <summary>
+        /// A reference name value referring to Alignment.name attribute.
+        /// </summary>
+
+        public string AlignmentRef;
+        /// <summary>
+        /// A reference name value referring to Surface.name attribute.
+        /// </summary>
+
+        public string SurfaceRef;
+
+        public double? Volume;
+
+        public double? HazenWilliams;
+
+        public double? Mannings;
+        /// <summary>
+        /// A integer based index value to a table item in the material table.
+        /// </summary>
+
+        public IList<int?> M;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -49,47 +88,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("m"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.AlignmentRef != null)
-            {
-                buff.AppendFormat("alignmentRef = {0}", this.AlignmentRef).AppendLine();
-            }
-            if ((object)this.SurfaceRef != null)
-            {
-                buff.AppendFormat("surfaceRef = {0}", this.SurfaceRef).AppendLine();
-            }
-            if ((object)this.Volume != null)
-            {
-                buff.AppendFormat("volume = {0}", this.Volume).AppendLine();
-            }
-            if ((object)this.HazenWilliams != null)
-            {
-                buff.AppendFormat("hazenWilliams = {0}", this.HazenWilliams).AppendLine();
-            }
-            if ((object)this.Mannings != null)
-            {
-                buff.AppendFormat("mannings = {0}", this.Mannings).AppendLine();
-            }
-            if ((object)this.M != null)
-            {
-                buff.AppendFormat("m = {0}", this.M).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -132,41 +130,51 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
-        /// <summary>
-        /// A reference name value referring to Alignment.name attribute.
-        /// </summary>
+        #region object
 
-        public string AlignmentRef;
-        /// <summary>
-        /// A reference name value referring to Surface.name attribute.
-        /// </summary>
-
-        public string SurfaceRef;
-
-        public double? Volume;
-
-        public double? HazenWilliams;
-
-        public double? Mannings;
-        /// <summary>
-        /// A integer based index value to a table item in the material table.
-        /// </summary>
-
-        public IList<int?> M;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.AlignmentRef != null)
+            {
+                buff.AppendFormat("alignmentRef = {0}", this.AlignmentRef).AppendLine();
+            }
+            if ((object)this.SurfaceRef != null)
+            {
+                buff.AppendFormat("surfaceRef = {0}", this.SurfaceRef).AppendLine();
+            }
+            if ((object)this.Volume != null)
+            {
+                buff.AppendFormat("volume = {0}", this.Volume).AppendLine();
+            }
+            if ((object)this.HazenWilliams != null)
+            {
+                buff.AppendFormat("hazenWilliams = {0}", this.HazenWilliams).AppendLine();
+            }
+            if ((object)this.Mannings != null)
+            {
+                buff.AppendFormat("mannings = {0}", this.Mannings).AppendLine();
+            }
+            if ((object)this.M != null)
+            {
+                buff.AppendFormat("m = {0}", this.M).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

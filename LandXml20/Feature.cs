@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Used to include additional information that is not explicitly defined by the LandXML schema, Feature may contain one or more Property, DocFileRef or nested Feature elements. 
     /// NOTE: to allow any valid content, the explicit definitions for Property, DocFileRef and Feature have been commented out, but are still expected in common use.
@@ -25,6 +23,36 @@ namespace XmlSchemaProcessor.LandXml20
         {
         }
 
+        public string Name;
+
+        public string Code;
+
+        public string Source;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("DocFileRef"))
+            {
+                return Tuple.Create("DocFileRef", this.NewReader<DocFileRef>());
+            }
+            if (name.EqualsIgnoreCase("Property"))
+            {
+                return Tuple.Create("Property", this.NewReader<Property>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -39,27 +67,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("source"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Code != null)
-            {
-                buff.AppendFormat("code = {0}", this.Code).AppendLine();
-            }
-            if ((object)this.Source != null)
-            {
-                buff.AppendFormat("source = {0}", this.Source).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -82,30 +89,31 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Code;
+        #region object
 
-        public string Source;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("DocFileRef"))
+            if ((object)this.Code != null)
             {
-                return Tuple.Create("DocFileRef", this.NewReader<DocFileRef>());
+                buff.AppendFormat("code = {0}", this.Code).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Property"))
+            if ((object)this.Source != null)
             {
-                return Tuple.Create("Property", this.NewReader<Property>());
+                buff.AppendFormat("source = {0}", this.Source).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Used to include additional information that is not explicitly defined by the LandXML schema, Feature may contain one or more Property, DocFileRef or nested Feature elements. 
     /// NOTE: to allow any valid content, the explicit definitions for Property, DocFileRef and Feature have been commented out, but are still expected in common use.
@@ -23,6 +21,21 @@ namespace XmlSchemaProcessor.LandXml10
         {
         }
 
+        public string Code;
+
+        public string Source;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -34,23 +47,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("source"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Code != null)
-            {
-                buff.AppendFormat("code = {0}", this.Code).AppendLine();
-            }
-            if ((object)this.Source != null)
-            {
-                buff.AppendFormat("source = {0}", this.Source).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -69,15 +65,27 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        public string Code;
+        #endregion
 
-        public string Source;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Code != null)
+            {
+                buff.AppendFormat("code = {0}", this.Code).AppendLine();
+            }
+            if ((object)this.Source != null)
+            {
+                buff.AppendFormat("source = {0}", this.Source).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

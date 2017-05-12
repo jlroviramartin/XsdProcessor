@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [1, *]
     ///     Start [0, 1]
@@ -21,6 +19,64 @@ namespace XmlSchemaProcessor.LandXml11
         public GradeSurface(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// A reference name value referring to Alignment.name attribute.
+        /// </summary>
+
+        public string AlignmentRef;
+        /// <summary>
+        /// A reference name value referring to Alignment.name attribute.
+        /// </summary>
+
+        public string StationAlignmentRef;
+
+        public ZoneSurfaceType SurfaceType;
+        /// <summary>
+        /// A reference name value referring to Surface.name attribute.
+        /// </summary>
+
+        public string SurfaceRef;
+        /// <summary>
+        /// A list of reference names values refering to one or more Surface.name attributes.
+        /// </summary>
+
+        public IList<string> SurfaceRefs;
+        /// <summary>
+        /// A list of reference names values refering to one or more PointType derived name attributes.
+        /// </summary>
+
+        public IList<string> CgPointRefs;
+
+        public string Name;
+
+        public string Desc;
+
+        public StateType? State;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Zones"))
+            {
+                return Tuple.Create("Zones", this.NewReader<Zones>());
+            }
+            if (name.EqualsIgnoreCase("Start"))
+            {
+                return Tuple.Create("Start", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -54,51 +110,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("state"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.AlignmentRef != null)
-            {
-                buff.AppendFormat("alignmentRef = {0}", this.AlignmentRef).AppendLine();
-            }
-            if ((object)this.StationAlignmentRef != null)
-            {
-                buff.AppendFormat("stationAlignmentRef = {0}", this.StationAlignmentRef).AppendLine();
-            }
-            if ((object)this.SurfaceType != null)
-            {
-                buff.AppendFormat("surfaceType = {0}", this.SurfaceType).AppendLine();
-            }
-            if ((object)this.SurfaceRef != null)
-            {
-                buff.AppendFormat("surfaceRef = {0}", this.SurfaceRef).AppendLine();
-            }
-            if ((object)this.SurfaceRefs != null)
-            {
-                buff.AppendFormat("surfaceRefs = {0}", this.SurfaceRefs).AppendLine();
-            }
-            if ((object)this.CgPointRefs != null)
-            {
-                buff.AppendFormat("cgPointRefs = {0}", this.CgPointRefs).AppendLine();
-            }
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -145,58 +156,55 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        /// <summary>
-        /// A reference name value referring to Alignment.name attribute.
-        /// </summary>
+        #endregion
 
-        public string AlignmentRef;
-        /// <summary>
-        /// A reference name value referring to Alignment.name attribute.
-        /// </summary>
+        #region object
 
-        public string StationAlignmentRef;
-
-        public ZoneSurfaceType SurfaceType;
-        /// <summary>
-        /// A reference name value referring to Surface.name attribute.
-        /// </summary>
-
-        public string SurfaceRef;
-        /// <summary>
-        /// A list of reference names values refering to one or more Surface.name attributes.
-        /// </summary>
-
-        public IList<string> SurfaceRefs;
-        /// <summary>
-        /// A list of reference names values refering to one or more PointType derived name attributes.
-        /// </summary>
-
-        public IList<string> CgPointRefs;
-
-        public string Name;
-
-        public string Desc;
-
-        public StateType? State;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.AlignmentRef != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("alignmentRef = {0}", this.AlignmentRef).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Zones"))
+            if ((object)this.StationAlignmentRef != null)
             {
-                return Tuple.Create("Zones", this.NewReader<Zones>());
+                buff.AppendFormat("stationAlignmentRef = {0}", this.StationAlignmentRef).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Start"))
+            if ((object)this.SurfaceType != null)
             {
-                return Tuple.Create("Start", this.NewReader<PointType>());
+                buff.AppendFormat("surfaceType = {0}", this.SurfaceType).AppendLine();
+            }
+            if ((object)this.SurfaceRef != null)
+            {
+                buff.AppendFormat("surfaceRef = {0}", this.SurfaceRef).AppendLine();
+            }
+            if ((object)this.SurfaceRefs != null)
+            {
+                buff.AppendFormat("surfaceRefs = {0}", this.SurfaceRefs).AppendLine();
+            }
+            if ((object)this.CgPointRefs != null)
+            {
+                buff.AppendFormat("cgPointRefs = {0}", this.CgPointRefs).AppendLine();
+            }
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

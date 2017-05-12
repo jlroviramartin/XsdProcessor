@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// This relates the new monument element to a survey - indicating its purpose in the survey and distrubed / replaced info as well
     /// Sequence [1, 1]
@@ -20,6 +18,52 @@ namespace XmlSchemaProcessor.LandXml20
         public SurveyMonument(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// A reference name value referring to monument.name attribute.
+        /// </summary>
+
+        public string MntRef;
+        /// <summary>
+        /// This is a list of purposes that the monument was used for on this survey.  The desired list may be based on local regulations. 
+        /// </summary>
+
+        public string Purpose;
+        /// <summary>
+        /// This is a list of states for a monument each  jurisdiction may haqve a list defined by regulation. 
+        /// </summary>
+
+        public string State;
+
+        public string AdoptedSurvey;
+
+        public string DisturbedMonument;
+
+        public DateTime? DisturbedDate;
+
+        public string DisturbedAnnotation;
+
+        public string ReplacedMonument;
+
+        public DateTime? ReplacedDate;
+
+        public string ReplacedAnnotation;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -56,55 +100,6 @@ namespace XmlSchemaProcessor.LandXml20
                     attributes.GetSafe("replacedAnnotation"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.MntRef != null)
-            {
-                buff.AppendFormat("mntRef = {0}", this.MntRef).AppendLine();
-            }
-            if ((object)this.Purpose != null)
-            {
-                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.AdoptedSurvey != null)
-            {
-                buff.AppendFormat("adoptedSurvey = {0}", this.AdoptedSurvey).AppendLine();
-            }
-            if ((object)this.DisturbedMonument != null)
-            {
-                buff.AppendFormat("disturbedMonument = {0}", this.DisturbedMonument).AppendLine();
-            }
-            if ((object)this.DisturbedDate != null)
-            {
-                buff.AppendFormat("disturbedDate = {0}", this.DisturbedDate).AppendLine();
-            }
-            if ((object)this.DisturbedAnnotation != null)
-            {
-                buff.AppendFormat("disturbedAnnotation = {0}", this.DisturbedAnnotation).AppendLine();
-            }
-            if ((object)this.ReplacedMonument != null)
-            {
-                buff.AppendFormat("replacedMonument = {0}", this.ReplacedMonument).AppendLine();
-            }
-            if ((object)this.ReplacedDate != null)
-            {
-                buff.AppendFormat("replacedDate = {0}", this.ReplacedDate).AppendLine();
-            }
-            if ((object)this.ReplacedAnnotation != null)
-            {
-                buff.AppendFormat("replacedAnnotation = {0}", this.ReplacedAnnotation).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -155,46 +150,59 @@ namespace XmlSchemaProcessor.LandXml20
             return buff.ToString();
         }
 
-        /// <summary>
-        /// A reference name value referring to monument.name attribute.
-        /// </summary>
+        #endregion
 
-        public string MntRef;
-        /// <summary>
-        /// This is a list of purposes that the monument was used for on this survey.  The desired list may be based on local regulations. 
-        /// </summary>
+        #region object
 
-        public string Purpose;
-        /// <summary>
-        /// This is a list of states for a monument each  jurisdiction may haqve a list defined by regulation. 
-        /// </summary>
-
-        public string State;
-
-        public string AdoptedSurvey;
-
-        public string DisturbedMonument;
-
-        public DateTime? DisturbedDate;
-
-        public string DisturbedAnnotation;
-
-        public string ReplacedMonument;
-
-        public DateTime? ReplacedDate;
-
-        public string ReplacedAnnotation;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.MntRef != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("mntRef = {0}", this.MntRef).AppendLine();
+            }
+            if ((object)this.Purpose != null)
+            {
+                buff.AppendFormat("purpose = {0}", this.Purpose).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.AdoptedSurvey != null)
+            {
+                buff.AppendFormat("adoptedSurvey = {0}", this.AdoptedSurvey).AppendLine();
+            }
+            if ((object)this.DisturbedMonument != null)
+            {
+                buff.AppendFormat("disturbedMonument = {0}", this.DisturbedMonument).AppendLine();
+            }
+            if ((object)this.DisturbedDate != null)
+            {
+                buff.AppendFormat("disturbedDate = {0}", this.DisturbedDate).AppendLine();
+            }
+            if ((object)this.DisturbedAnnotation != null)
+            {
+                buff.AppendFormat("disturbedAnnotation = {0}", this.DisturbedAnnotation).AppendLine();
+            }
+            if ((object)this.ReplacedMonument != null)
+            {
+                buff.AppendFormat("replacedMonument = {0}", this.ReplacedMonument).AppendLine();
+            }
+            if ((object)this.ReplacedDate != null)
+            {
+                buff.AppendFormat("replacedDate = {0}", this.ReplacedDate).AppendLine();
+            }
+            if ((object)this.ReplacedAnnotation != null)
+            {
+                buff.AppendFormat("replacedAnnotation = {0}", this.ReplacedAnnotation).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Each Pipe within a Pipes collection element will have a unique  "name" attribute.
     /// The pipe type is determined by the existance of one of the following elements: CircPipe, ElliPipe or RectPipe.
@@ -32,6 +30,72 @@ namespace XmlSchemaProcessor.LandXml11
         public Pipe(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+        /// <summary>
+        /// A reference name value referring to Struct.name attribute.
+        /// </summary>
+
+        public string RefEnd;
+        /// <summary>
+        /// A reference name value referring to Struct.name attribute.
+        /// </summary>
+
+        public string RefStart;
+
+        public string Desc;
+
+        public double? Length;
+
+        public string OID;
+
+        public double? Slope;
+
+        public StateType? State;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Center"))
+            {
+                return Tuple.Create("Center", this.NewReader<PointType>());
+            }
+            if (name.EqualsIgnoreCase("PipeFlow"))
+            {
+                return Tuple.Create("PipeFlow", this.NewReader<PipeFlow>());
+            }
+            if (name.EqualsIgnoreCase("Channel"))
+            {
+                return Tuple.Create("Channel", this.NewReader<Channel>());
+            }
+            if (name.EqualsIgnoreCase("RectPipe"))
+            {
+                return Tuple.Create("RectPipe", this.NewReader<RectPipe>());
+            }
+            if (name.EqualsIgnoreCase("ElliPipe"))
+            {
+                return Tuple.Create("ElliPipe", this.NewReader<ElliPipe>());
+            }
+            if (name.EqualsIgnoreCase("EggPipe"))
+            {
+                return Tuple.Create("EggPipe", this.NewReader<EggPipe>());
+            }
+            if (name.EqualsIgnoreCase("CircPipe"))
+            {
+                return Tuple.Create("CircPipe", this.NewReader<CircPipe>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -62,47 +126,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("state"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.RefEnd != null)
-            {
-                buff.AppendFormat("refEnd = {0}", this.RefEnd).AppendLine();
-            }
-            if ((object)this.RefStart != null)
-            {
-                buff.AppendFormat("refStart = {0}", this.RefStart).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Length != null)
-            {
-                buff.AppendFormat("length = {0}", this.Length).AppendLine();
-            }
-            if ((object)this.OID != null)
-            {
-                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
-            }
-            if ((object)this.Slope != null)
-            {
-                buff.AppendFormat("slope = {0}", this.Slope).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -145,66 +168,51 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public string Name;
-        /// <summary>
-        /// A reference name value referring to Struct.name attribute.
-        /// </summary>
+        #endregion
 
-        public string RefEnd;
-        /// <summary>
-        /// A reference name value referring to Struct.name attribute.
-        /// </summary>
+        #region object
 
-        public string RefStart;
-
-        public string Desc;
-
-        public double? Length;
-
-        public string OID;
-
-        public double? Slope;
-
-        public StateType? State;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Center"))
+            if ((object)this.RefEnd != null)
             {
-                return Tuple.Create("Center", this.NewReader<PointType>());
+                buff.AppendFormat("refEnd = {0}", this.RefEnd).AppendLine();
             }
-            if (name.EqualsIgnoreCase("PipeFlow"))
+            if ((object)this.RefStart != null)
             {
-                return Tuple.Create("PipeFlow", this.NewReader<PipeFlow>());
+                buff.AppendFormat("refStart = {0}", this.RefStart).AppendLine();
             }
-            if (name.EqualsIgnoreCase("Channel"))
+            if ((object)this.Desc != null)
             {
-                return Tuple.Create("Channel", this.NewReader<Channel>());
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
-            if (name.EqualsIgnoreCase("RectPipe"))
+            if ((object)this.Length != null)
             {
-                return Tuple.Create("RectPipe", this.NewReader<RectPipe>());
+                buff.AppendFormat("length = {0}", this.Length).AppendLine();
             }
-            if (name.EqualsIgnoreCase("ElliPipe"))
+            if ((object)this.OID != null)
             {
-                return Tuple.Create("ElliPipe", this.NewReader<ElliPipe>());
+                buff.AppendFormat("oID = {0}", this.OID).AppendLine();
             }
-            if (name.EqualsIgnoreCase("EggPipe"))
+            if ((object)this.Slope != null)
             {
-                return Tuple.Create("EggPipe", this.NewReader<EggPipe>());
+                buff.AppendFormat("slope = {0}", this.Slope).AppendLine();
             }
-            if (name.EqualsIgnoreCase("CircPipe"))
+            if ((object)this.State != null)
             {
-                return Tuple.Create("CircPipe", this.NewReader<CircPipe>());
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

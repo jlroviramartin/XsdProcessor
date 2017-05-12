@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    // needContent    : true
-    // includeContent : false
     /// <summary>
     /// A retaining wall point defined by a space delimited "northing easting elevation" text value with height and offset attributes to define the wall point
     /// The height value is positive if the northing/easting/elevation point is at the bottom of the wall, negative if the point is at the top of the wall.
@@ -21,6 +19,21 @@ namespace XmlSchemaProcessor.LandXml12
         {
         }
 
+        public double Height;
+
+        public double Offset;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
@@ -32,23 +45,6 @@ namespace XmlSchemaProcessor.LandXml12
                     attributes.GetSafe("offset"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Height != null)
-            {
-                buff.AppendFormat("height = {0}", this.Height).AppendLine();
-            }
-            if ((object)this.Offset != null)
-            {
-                buff.AppendFormat("offset = {0}", this.Offset).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -67,15 +63,27 @@ namespace XmlSchemaProcessor.LandXml12
             return buff.ToString();
         }
 
-        public double Height;
+        #endregion
 
-        public double Offset;
+        #region object
 
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Height != null)
+            {
+                buff.AppendFormat("height = {0}", this.Height).AppendLine();
+            }
+            if ((object)this.Offset != null)
+            {
+                buff.AppendFormat("offset = {0}", this.Offset).AppendLine();
+            }
+
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

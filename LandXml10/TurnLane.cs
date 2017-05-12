@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Choice [0, *]
     ///     Feature [0, *]
@@ -19,6 +17,48 @@ namespace XmlSchemaProcessor.LandXml10
         public TurnLane(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? StaStart;
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? StaEnd;
+        /// <summary>
+        /// Represents a station value in decimal form expressed in length units
+        /// </summary>
+
+        public double? BeginFullWidthSta;
+
+        public double? Width;
+
+        public SideofRoadType? SideofRoad;
+
+        public TurnLaneType? Type;
+
+        public LaneTaperType? TaperType;
+
+        public double? TaperTangentLength;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -49,47 +89,6 @@ namespace XmlSchemaProcessor.LandXml10
                     attributes.GetSafe("taperTangentLength"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.StaStart != null)
-            {
-                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
-            }
-            if ((object)this.StaEnd != null)
-            {
-                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
-            }
-            if ((object)this.BeginFullWidthSta != null)
-            {
-                buff.AppendFormat("beginFullWidthSta = {0}", this.BeginFullWidthSta).AppendLine();
-            }
-            if ((object)this.Width != null)
-            {
-                buff.AppendFormat("width = {0}", this.Width).AppendLine();
-            }
-            if ((object)this.SideofRoad != null)
-            {
-                buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
-            }
-            if ((object)this.Type != null)
-            {
-                buff.AppendFormat("type = {0}", this.Type).AppendLine();
-            }
-            if ((object)this.TaperType != null)
-            {
-                buff.AppendFormat("taperType = {0}", this.TaperType).AppendLine();
-            }
-            if ((object)this.TaperTangentLength != null)
-            {
-                buff.AppendFormat("taperTangentLength = {0}", this.TaperTangentLength).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -132,42 +131,51 @@ namespace XmlSchemaProcessor.LandXml10
             return buff.ToString();
         }
 
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #endregion
 
-        public double? StaStart;
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
+        #region object
 
-        public double? StaEnd;
-        /// <summary>
-        /// Represents a station value in decimal form expressed in length units
-        /// </summary>
-
-        public double? BeginFullWidthSta;
-
-        public double? Width;
-
-        public SideofRoadType? SideofRoad;
-
-        public TurnLaneType? Type;
-
-        public LaneTaperType? TaperType;
-
-        public double? TaperTangentLength;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Feature"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.StaStart != null)
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                buff.AppendFormat("staStart = {0}", this.StaStart).AppendLine();
+            }
+            if ((object)this.StaEnd != null)
+            {
+                buff.AppendFormat("staEnd = {0}", this.StaEnd).AppendLine();
+            }
+            if ((object)this.BeginFullWidthSta != null)
+            {
+                buff.AppendFormat("beginFullWidthSta = {0}", this.BeginFullWidthSta).AppendLine();
+            }
+            if ((object)this.Width != null)
+            {
+                buff.AppendFormat("width = {0}", this.Width).AppendLine();
+            }
+            if ((object)this.SideofRoad != null)
+            {
+                buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
+            }
+            if ((object)this.Type != null)
+            {
+                buff.AppendFormat("type = {0}", this.Type).AppendLine();
+            }
+            if ((object)this.TaperType != null)
+            {
+                buff.AppendFormat("taperType = {0}", this.TaperType).AppendLine();
+            }
+            if ((object)this.TaperTangentLength != null)
+            {
+                buff.AppendFormat("taperTangentLength = {0}", this.TaperTangentLength).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

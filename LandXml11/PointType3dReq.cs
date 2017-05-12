@@ -7,13 +7,47 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : true
-    // includeContent : true
     public class PointType3dReq : XsdBaseReader
     {
         public PointType3dReq(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+
+        public string Code;
+
+        public StateType? State;
+        /// <summary>
+        /// A reference name value referring to a PointType derived name attribute. An attribute if this type contains the value of a PointType derived element "name" attribute that exists elsewhere the instance data.
+        /// </summary>
+
+        public string PntRef;
+
+        public PointGeometryType? PointGeometry;
+
+        public DTMAttributeType? DTMAttribute;
+
+        public DateTime? TimeStamp;
+
+        public SurveyRoleType? Role;
+
+        public IList<double> Content;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
+
+        protected override bool NeedContent { get { return true; } }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -48,55 +82,6 @@ namespace XmlSchemaProcessor.LandXml11
 
             this.Content = XsdConverter.Instance.Convert<IList<double>>(text);
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Code != null)
-            {
-                buff.AppendFormat("code = {0}", this.Code).AppendLine();
-            }
-            if ((object)this.State != null)
-            {
-                buff.AppendFormat("state = {0}", this.State).AppendLine();
-            }
-            if ((object)this.PntRef != null)
-            {
-                buff.AppendFormat("pntRef = {0}", this.PntRef).AppendLine();
-            }
-            if ((object)this.PointGeometry != null)
-            {
-                buff.AppendFormat("pointGeometry = {0}", this.PointGeometry).AppendLine();
-            }
-            if ((object)this.DTMAttribute != null)
-            {
-                buff.AppendFormat("DTMAttribute = {0}", this.DTMAttribute).AppendLine();
-            }
-            if ((object)this.TimeStamp != null)
-            {
-                buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
-            }
-            if ((object)this.Role != null)
-            {
-                buff.AppendFormat("role = {0}", this.Role).AppendLine();
-            }
-
-            if ((object)this.Content != null)
-            {
-                buff.AppendFormat("content = {0}", this.Content).AppendLine();
-            }
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -147,36 +132,59 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
+        #region object
 
-        public string Code;
-
-        public StateType? State;
-        /// <summary>
-        /// A reference name value referring to a PointType derived name attribute. An attribute if this type contains the value of a PointType derived element "name" attribute that exists elsewhere the instance data.
-        /// </summary>
-
-        public string PntRef;
-
-        public PointGeometryType? PointGeometry;
-
-        public DTMAttributeType? DTMAttribute;
-
-        public DateTime? TimeStamp;
-
-        public SurveyRoleType? Role;
-
-
-        protected override bool NeedContent { get { return true; } }
-
-        public IList<double> Content;
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            return null;
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
+            {
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Code != null)
+            {
+                buff.AppendFormat("code = {0}", this.Code).AppendLine();
+            }
+            if ((object)this.State != null)
+            {
+                buff.AppendFormat("state = {0}", this.State).AppendLine();
+            }
+            if ((object)this.PntRef != null)
+            {
+                buff.AppendFormat("pntRef = {0}", this.PntRef).AppendLine();
+            }
+            if ((object)this.PointGeometry != null)
+            {
+                buff.AppendFormat("pointGeometry = {0}", this.PointGeometry).AppendLine();
+            }
+            if ((object)this.DTMAttribute != null)
+            {
+                buff.AppendFormat("DTMAttribute = {0}", this.DTMAttribute).AppendLine();
+            }
+            if ((object)this.TimeStamp != null)
+            {
+                buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
+            }
+            if ((object)this.Role != null)
+            {
+                buff.AppendFormat("role = {0}", this.Role).AppendLine();
+            }
+
+            if ((object)this.Content != null)
+            {
+                buff.AppendFormat("content = {0}", this.Content).AppendLine();
+            }
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif

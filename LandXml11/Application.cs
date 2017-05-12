@@ -7,8 +7,6 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    // needContent    : false
-    // includeContent : false
     /// <summary>
     /// Optional element to identify the software that was used to create the file.
     /// Sequence [1, 1]
@@ -22,6 +20,34 @@ namespace XmlSchemaProcessor.LandXml11
         public Application(System.Xml.XmlReader reader) : base(reader)
         {
         }
+
+        public string Name;
+
+        public string Desc;
+
+        public string Manufacturer;
+
+        public string Version;
+
+        public string ManufacturerURL;
+
+        public DateTime? TimeStamp;
+
+        #region XsdBaseReader
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Author"))
+            {
+                return Tuple.Create("Author", this.NewReader<Author>());
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region XsdBaseObject
 
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
@@ -46,39 +72,6 @@ namespace XmlSchemaProcessor.LandXml11
                     attributes.GetSafe("timeStamp"));
 
             return true;
-        }
-
-        public override string ToString()
-        {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.AppendLine(base.ToString());
-
-            if ((object)this.Name != null)
-            {
-                buff.AppendFormat("name = {0}", this.Name).AppendLine();
-            }
-            if ((object)this.Desc != null)
-            {
-                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
-            }
-            if ((object)this.Manufacturer != null)
-            {
-                buff.AppendFormat("manufacturer = {0}", this.Manufacturer).AppendLine();
-            }
-            if ((object)this.Version != null)
-            {
-                buff.AppendFormat("version = {0}", this.Version).AppendLine();
-            }
-            if ((object)this.ManufacturerURL != null)
-            {
-                buff.AppendFormat("manufacturerURL = {0}", this.ManufacturerURL).AppendLine();
-            }
-            if ((object)this.TimeStamp != null)
-            {
-                buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
-            }
-
-            return buff.ToString();
         }
 
         public override string ToAttributes()
@@ -113,28 +106,43 @@ namespace XmlSchemaProcessor.LandXml11
             return buff.ToString();
         }
 
-        public string Name;
+        #endregion
 
-        public string Desc;
+        #region object
 
-        public string Manufacturer;
-
-        public string Version;
-
-        public string ManufacturerURL;
-
-        public DateTime? TimeStamp;
-
-
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        public override string ToString()
         {
-            if (name.EqualsIgnoreCase("Author"))
+            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+
+            if ((object)this.Name != null)
             {
-                return Tuple.Create("Author", this.NewReader<Author>());
+                buff.AppendFormat("name = {0}", this.Name).AppendLine();
+            }
+            if ((object)this.Desc != null)
+            {
+                buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
+            }
+            if ((object)this.Manufacturer != null)
+            {
+                buff.AppendFormat("manufacturer = {0}", this.Manufacturer).AppendLine();
+            }
+            if ((object)this.Version != null)
+            {
+                buff.AppendFormat("version = {0}", this.Version).AppendLine();
+            }
+            if ((object)this.ManufacturerURL != null)
+            {
+                buff.AppendFormat("manufacturerURL = {0}", this.ManufacturerURL).AppendLine();
+            }
+            if ((object)this.TimeStamp != null)
+            {
+                buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
             }
 
-            return null;
+            return buff.ToString();
         }
+
+        #endregion
     }
 }
 #endif
