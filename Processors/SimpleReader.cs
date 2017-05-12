@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-// XsdBaseObject.Read(IDictionary<string, string> attributes, string text)
 using BeginRead = System.Action<System.Collections.Generic.IDictionary<string, string>, string>;
 using EndRead = System.Action;
 

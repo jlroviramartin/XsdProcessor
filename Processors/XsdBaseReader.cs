@@ -46,7 +46,10 @@ namespace XmlSchemaProcessor.Processors
 
                 if ((this.reader.Depth == this.depth + 1) && (this.reader.NodeType == XmlNodeType.Element))
                 {
-                    current = this.NewReader(this.reader.NamespaceURI, this.reader.Name);
+                    if (this.TestURI(this.reader.NamespaceURI))
+                    {
+                        current = this.NewReader(this.reader.NamespaceURI, this.reader.Name);
+                    }
                 }
             }
             return current;
@@ -119,11 +122,6 @@ namespace XmlSchemaProcessor.Processors
 
         #region private
 
-        private bool TestURI(string namespaceURI)
-        {
-            return true;
-        }
-
         private string ReadContent()
         {
             StringBuilder buff = new StringBuilder();
@@ -133,11 +131,19 @@ namespace XmlSchemaProcessor.Processors
                 {
                     if (subReader.NodeType == XmlNodeType.Text || subReader.NodeType == XmlNodeType.CDATA)
                     {
-                        buff.Append(subReader.Value);
+                        if (this.TestURI(subReader.NamespaceURI))
+                        {
+                            buff.Append(subReader.Value);
+                        }
                     }
                 }
             }
             return buff.ToString();
+        }
+
+        private bool TestURI(string namespaceURI)
+        {
+            return true;
         }
 
         private readonly XmlReader reader;

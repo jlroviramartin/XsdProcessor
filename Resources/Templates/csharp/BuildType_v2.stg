@@ -37,7 +37,7 @@ $Pre(namespace)$
         protected override Tuple<string, object> NewReader(string namespaceURI, string name)
         {
             $events:{event | $Element(event)$}$
-            return null;
+            return base.NewReader(namespaceURI, name);
         }
 
         $if(includeContent)$
