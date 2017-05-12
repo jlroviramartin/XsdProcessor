@@ -7,51 +7,49 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// Used to record lines that are irregular such as river boudaries etc. It has Start and End point elements and a list of intermediate points. Point list should also include the start and end points.
+    /// Sequence [1, 1]
+    ///     Start [1, 1]
+    ///     End [1, 1]
+    ///     Choice [1, 1]
+    ///         PntList2D [1, 1]
+    ///         PntList3D [1, 1]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class IrregularLine : XsdBaseObject
+    public class IrregularLine : XsdBaseReader
     {
+        public IrregularLine(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.Dir = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("dir"));
 
-
-
             this.Length = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("length"));
-
-
 
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
 
-
-
             this.StaStart = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("staStart"));
-
-
 
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
 
-
-
             this.OID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("oID"));
-
-
 
             return true;
         }
@@ -90,44 +88,41 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("oID = {0}", this.OID).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Dir != null)
             {
-                buff.AppendFormat(" dir=\"{0}\"", this.Dir);
+                buff.Append("dir", this.Dir);
             }
             if ((object)this.Length != null)
             {
-                buff.AppendFormat(" length=\"{0}\"", this.Length);
+                buff.Append("length", this.Length);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.StaStart != null)
             {
-                buff.AppendFormat(" staStart=\"{0}\"", this.StaStart);
+                buff.Append("staStart", this.StaStart);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.OID != null)
             {
-                buff.AppendFormat(" oID=\"{0}\"", this.OID);
+                buff.Append("oID", this.OID);
             }
-
 
             return buff.ToString();
         }
@@ -150,6 +145,31 @@ namespace XmlSchemaProcessor.LandXml10
         public string OID;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList3D"))
+            {
+                return Tuple.Create("PntList3D", this.NewReader<IList<double>>());
+            }
+            if (name.EqualsIgnoreCase("PntList2D"))
+            {
+                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+            }
+            if (name.EqualsIgnoreCase("End"))
+            {
+                return Tuple.Create("End", this.NewReader<PointType>());
+            }
+            if (name.EqualsIgnoreCase("Start"))
+            {
+                return Tuple.Create("Start", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

@@ -7,67 +7,55 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class PipeFlow : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class PipeFlow : XsdBaseReader
     {
+        public PipeFlow(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.FlowIn = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("flowIn"));
-
-
 
             this.AreaCatchment = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("areaCatchment"));
 
-
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.DepthCritical = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("depthCritical"));
 
-
-
             this.HglDown = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("hglDown"));
-
-
 
             this.HglUp = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("hglUp"));
 
-
-
             this.Intensity = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("intensity"));
-
-
 
             this.RunoffCoeff = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("runoffCoeff"));
 
-
-
             this.SlopeCritical = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("slopeCritical"));
-
-
 
             this.TimeInlet = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("timeInlet"));
 
-
-
             this.VelocityCritical = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("velocityCritical"));
-
-
 
             return true;
         }
@@ -122,60 +110,57 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("velocityCritical = {0}", this.VelocityCritical).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.FlowIn != null)
             {
-                buff.AppendFormat(" flowIn=\"{0}\"", this.FlowIn);
+                buff.Append("flowIn", this.FlowIn);
             }
             if ((object)this.AreaCatchment != null)
             {
-                buff.AppendFormat(" areaCatchment=\"{0}\"", this.AreaCatchment);
+                buff.Append("areaCatchment", this.AreaCatchment);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.DepthCritical != null)
             {
-                buff.AppendFormat(" depthCritical=\"{0}\"", this.DepthCritical);
+                buff.Append("depthCritical", this.DepthCritical);
             }
             if ((object)this.HglDown != null)
             {
-                buff.AppendFormat(" hglDown=\"{0}\"", this.HglDown);
+                buff.Append("hglDown", this.HglDown);
             }
             if ((object)this.HglUp != null)
             {
-                buff.AppendFormat(" hglUp=\"{0}\"", this.HglUp);
+                buff.Append("hglUp", this.HglUp);
             }
             if ((object)this.Intensity != null)
             {
-                buff.AppendFormat(" intensity=\"{0}\"", this.Intensity);
+                buff.Append("intensity", this.Intensity);
             }
             if ((object)this.RunoffCoeff != null)
             {
-                buff.AppendFormat(" runoffCoeff=\"{0}\"", this.RunoffCoeff);
+                buff.Append("runoffCoeff", this.RunoffCoeff);
             }
             if ((object)this.SlopeCritical != null)
             {
-                buff.AppendFormat(" slopeCritical=\"{0}\"", this.SlopeCritical);
+                buff.Append("slopeCritical", this.SlopeCritical);
             }
             if ((object)this.TimeInlet != null)
             {
-                buff.AppendFormat(" timeInlet=\"{0}\"", this.TimeInlet);
+                buff.Append("timeInlet", this.TimeInlet);
             }
             if ((object)this.VelocityCritical != null)
             {
-                buff.AppendFormat(" velocityCritical=\"{0}\"", this.VelocityCritical);
+                buff.Append("velocityCritical", this.VelocityCritical);
             }
-
 
             return buff.ToString();
         }
@@ -203,6 +188,15 @@ namespace XmlSchemaProcessor.LandXml20
         public double? VelocityCritical;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

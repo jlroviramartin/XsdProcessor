@@ -7,52 +7,46 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    public class ZoneSlope : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class ZoneSlope : XsdBaseReader
     {
+        public ZoneSlope(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.StaStart = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staStart"));
-
-
 
             this.StaEnd = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staEnd"));
 
-
-
             this.StartVertValue = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("startVertValue"));
-
-
 
             this.StartVertType = XsdConverter.Instance.Convert<ZoneVertType?>(
                     attributes.GetSafe("startVertType"));
 
-
-
             this.EndVertValue = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("endVertValue"));
-
-
 
             this.EndVertType = XsdConverter.Instance.Convert<ZoneVertType>(
                     attributes.GetSafe("endVertType"));
 
-
-
             this.ParabolicStartStation = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("parabolicStartStation"));
 
-
-
             this.ParabolicEndStation = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("parabolicEndStation"));
-
-
 
             return true;
         }
@@ -95,48 +89,45 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("parabolicEndStation = {0}", this.ParabolicEndStation).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.StaStart != null)
             {
-                buff.AppendFormat(" staStart=\"{0}\"", this.StaStart);
+                buff.Append("staStart", this.StaStart);
             }
             if ((object)this.StaEnd != null)
             {
-                buff.AppendFormat(" staEnd=\"{0}\"", this.StaEnd);
+                buff.Append("staEnd", this.StaEnd);
             }
             if ((object)this.StartVertValue != null)
             {
-                buff.AppendFormat(" startVertValue=\"{0}\"", this.StartVertValue);
+                buff.Append("startVertValue", this.StartVertValue);
             }
             if ((object)this.StartVertType != null)
             {
-                buff.AppendFormat(" startVertType=\"{0}\"", this.StartVertType);
+                buff.Append("startVertType", this.StartVertType);
             }
             if ((object)this.EndVertValue != null)
             {
-                buff.AppendFormat(" endVertValue=\"{0}\"", this.EndVertValue);
+                buff.Append("endVertValue", this.EndVertValue);
             }
             if ((object)this.EndVertType != null)
             {
-                buff.AppendFormat(" endVertType=\"{0}\"", this.EndVertType);
+                buff.Append("endVertType", this.EndVertType);
             }
             if ((object)this.ParabolicStartStation != null)
             {
-                buff.AppendFormat(" parabolicStartStation=\"{0}\"", this.ParabolicStartStation);
+                buff.Append("parabolicStartStation", this.ParabolicStartStation);
             }
             if ((object)this.ParabolicEndStation != null)
             {
-                buff.AppendFormat(" parabolicEndStation=\"{0}\"", this.ParabolicEndStation);
+                buff.Append("parabolicEndStation", this.ParabolicEndStation);
             }
-
 
             return buff.ToString();
         }
@@ -171,6 +162,15 @@ namespace XmlSchemaProcessor.LandXml12
         public double? ParabolicEndStation;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

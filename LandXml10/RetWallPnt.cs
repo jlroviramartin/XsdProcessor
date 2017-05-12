@@ -7,6 +7,8 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : true
+    // includeContent : false
     /// <summary>
     /// A retaining wall point defined by a space delimited "northing easting elevation" text value with height and offset attributes to define the wall point
     /// The height value is positive if the northing/easting/elevation point is at the bottom of the wall, negative if the point is at the top of the wall.
@@ -15,20 +17,19 @@ namespace XmlSchemaProcessor.LandXml10
 
     public class RetWallPnt : PointType3dReq
     {
+        public RetWallPnt(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Height = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("height"));
 
-
-
             this.Offset = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("offset"));
-
-
 
             return true;
         }
@@ -47,24 +48,21 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("offset = {0}", this.Offset).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Height != null)
             {
-                buff.AppendFormat(" height=\"{0}\"", this.Height);
+                buff.Append("height", this.Height);
             }
             if ((object)this.Offset != null)
             {
-                buff.AppendFormat(" offset=\"{0}\"", this.Offset);
+                buff.Append("offset", this.Offset);
             }
-
 
             return buff.ToString();
         }
@@ -74,6 +72,10 @@ namespace XmlSchemaProcessor.LandXml10
         public double Offset;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

@@ -7,41 +7,38 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// Optional element to identify the source of the file.
+    /// Sequence [1, 1]
+    ///     XmlSchemaProcessor.Xsd.XsdParticleAny
     /// </summary>
 
-    public class Author : XsdBaseObject
+    public class Author : XsdBaseReader
     {
+        public Author(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.CreatedBy = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("createdBy"));
-
-
 
             this.CreatedByEmail = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("createdByEmail"));
 
-
-
             this.Company = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("company"));
-
-
 
             this.CompanyURL = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("companyURL"));
 
-
-
             this.TimeStamp = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("timeStamp"));
-
-
 
             return true;
         }
@@ -72,36 +69,33 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.CreatedBy != null)
             {
-                buff.AppendFormat(" createdBy=\"{0}\"", this.CreatedBy);
+                buff.Append("createdBy", this.CreatedBy);
             }
             if ((object)this.CreatedByEmail != null)
             {
-                buff.AppendFormat(" createdByEmail=\"{0}\"", this.CreatedByEmail);
+                buff.Append("createdByEmail", this.CreatedByEmail);
             }
             if ((object)this.Company != null)
             {
-                buff.AppendFormat(" company=\"{0}\"", this.Company);
+                buff.Append("company", this.Company);
             }
             if ((object)this.CompanyURL != null)
             {
-                buff.AppendFormat(" companyURL=\"{0}\"", this.CompanyURL);
+                buff.Append("companyURL", this.CompanyURL);
             }
             if ((object)this.TimeStamp != null)
             {
-                buff.AppendFormat(" timeStamp=\"{0}\"", this.TimeStamp);
+                buff.Append("timeStamp", this.TimeStamp);
             }
-
 
             return buff.ToString();
         }
@@ -117,6 +111,10 @@ namespace XmlSchemaProcessor.LandXml10
         public DateTime? TimeStamp;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

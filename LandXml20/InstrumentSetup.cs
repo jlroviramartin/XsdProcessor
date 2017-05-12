@@ -7,51 +7,52 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The Instrument setup location is defined by either a coordinate text value ("north east" or "north east elev") or a CgPoint number reference "pntRef" attribute.
+    /// Sequence [1, 1]
+    ///     Choice [0, *]
+    ///         InstrumentPoint [0, 1]
+    ///         Backsight [0, *]
+    ///         TargetSetup [0, *]
+    ///         RawObservation [0, *]
+    ///         ObservationGroup [0, *]
+    ///         ControlChecks [0, *]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
     /// </summary>
 
-    public class InstrumentSetup : XsdBaseObject
+    public class InstrumentSetup : XsdBaseReader
     {
+        public InstrumentSetup(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Id = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("id"));
-
-
 
             this.InstrumentDetailsID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("instrumentDetailsID"));
 
-
-
             this.StationName = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("stationName"));
-
-
 
             this.InstrumentHeight = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("instrumentHeight"));
 
-
-
             this.OrientationAzimuth = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("orientationAzimuth"));
-
-
 
             this.CircleAzimuth = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("circleAzimuth"));
 
-
-
             this.Status = XsdConverter.Instance.Convert<ObservationStatusType?>(
                     attributes.GetSafe("status"));
-
-
 
             return true;
         }
@@ -90,44 +91,41 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("status = {0}", this.Status).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Id != null)
             {
-                buff.AppendFormat(" id=\"{0}\"", this.Id);
+                buff.Append("id", this.Id);
             }
             if ((object)this.InstrumentDetailsID != null)
             {
-                buff.AppendFormat(" instrumentDetailsID=\"{0}\"", this.InstrumentDetailsID);
+                buff.Append("instrumentDetailsID", this.InstrumentDetailsID);
             }
             if ((object)this.StationName != null)
             {
-                buff.AppendFormat(" stationName=\"{0}\"", this.StationName);
+                buff.Append("stationName", this.StationName);
             }
             if ((object)this.InstrumentHeight != null)
             {
-                buff.AppendFormat(" instrumentHeight=\"{0}\"", this.InstrumentHeight);
+                buff.Append("instrumentHeight", this.InstrumentHeight);
             }
             if ((object)this.OrientationAzimuth != null)
             {
-                buff.AppendFormat(" orientationAzimuth=\"{0}\"", this.OrientationAzimuth);
+                buff.Append("orientationAzimuth", this.OrientationAzimuth);
             }
             if ((object)this.CircleAzimuth != null)
             {
-                buff.AppendFormat(" circleAzimuth=\"{0}\"", this.CircleAzimuth);
+                buff.Append("circleAzimuth", this.CircleAzimuth);
             }
             if ((object)this.Status != null)
             {
-                buff.AppendFormat(" status=\"{0}\"", this.Status);
+                buff.Append("status", this.Status);
             }
-
 
             return buff.ToString();
         }
@@ -153,6 +151,43 @@ namespace XmlSchemaProcessor.LandXml20
         public ObservationStatusType? Status;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("ControlChecks"))
+            {
+                return Tuple.Create("ControlChecks", this.NewReader<ControlChecks>());
+            }
+            if (name.EqualsIgnoreCase("ObservationGroup"))
+            {
+                return Tuple.Create("ObservationGroup", this.NewReader<ObservationGroup>());
+            }
+            if (name.EqualsIgnoreCase("RawObservation"))
+            {
+                return Tuple.Create("RawObservation", this.NewReader<RawObservation>());
+            }
+            if (name.EqualsIgnoreCase("TargetSetup"))
+            {
+                return Tuple.Create("TargetSetup", this.NewReader<TargetSetup>());
+            }
+            if (name.EqualsIgnoreCase("Backsight"))
+            {
+                return Tuple.Create("Backsight", this.NewReader<Backsight>());
+            }
+            if (name.EqualsIgnoreCase("InstrumentPoint"))
+            {
+                return Tuple.Create("InstrumentPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

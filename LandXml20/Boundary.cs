@@ -7,6 +7,8 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The boundary region contains a 2D north/east or 3D north/east/elev list of points that define the geometry.
     /// is identified by the "name" attribute.
@@ -15,59 +17,49 @@ namespace XmlSchemaProcessor.LandXml20
     /// coefficient = Hydrology Rational method runoff coefficient (double value between 0.0-1.0) for the land cover type.
     /// cn = Hydrology SCS runoff method CN number (Integer value between 0-100).
     /// m is the material table index for color and texture data.
+    /// Sequence [1, 1]
+    ///     Choice [1, 1]
+    ///         PntList2D [1, 1]
+    ///         PntList3D [1, 1]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class Boundary : XsdBaseObject
+    public class Boundary : XsdBaseReader
     {
+        public Boundary(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.BndType = XsdConverter.Instance.Convert<SurfBndType>(
                     attributes.GetSafe("bndType"));
-
-
 
             this.EdgeTrim = XsdConverter.Instance.Convert<bool?>(
                     attributes.GetSafe("edgeTrim"));
 
-
-
             this.Area = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("area"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
 
-
-
             this.Coefficient = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("coefficient"));
-
-
 
             this.Cn = XsdConverter.Instance.Convert<int?>(
                     attributes.GetSafe("cn"));
 
-
-
             this.M = XsdConverter.Instance.Convert<IList<int?>>(
                     attributes.GetSafe("m"));
-
-
 
             return true;
         }
@@ -114,52 +106,49 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("m = {0}", this.M).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.BndType != null)
             {
-                buff.AppendFormat(" bndType=\"{0}\"", this.BndType);
+                buff.Append("bndType", this.BndType);
             }
             if ((object)this.EdgeTrim != null)
             {
-                buff.AppendFormat(" edgeTrim=\"{0}\"", this.EdgeTrim);
+                buff.Append("edgeTrim", this.EdgeTrim);
             }
             if ((object)this.Area != null)
             {
-                buff.AppendFormat(" area=\"{0}\"", this.Area);
+                buff.Append("area", this.Area);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.Coefficient != null)
             {
-                buff.AppendFormat(" coefficient=\"{0}\"", this.Coefficient);
+                buff.Append("coefficient", this.Coefficient);
             }
             if ((object)this.Cn != null)
             {
-                buff.AppendFormat(" cn=\"{0}\"", this.Cn);
+                buff.Append("cn", this.Cn);
             }
             if ((object)this.M != null)
             {
-                buff.AppendFormat(" m=\"{0}\"", this.M);
+                buff.Append("m", this.M);
             }
-
 
             return buff.ToString();
         }
@@ -190,6 +179,23 @@ namespace XmlSchemaProcessor.LandXml20
         public IList<int?> M;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList3D"))
+            {
+                return Tuple.Create("PntList3D", this.NewReader<IList<double>>());
+            }
+            if (name.EqualsIgnoreCase("PntList2D"))
+            {
+                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

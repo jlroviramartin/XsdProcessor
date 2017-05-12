@@ -7,32 +7,34 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class DesignSpeed85th : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class DesignSpeed85th : XsdBaseReader
     {
+        public DesignSpeed85th(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.StaStart = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("staStart"));
-
-
 
             this.StaEnd = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("staEnd"));
 
-
-
             this.SideofRoad = XsdConverter.Instance.Convert<SideofRoadType?>(
                     attributes.GetSafe("sideofRoad"));
 
-
-
             this.Speed = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("speed"));
-
-
 
             return true;
         }
@@ -59,32 +61,29 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.StaStart != null)
             {
-                buff.AppendFormat(" staStart=\"{0}\"", this.StaStart);
+                buff.Append("staStart", this.StaStart);
             }
             if ((object)this.StaEnd != null)
             {
-                buff.AppendFormat(" staEnd=\"{0}\"", this.StaEnd);
+                buff.Append("staEnd", this.StaEnd);
             }
             if ((object)this.SideofRoad != null)
             {
-                buff.AppendFormat(" sideofRoad=\"{0}\"", this.SideofRoad);
+                buff.Append("sideofRoad", this.SideofRoad);
             }
             if ((object)this.Speed != null)
             {
-                buff.AppendFormat(" speed=\"{0}\"", this.Speed);
+                buff.Append("speed", this.Speed);
             }
-
 
             return buff.ToString();
         }
@@ -108,6 +107,15 @@ namespace XmlSchemaProcessor.LandXml20
         public double? Speed;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

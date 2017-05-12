@@ -7,37 +7,32 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class RoadName : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    public class RoadName : XsdBaseReader
     {
+        public RoadName(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.RoadNameType = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("roadNameType"));
-
-
 
             this._RoadName = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("roadName"));
 
-
-
             this.RoadNameSuffix = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("roadNameSuffix"));
-
-
 
             this.RoadType = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("roadType"));
 
-
-
             this.PclRef = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("pclRef"));
-
-
 
             return true;
         }
@@ -68,36 +63,33 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.RoadNameType != null)
             {
-                buff.AppendFormat(" roadNameType=\"{0}\"", this.RoadNameType);
+                buff.Append("roadNameType", this.RoadNameType);
             }
             if ((object)this._RoadName != null)
             {
-                buff.AppendFormat(" roadName=\"{0}\"", this._RoadName);
+                buff.Append("roadName", this._RoadName);
             }
             if ((object)this.RoadNameSuffix != null)
             {
-                buff.AppendFormat(" roadNameSuffix=\"{0}\"", this.RoadNameSuffix);
+                buff.Append("roadNameSuffix", this.RoadNameSuffix);
             }
             if ((object)this.RoadType != null)
             {
-                buff.AppendFormat(" roadType=\"{0}\"", this.RoadType);
+                buff.Append("roadType", this.RoadType);
             }
             if ((object)this.PclRef != null)
             {
-                buff.AppendFormat(" pclRef=\"{0}\"", this.PclRef);
+                buff.Append("pclRef", this.PclRef);
             }
-
 
             return buff.ToString();
         }
@@ -126,6 +118,10 @@ namespace XmlSchemaProcessor.LandXml11
         public IList<string> PclRef;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

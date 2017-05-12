@@ -17,11 +17,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Xsd;
 
 namespace XmlSchemaProcessor
 {
     public static class Extensions
     {
+        public static bool EqualsIgnoreCase(this string str1, string str2)
+        {
+            if (str1 == null)
+            {
+                return str2 == null;
+            }
+            if (str2 == null)
+            {
+                return false;
+            }
+            return str1.ToUpperInvariant().Equals(str2.ToUpperInvariant());
+        }
+
+        public static void PushAll<T>(this Stack<T> stack, IEnumerable<T> enumer)
+        {
+            foreach (T value in enumer)
+            {
+                stack.Push(value);
+            }
+        }
+
         public static TV GetSafe<TK, TV>(this IDictionary<TK, TV> dicc, TK key, TV def = default(TV))
         {
             TV value;
@@ -220,6 +243,26 @@ namespace XmlSchemaProcessor
             buff.Append(close);
 
             return buff;
+        }
+
+        public static string ToNetType(this XsdElement xsdElement, bool optional)
+        {
+            if (xsdElement.TypeDefinition is XsdComplexType)
+            {
+                if (xsdElement.TypeDefinition.TopLevel)
+                {
+                    return xsdElement.TypeDefinition.ToNetType(optional);
+                }
+                else
+                {
+                    return xsdElement.Name.ToTypeName();
+                }
+            }
+            else if (xsdElement.TypeDefinition is XsdSimpleType)
+            {
+                return xsdElement.TypeDefinition.ToNetType(optional);
+            }
+            return "<Error>";
         }
 
         #region private

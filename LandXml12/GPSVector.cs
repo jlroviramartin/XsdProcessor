@@ -7,77 +7,66 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    public class GPSVector : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     TargetPoint [1, 1]
+    ///     GPSQCInfoLevel1 [0, 1]
+    ///     GPSQCInfoLevel2 [0, 1]
+    ///     Choice [0, *]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
+    /// </summary>
+
+    public class GPSVector : XsdBaseReader
     {
+        public GPSVector(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.DX = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("dX"));
-
-
 
             this.DY = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("dY"));
 
-
-
             this.DZ = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("dZ"));
-
-
 
             this.SetupID_A = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID_A"));
 
-
-
             this.SetupID_B = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID_B"));
-
-
 
             this.StartTime = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("startTime"));
 
-
-
             this.EndTime = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("endTime"));
-
-
 
             this.HorizontalPrecision = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("horizontalPrecision"));
 
-
-
             this.VerticalPrecision = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("verticalPrecision"));
-
-
 
             this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
                     attributes.GetSafe("purpose"));
 
-
-
             this.SetID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setID"));
-
-
 
             this.SolutionDataLink = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("solutionDataLink"));
 
-
-
             this.CoordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("coordGeomRefs"));
-
-
 
             return true;
         }
@@ -140,68 +129,65 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.DX != null)
             {
-                buff.AppendFormat(" dX=\"{0}\"", this.DX);
+                buff.Append("dX", this.DX);
             }
             if ((object)this.DY != null)
             {
-                buff.AppendFormat(" dY=\"{0}\"", this.DY);
+                buff.Append("dY", this.DY);
             }
             if ((object)this.DZ != null)
             {
-                buff.AppendFormat(" dZ=\"{0}\"", this.DZ);
+                buff.Append("dZ", this.DZ);
             }
             if ((object)this.SetupID_A != null)
             {
-                buff.AppendFormat(" setupID_A=\"{0}\"", this.SetupID_A);
+                buff.Append("setupID_A", this.SetupID_A);
             }
             if ((object)this.SetupID_B != null)
             {
-                buff.AppendFormat(" setupID_B=\"{0}\"", this.SetupID_B);
+                buff.Append("setupID_B", this.SetupID_B);
             }
             if ((object)this.StartTime != null)
             {
-                buff.AppendFormat(" startTime=\"{0}\"", this.StartTime);
+                buff.Append("startTime", this.StartTime);
             }
             if ((object)this.EndTime != null)
             {
-                buff.AppendFormat(" endTime=\"{0}\"", this.EndTime);
+                buff.Append("endTime", this.EndTime);
             }
             if ((object)this.HorizontalPrecision != null)
             {
-                buff.AppendFormat(" horizontalPrecision=\"{0}\"", this.HorizontalPrecision);
+                buff.Append("horizontalPrecision", this.HorizontalPrecision);
             }
             if ((object)this.VerticalPrecision != null)
             {
-                buff.AppendFormat(" verticalPrecision=\"{0}\"", this.VerticalPrecision);
+                buff.Append("verticalPrecision", this.VerticalPrecision);
             }
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.SetID != null)
             {
-                buff.AppendFormat(" setID=\"{0}\"", this.SetID);
+                buff.Append("setID", this.SetID);
             }
             if ((object)this.SolutionDataLink != null)
             {
-                buff.AppendFormat(" solutionDataLink=\"{0}\"", this.SolutionDataLink);
+                buff.Append("solutionDataLink", this.SolutionDataLink);
             }
             if ((object)this.CoordGeomRefs != null)
             {
-                buff.AppendFormat(" coordGeomRefs=\"{0}\"", this.CoordGeomRefs);
+                buff.Append("coordGeomRefs", this.CoordGeomRefs);
             }
-
 
             return buff.ToString();
         }
@@ -239,6 +225,31 @@ namespace XmlSchemaProcessor.LandXml12
         public IList<string> CoordGeomRefs;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("GPSQCInfoLevel2"))
+            {
+                return Tuple.Create("GPSQCInfoLevel2", this.NewReader<GPSQCInfoLevel2>());
+            }
+            if (name.EqualsIgnoreCase("GPSQCInfoLevel1"))
+            {
+                return Tuple.Create("GPSQCInfoLevel1", this.NewReader<GPSQCInfoLevel1>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

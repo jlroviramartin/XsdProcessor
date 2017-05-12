@@ -7,27 +7,31 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class TurnRestriction : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class TurnRestriction : XsdBaseReader
     {
+        public TurnRestriction(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Station = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("station"));
-
-
 
             this.LegNumber = XsdConverter.Instance.Convert<int?>(
                     attributes.GetSafe("legNumber"));
 
-
-
             this.Type = XsdConverter.Instance.Convert<TrafficTurnRestriction?>(
                     attributes.GetSafe("type"));
-
-
 
             return true;
         }
@@ -50,28 +54,25 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("type = {0}", this.Type).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Station != null)
             {
-                buff.AppendFormat(" station=\"{0}\"", this.Station);
+                buff.Append("station", this.Station);
             }
             if ((object)this.LegNumber != null)
             {
-                buff.AppendFormat(" legNumber=\"{0}\"", this.LegNumber);
+                buff.Append("legNumber", this.LegNumber);
             }
             if ((object)this.Type != null)
             {
-                buff.AppendFormat(" type=\"{0}\"", this.Type);
+                buff.Append("type", this.Type);
             }
-
 
             return buff.ToString();
         }
@@ -87,6 +88,15 @@ namespace XmlSchemaProcessor.LandXml11
         public TrafficTurnRestriction? Type;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

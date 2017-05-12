@@ -7,27 +7,31 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class TurnSpeed : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class TurnSpeed : XsdBaseReader
     {
+        public TurnSpeed(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Station = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("station"));
-
-
 
             this.LegNumber = XsdConverter.Instance.Convert<int?>(
                     attributes.GetSafe("legNumber"));
 
-
-
             this.Speed = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("speed"));
-
-
 
             return true;
         }
@@ -50,28 +54,25 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Station != null)
             {
-                buff.AppendFormat(" station=\"{0}\"", this.Station);
+                buff.Append("station", this.Station);
             }
             if ((object)this.LegNumber != null)
             {
-                buff.AppendFormat(" legNumber=\"{0}\"", this.LegNumber);
+                buff.Append("legNumber", this.LegNumber);
             }
             if ((object)this.Speed != null)
             {
-                buff.AppendFormat(" speed=\"{0}\"", this.Speed);
+                buff.Append("speed", this.Speed);
             }
-
 
             return buff.ToString();
         }
@@ -87,6 +88,15 @@ namespace XmlSchemaProcessor.LandXml20
         public double? Speed;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

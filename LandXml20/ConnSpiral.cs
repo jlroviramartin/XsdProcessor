@@ -7,16 +7,23 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// Connecting Spiral Definition
+    /// All [1, 1]
+    ///     Spiral [1, 1]
     /// </summary>
 
-    public class ConnSpiral : XsdBaseObject
+    public class ConnSpiral : XsdBaseReader
     {
+        public ConnSpiral(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
-
 
             return true;
         }
@@ -26,20 +33,26 @@ namespace XmlSchemaProcessor.LandXml20
             System.Text.StringBuilder buff = new System.Text.StringBuilder();
             buff.AppendLine(base.ToString());
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
-
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             return buff.ToString();
         }
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Spiral"))
+            {
+                return Tuple.Create("Spiral", this.NewReader<Spiral>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

@@ -7,51 +7,44 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// volume calculation results between two surfaces
+    /// Sequence [1, 1]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class SurfVolume : XsdBaseObject
+    public class SurfVolume : XsdBaseReader
     {
+        public SurfVolume(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.SurfBase = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("surfBase"));
-
-
 
             this.SurfCompare = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("surfCompare"));
 
-
-
             this.VolCut = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("volCut"));
-
-
 
             this.VolFill = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("volFill"));
 
-
-
             this.VolTotal = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("volTotal"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             return true;
         }
@@ -90,44 +83,41 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("name = {0}", this.Name).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.SurfBase != null)
             {
-                buff.AppendFormat(" surfBase=\"{0}\"", this.SurfBase);
+                buff.Append("surfBase", this.SurfBase);
             }
             if ((object)this.SurfCompare != null)
             {
-                buff.AppendFormat(" surfCompare=\"{0}\"", this.SurfCompare);
+                buff.Append("surfCompare", this.SurfCompare);
             }
             if ((object)this.VolCut != null)
             {
-                buff.AppendFormat(" volCut=\"{0}\"", this.VolCut);
+                buff.Append("volCut", this.VolCut);
             }
             if ((object)this.VolFill != null)
             {
-                buff.AppendFormat(" volFill=\"{0}\"", this.VolFill);
+                buff.Append("volFill", this.VolFill);
             }
             if ((object)this.VolTotal != null)
             {
-                buff.AppendFormat(" volTotal=\"{0}\"", this.VolTotal);
+                buff.Append("volTotal", this.VolTotal);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
-
 
             return buff.ToString();
         }
@@ -154,6 +144,15 @@ namespace XmlSchemaProcessor.LandXml20
         public string Name;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

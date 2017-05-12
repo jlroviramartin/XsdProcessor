@@ -7,76 +7,57 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// This is a new element that represents a physical monument placed to mark a CgPoint within a survey
     /// </summary>
 
-    public class Monument : XsdBaseObject
+    public class Monument : XsdBaseReader
     {
+        public Monument(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.PntRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("pntRef"));
 
-
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.State = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("state"));
 
-
-
             this.Type = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("type"));
-
-
 
             this.Condition = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("condition"));
 
-
-
             this.Category = XsdConverter.Instance.Convert<MonumentCategory?>(
                     attributes.GetSafe("category"));
-
-
 
             this.Beacon = XsdConverter.Instance.Convert<BeaconType?>(
                     attributes.GetSafe("beacon"));
 
-
-
             this.BeaconProtection = XsdConverter.Instance.Convert<BeaconProtectionType?>(
                     attributes.GetSafe("beaconProtection"));
-
-
 
             this.OID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("oID"));
 
-
-
             this.Reference = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("reference"));
 
-
-
             this.OriginSurvey = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("originSurvey"));
-
-
 
             return true;
         }
@@ -135,64 +116,61 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("originSurvey = {0}", this.OriginSurvey).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.PntRef != null)
             {
-                buff.AppendFormat(" pntRef=\"{0}\"", this.PntRef);
+                buff.Append("pntRef", this.PntRef);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.Type != null)
             {
-                buff.AppendFormat(" type=\"{0}\"", this.Type);
+                buff.Append("type", this.Type);
             }
             if ((object)this.Condition != null)
             {
-                buff.AppendFormat(" condition=\"{0}\"", this.Condition);
+                buff.Append("condition", this.Condition);
             }
             if ((object)this.Category != null)
             {
-                buff.AppendFormat(" category=\"{0}\"", this.Category);
+                buff.Append("category", this.Category);
             }
             if ((object)this.Beacon != null)
             {
-                buff.AppendFormat(" beacon=\"{0}\"", this.Beacon);
+                buff.Append("beacon", this.Beacon);
             }
             if ((object)this.BeaconProtection != null)
             {
-                buff.AppendFormat(" beaconProtection=\"{0}\"", this.BeaconProtection);
+                buff.Append("beaconProtection", this.BeaconProtection);
             }
             if ((object)this.OID != null)
             {
-                buff.AppendFormat(" oID=\"{0}\"", this.OID);
+                buff.Append("oID", this.OID);
             }
             if ((object)this.Reference != null)
             {
-                buff.AppendFormat(" reference=\"{0}\"", this.Reference);
+                buff.Append("reference", this.Reference);
             }
             if ((object)this.OriginSurvey != null)
             {
-                buff.AppendFormat(" originSurvey=\"{0}\"", this.OriginSurvey);
+                buff.Append("originSurvey", this.OriginSurvey);
             }
-
 
             return buff.ToString();
         }
@@ -245,6 +223,10 @@ namespace XmlSchemaProcessor.LandXml11
         public string OriginSurvey;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

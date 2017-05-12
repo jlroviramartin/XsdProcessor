@@ -7,6 +7,8 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : true
+    // includeContent : false
     /// <summary>
     /// A surface point. it contains an id attribute and a space delimited "northing easting elevation" text value.
     /// The id values are referenced by the surface faces for the coordinate values.
@@ -14,15 +16,16 @@ namespace XmlSchemaProcessor.LandXml12
 
     public class P : PointType
     {
+        public P(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Id = XsdConverter.Instance.Convert<uint>(
                     attributes.GetSafe("id"));
-
-
 
             return true;
         }
@@ -37,20 +40,17 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("id = {0}", this.Id).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Id != null)
             {
-                buff.AppendFormat(" id=\"{0}\"", this.Id);
+                buff.Append("id", this.Id);
             }
-
 
             return buff.ToString();
         }
@@ -58,6 +58,10 @@ namespace XmlSchemaProcessor.LandXml12
         public uint Id;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

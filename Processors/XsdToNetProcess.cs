@@ -255,19 +255,20 @@ namespace XmlSchemaProcessor.Processors
                 this.BuildType(xsdType, xsdType.Name);
             }
 
-            foreach (XsdElement element in schema.Elements.Where(e => e.TypeDefinition is XsdSimpleType))
+            foreach (XsdElement element in schema.Elements)
             {
-                this.ProcessSimpleElement(element);
-            }
-
-            foreach (XsdElement element in schema.Elements.Where(e => e.TypeDefinition is XsdComplexType))
-            {
-                this.ProcessComplexElement(element);
-            }
-
-            foreach (XsdElement element in schema.Elements.Where(e => e.TypeDefinition == null))
-            {
-                Debug.WriteLine("class {0} ???", element.Name);
+                if (element.TypeDefinition is XsdSimpleType)
+                {
+                    this.ProcessSimpleElement(element);
+                }
+                else if (element.TypeDefinition is XsdComplexType)
+                {
+                    this.ProcessComplexElement(element);
+                }
+                else
+                {
+                    Debug.WriteLine("class {0} ???", element.Name);
+                }
             }
 
             this.WriteEventInterface();
@@ -279,22 +280,20 @@ namespace XmlSchemaProcessor.Processors
         private void ProcessComplexElement(XsdElement xsdElement)
         {
             Contract.Assert(xsdElement.TypeDefinition is XsdComplexType);
-            if (xsdElement.TypeDefinition.TopLevel)
-            {
-                this.NewEvent(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), false, GetElementDocumentation(xsdElement));
-            }
-            else
+
+            if (!xsdElement.TypeDefinition.TopLevel)
             {
                 this.BuildType((XsdComplexType)xsdElement.TypeDefinition, xsdElement.Name, xsdElement.GetNetDocumentation());
-
-                this.NewEvent(xsdElement.Name, xsdElement.Name.ToTypeName(), false, GetElementDocumentation(xsdElement));
             }
+
+            this.NewEvent(xsdElement.Name, xsdElement.ToNetType(false), false, GetElementDocumentation(xsdElement));
         }
 
         private void ProcessSimpleElement(XsdElement xsdElement)
         {
             Contract.Assert(xsdElement.TypeDefinition is XsdSimpleType);
-            this.NewEvent(xsdElement.Name, xsdElement.TypeDefinition.ToNetType(false), true, GetElementDocumentation(xsdElement));
+
+            this.NewEvent(xsdElement.Name, xsdElement.ToNetType(false), true, GetElementDocumentation(xsdElement));
         }
 
         #region XsdSimpleType

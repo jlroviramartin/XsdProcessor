@@ -7,111 +7,84 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// As we discussed this element is used to provide measured information for calculating boundary arcs. The definition information required is quite different to the curve element
+    /// Sequence [1, 1]
+    ///     TargetPoint [0, 1]
+    ///     OffsetVals [0, 1]
+    ///     Choice [0, *]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
     /// </summary>
 
-    public class ReducedArcObservation : XsdBaseObject
+    public class ReducedArcObservation : XsdBaseReader
     {
+        public ReducedArcObservation(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
                     attributes.GetSafe("purpose"));
-
-
 
             this.SetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID"));
 
-
-
             this.TargetSetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("targetSetupID"));
-
-
 
             this.SetID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setID"));
 
-
-
             this.ChordAzimuth = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("chordAzimuth"));
-
-
 
             this.Radius = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("radius"));
 
-
-
             this.Length = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("length"));
-
-
 
             this.Rot = XsdConverter.Instance.Convert<Clockwise>(
                     attributes.GetSafe("rot"));
 
-
-
             this.EquipmentUsed = XsdConverter.Instance.Convert<EquipmentType?>(
                     attributes.GetSafe("equipmentUsed"));
-
-
 
             this.ArcAzimuthAccuracy = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("arcAzimuthAccuracy"));
 
-
-
             this.ArcLengthAccuracy = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("arcLengthAccuracy"));
-
-
 
             this.Date = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("date"));
 
-
-
             this.ArcType = XsdConverter.Instance.Convert<ObservationType?>(
                     attributes.GetSafe("arcType"));
-
-
 
             this.AdoptedSurvey = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("adoptedSurvey"));
 
-
-
             this.LengthAccClass = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("lengthAccClass"));
-
-
 
             this.AzimuthAccClass = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("azimuthAccClass"));
 
-
-
             this.AzimuthAdoptionFactor = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("azimuthAdoptionFactor"));
-
-
 
             this.LengthAdoptionFactor = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("lengthAdoptionFactor"));
 
-
-
             this.CoordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("coordGeomRefs"));
-
-
 
             return true;
         }
@@ -198,92 +171,89 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("coordGeomRefs = {0}", this.CoordGeomRefs).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.SetupID != null)
             {
-                buff.AppendFormat(" setupID=\"{0}\"", this.SetupID);
+                buff.Append("setupID", this.SetupID);
             }
             if ((object)this.TargetSetupID != null)
             {
-                buff.AppendFormat(" targetSetupID=\"{0}\"", this.TargetSetupID);
+                buff.Append("targetSetupID", this.TargetSetupID);
             }
             if ((object)this.SetID != null)
             {
-                buff.AppendFormat(" setID=\"{0}\"", this.SetID);
+                buff.Append("setID", this.SetID);
             }
             if ((object)this.ChordAzimuth != null)
             {
-                buff.AppendFormat(" chordAzimuth=\"{0}\"", this.ChordAzimuth);
+                buff.Append("chordAzimuth", this.ChordAzimuth);
             }
             if ((object)this.Radius != null)
             {
-                buff.AppendFormat(" radius=\"{0}\"", this.Radius);
+                buff.Append("radius", this.Radius);
             }
             if ((object)this.Length != null)
             {
-                buff.AppendFormat(" length=\"{0}\"", this.Length);
+                buff.Append("length", this.Length);
             }
             if ((object)this.Rot != null)
             {
-                buff.AppendFormat(" rot=\"{0}\"", this.Rot);
+                buff.Append("rot", this.Rot);
             }
             if ((object)this.EquipmentUsed != null)
             {
-                buff.AppendFormat(" equipmentUsed=\"{0}\"", this.EquipmentUsed);
+                buff.Append("equipmentUsed", this.EquipmentUsed);
             }
             if ((object)this.ArcAzimuthAccuracy != null)
             {
-                buff.AppendFormat(" arcAzimuthAccuracy=\"{0}\"", this.ArcAzimuthAccuracy);
+                buff.Append("arcAzimuthAccuracy", this.ArcAzimuthAccuracy);
             }
             if ((object)this.ArcLengthAccuracy != null)
             {
-                buff.AppendFormat(" arcLengthAccuracy=\"{0}\"", this.ArcLengthAccuracy);
+                buff.Append("arcLengthAccuracy", this.ArcLengthAccuracy);
             }
             if ((object)this.Date != null)
             {
-                buff.AppendFormat(" date=\"{0}\"", this.Date);
+                buff.Append("date", this.Date);
             }
             if ((object)this.ArcType != null)
             {
-                buff.AppendFormat(" arcType=\"{0}\"", this.ArcType);
+                buff.Append("arcType", this.ArcType);
             }
             if ((object)this.AdoptedSurvey != null)
             {
-                buff.AppendFormat(" adoptedSurvey=\"{0}\"", this.AdoptedSurvey);
+                buff.Append("adoptedSurvey", this.AdoptedSurvey);
             }
             if ((object)this.LengthAccClass != null)
             {
-                buff.AppendFormat(" lengthAccClass=\"{0}\"", this.LengthAccClass);
+                buff.Append("lengthAccClass", this.LengthAccClass);
             }
             if ((object)this.AzimuthAccClass != null)
             {
-                buff.AppendFormat(" azimuthAccClass=\"{0}\"", this.AzimuthAccClass);
+                buff.Append("azimuthAccClass", this.AzimuthAccClass);
             }
             if ((object)this.AzimuthAdoptionFactor != null)
             {
-                buff.AppendFormat(" azimuthAdoptionFactor=\"{0}\"", this.AzimuthAdoptionFactor);
+                buff.Append("azimuthAdoptionFactor", this.AzimuthAdoptionFactor);
             }
             if ((object)this.LengthAdoptionFactor != null)
             {
-                buff.AppendFormat(" lengthAdoptionFactor=\"{0}\"", this.LengthAdoptionFactor);
+                buff.Append("lengthAdoptionFactor", this.LengthAdoptionFactor);
             }
             if ((object)this.CoordGeomRefs != null)
             {
-                buff.AppendFormat(" coordGeomRefs=\"{0}\"", this.CoordGeomRefs);
+                buff.Append("coordGeomRefs", this.CoordGeomRefs);
             }
-
 
             return buff.ToString();
         }
@@ -343,6 +313,27 @@ namespace XmlSchemaProcessor.LandXml10
         public IList<string> CoordGeomRefs;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("OffsetVals"))
+            {
+                return Tuple.Create("OffsetVals", this.NewReader<OffsetVals>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

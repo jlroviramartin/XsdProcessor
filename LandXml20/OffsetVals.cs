@@ -7,33 +7,32 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// offsetInOut:   -ve = offset in towards inst, +ve = offset away from inst 
     /// offsetLeftRight:   -ve = left, +ve = right (as viewed from instrument) 
     /// offsetUpDown:   -ve = down, +ve = up
     /// </summary>
 
-    public class OffsetVals : XsdBaseObject
+    public class OffsetVals : XsdBaseReader
     {
+        public OffsetVals(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.OffsetInOut = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("offsetInOut"));
-
-
 
             this.OffsetLeftRight = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("offsetLeftRight"));
 
-
-
             this.OffsetUpDown = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("offsetUpDown"));
-
-
 
             return true;
         }
@@ -56,28 +55,25 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("offsetUpDown = {0}", this.OffsetUpDown).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.OffsetInOut != null)
             {
-                buff.AppendFormat(" offsetInOut=\"{0}\"", this.OffsetInOut);
+                buff.Append("offsetInOut", this.OffsetInOut);
             }
             if ((object)this.OffsetLeftRight != null)
             {
-                buff.AppendFormat(" offsetLeftRight=\"{0}\"", this.OffsetLeftRight);
+                buff.Append("offsetLeftRight", this.OffsetLeftRight);
             }
             if ((object)this.OffsetUpDown != null)
             {
-                buff.AppendFormat(" offsetUpDown=\"{0}\"", this.OffsetUpDown);
+                buff.Append("offsetUpDown", this.OffsetUpDown);
             }
-
 
             return buff.ToString();
         }
@@ -89,6 +85,10 @@ namespace XmlSchemaProcessor.LandXml20
         public double? OffsetUpDown;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

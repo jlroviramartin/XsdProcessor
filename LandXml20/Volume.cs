@@ -7,32 +7,34 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class Volume : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class Volume : XsdBaseReader
     {
+        public Volume(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Station = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("station"));
-
-
 
             this.LegNumber = XsdConverter.Instance.Convert<int?>(
                     attributes.GetSafe("legNumber"));
 
-
-
             this.TurnPercent = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("turnPercent"));
 
-
-
             this.PercentTrucks = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("percentTrucks"));
-
-
 
             return true;
         }
@@ -59,32 +61,29 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("percentTrucks = {0}", this.PercentTrucks).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Station != null)
             {
-                buff.AppendFormat(" station=\"{0}\"", this.Station);
+                buff.Append("station", this.Station);
             }
             if ((object)this.LegNumber != null)
             {
-                buff.AppendFormat(" legNumber=\"{0}\"", this.LegNumber);
+                buff.Append("legNumber", this.LegNumber);
             }
             if ((object)this.TurnPercent != null)
             {
-                buff.AppendFormat(" turnPercent=\"{0}\"", this.TurnPercent);
+                buff.Append("turnPercent", this.TurnPercent);
             }
             if ((object)this.PercentTrucks != null)
             {
-                buff.AppendFormat(" percentTrucks=\"{0}\"", this.PercentTrucks);
+                buff.Append("percentTrucks", this.PercentTrucks);
             }
-
 
             return buff.ToString();
         }
@@ -102,6 +101,15 @@ namespace XmlSchemaProcessor.LandXml20
         public double? PercentTrucks;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

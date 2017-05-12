@@ -7,22 +7,28 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    public class DecisionSightDistance : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class DecisionSightDistance : XsdBaseReader
     {
+        public DecisionSightDistance(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Station = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("station"));
 
-
-
             this.Maneuver = XsdConverter.Instance.Convert<ManeuverType?>(
                     attributes.GetSafe("maneuver"));
-
-
 
             return true;
         }
@@ -41,24 +47,21 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("maneuver = {0}", this.Maneuver).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Station != null)
             {
-                buff.AppendFormat(" station=\"{0}\"", this.Station);
+                buff.Append("station", this.Station);
             }
             if ((object)this.Maneuver != null)
             {
-                buff.AppendFormat(" maneuver=\"{0}\"", this.Maneuver);
+                buff.Append("maneuver", this.Maneuver);
             }
-
 
             return buff.ToString();
         }
@@ -72,6 +75,15 @@ namespace XmlSchemaProcessor.LandXml12
         public ManeuverType? Maneuver;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

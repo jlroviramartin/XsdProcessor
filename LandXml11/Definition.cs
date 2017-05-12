@@ -7,41 +7,40 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The collection of faces and points that defined the surface.
+    /// Sequence [1, 1]
+    ///     Pnts [1, 1]
+    ///     Faces [1, *]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class Definition : XsdBaseObject
+    public class Definition : XsdBaseReader
     {
+        public Definition(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.SurfType = XsdConverter.Instance.Convert<SurfTypeEnum>(
                     attributes.GetSafe("surfType"));
-
-
 
             this.Area2DSurf = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("area2DSurf"));
 
-
-
             this.Area3DSurf = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("area3DSurf"));
-
-
 
             this.ElevMax = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("elevMax"));
 
-
-
             this.ElevMin = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("elevMin"));
-
-
 
             return true;
         }
@@ -72,36 +71,33 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("elevMin = {0}", this.ElevMin).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.SurfType != null)
             {
-                buff.AppendFormat(" surfType=\"{0}\"", this.SurfType);
+                buff.Append("surfType", this.SurfType);
             }
             if ((object)this.Area2DSurf != null)
             {
-                buff.AppendFormat(" area2DSurf=\"{0}\"", this.Area2DSurf);
+                buff.Append("area2DSurf", this.Area2DSurf);
             }
             if ((object)this.Area3DSurf != null)
             {
-                buff.AppendFormat(" area3DSurf=\"{0}\"", this.Area3DSurf);
+                buff.Append("area3DSurf", this.Area3DSurf);
             }
             if ((object)this.ElevMax != null)
             {
-                buff.AppendFormat(" elevMax=\"{0}\"", this.ElevMax);
+                buff.Append("elevMax", this.ElevMax);
             }
             if ((object)this.ElevMin != null)
             {
-                buff.AppendFormat(" elevMin=\"{0}\"", this.ElevMin);
+                buff.Append("elevMin", this.ElevMin);
             }
-
 
             return buff.ToString();
         }
@@ -122,6 +118,23 @@ namespace XmlSchemaProcessor.LandXml11
         public double? ElevMin;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Faces"))
+            {
+                return Tuple.Create("Faces", this.NewReader<Faces>());
+            }
+            if (name.EqualsIgnoreCase("Pnts"))
+            {
+                return Tuple.Create("Pnts", this.NewReader<Pnts>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

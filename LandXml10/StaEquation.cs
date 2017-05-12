@@ -7,36 +7,35 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The "staInternal" value identifies the location of the station equation. It is the station value with no equations applied (staStart + dist).
+    /// Sequence [1, 1]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class StaEquation : XsdBaseObject
+    public class StaEquation : XsdBaseReader
     {
+        public StaEquation(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.StaAhead = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staAhead"));
-
-
 
             this.StaBack = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("staBack"));
 
-
-
             this.StaInternal = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staInternal"));
 
-
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             return true;
         }
@@ -63,32 +62,29 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.StaAhead != null)
             {
-                buff.AppendFormat(" staAhead=\"{0}\"", this.StaAhead);
+                buff.Append("staAhead", this.StaAhead);
             }
             if ((object)this.StaBack != null)
             {
-                buff.AppendFormat(" staBack=\"{0}\"", this.StaBack);
+                buff.Append("staBack", this.StaBack);
             }
             if ((object)this.StaInternal != null)
             {
-                buff.AppendFormat(" staInternal=\"{0}\"", this.StaInternal);
+                buff.Append("staInternal", this.StaInternal);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
-
 
             return buff.ToString();
         }
@@ -102,6 +98,15 @@ namespace XmlSchemaProcessor.LandXml10
         public string Desc;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

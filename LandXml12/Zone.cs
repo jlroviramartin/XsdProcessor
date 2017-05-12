@@ -7,77 +7,66 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    public class Zone : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     ZoneWidth [0, *]
+    ///     ZoneSlope [0, *]
+    ///     ZoneCutFill [0, *]
+    ///     ZoneMaterial [0, *]
+    ///     ZoneCrossSectStructure [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class Zone : XsdBaseReader
     {
+        public Zone(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             this.Priority = XsdConverter.Instance.Convert<int>(
                     attributes.GetSafe("priority"));
 
-
-
             this.Category = XsdConverter.Instance.Convert<ZoneCategoryType>(
                     attributes.GetSafe("category"));
-
-
 
             this.StaStart = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staStart"));
 
-
-
             this.StaEnd = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("staEnd"));
-
-
 
             this.StartWidth = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("startWidth"));
 
-
-
             this.StartVertValue = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("startVertValue"));
-
-
 
             this.StartVertType = XsdConverter.Instance.Convert<ZoneVertType>(
                     attributes.GetSafe("startVertType"));
 
-
-
             this.EndWidth = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("endWidth"));
-
-
 
             this.EndVertValue = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("endVertValue"));
 
-
-
             this.EndVertType = XsdConverter.Instance.Convert<ZoneVertType?>(
                     attributes.GetSafe("endVertType"));
-
-
 
             return true;
         }
@@ -140,68 +129,65 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("endVertType = {0}", this.EndVertType).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.Priority != null)
             {
-                buff.AppendFormat(" priority=\"{0}\"", this.Priority);
+                buff.Append("priority", this.Priority);
             }
             if ((object)this.Category != null)
             {
-                buff.AppendFormat(" category=\"{0}\"", this.Category);
+                buff.Append("category", this.Category);
             }
             if ((object)this.StaStart != null)
             {
-                buff.AppendFormat(" staStart=\"{0}\"", this.StaStart);
+                buff.Append("staStart", this.StaStart);
             }
             if ((object)this.StaEnd != null)
             {
-                buff.AppendFormat(" staEnd=\"{0}\"", this.StaEnd);
+                buff.Append("staEnd", this.StaEnd);
             }
             if ((object)this.StartWidth != null)
             {
-                buff.AppendFormat(" startWidth=\"{0}\"", this.StartWidth);
+                buff.Append("startWidth", this.StartWidth);
             }
             if ((object)this.StartVertValue != null)
             {
-                buff.AppendFormat(" startVertValue=\"{0}\"", this.StartVertValue);
+                buff.Append("startVertValue", this.StartVertValue);
             }
             if ((object)this.StartVertType != null)
             {
-                buff.AppendFormat(" startVertType=\"{0}\"", this.StartVertType);
+                buff.Append("startVertType", this.StartVertType);
             }
             if ((object)this.EndWidth != null)
             {
-                buff.AppendFormat(" endWidth=\"{0}\"", this.EndWidth);
+                buff.Append("endWidth", this.EndWidth);
             }
             if ((object)this.EndVertValue != null)
             {
-                buff.AppendFormat(" endVertValue=\"{0}\"", this.EndVertValue);
+                buff.Append("endVertValue", this.EndVertValue);
             }
             if ((object)this.EndVertType != null)
             {
-                buff.AppendFormat(" endVertType=\"{0}\"", this.EndVertType);
+                buff.Append("endVertType", this.EndVertType);
             }
-
 
             return buff.ToString();
         }
@@ -239,6 +225,35 @@ namespace XmlSchemaProcessor.LandXml12
         public ZoneVertType? EndVertType;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("ZoneCrossSectStructure"))
+            {
+                return Tuple.Create("ZoneCrossSectStructure", this.NewReader<ZoneCrossSectStructure>());
+            }
+            if (name.EqualsIgnoreCase("ZoneMaterial"))
+            {
+                return Tuple.Create("ZoneMaterial", this.NewReader<ZoneMaterial>());
+            }
+            if (name.EqualsIgnoreCase("ZoneCutFill"))
+            {
+                return Tuple.Create("ZoneCutFill", this.NewReader<ZoneCutFill>());
+            }
+            if (name.EqualsIgnoreCase("ZoneSlope"))
+            {
+                return Tuple.Create("ZoneSlope", this.NewReader<ZoneSlope>());
+            }
+            if (name.EqualsIgnoreCase("ZoneWidth"))
+            {
+                return Tuple.Create("ZoneWidth", this.NewReader<ZoneWidth>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

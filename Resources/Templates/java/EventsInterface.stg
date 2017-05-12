@@ -1,0 +1,18 @@
+﻿delimiters "$", "$"
+
+EventsInterface(namespace, interfaceTypeName, events) ::= <<
+$Pre(namespace)$
+    public interface $interfaceTypeName$
+    {
+        $events:{x | $EventInterface(x)$}$
+    }
+$Post()$
+
+>>
+
+EventInterface(simpleEvent) ::= <<
+$simpleEvent.Documentation; format="NetDocumentation"$
+void BeginRead$simpleEvent.Name; format="FirstUpper"$( $simpleEvent.ArgType$ value );
+void EndRead$simpleEvent.Name; format="FirstUpper"$();
+
+>>

@@ -7,32 +7,34 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class ZoneWidth : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [1, 1]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class ZoneWidth : XsdBaseReader
     {
+        public ZoneWidth(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.StaStart = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staStart"));
-
-
 
             this.StaEnd = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staEnd"));
 
-
-
             this.StartWidth = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("startWidth"));
 
-
-
             this.EndWidth = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("endWidth"));
-
-
 
             return true;
         }
@@ -59,32 +61,29 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("endWidth = {0}", this.EndWidth).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.StaStart != null)
             {
-                buff.AppendFormat(" staStart=\"{0}\"", this.StaStart);
+                buff.Append("staStart", this.StaStart);
             }
             if ((object)this.StaEnd != null)
             {
-                buff.AppendFormat(" staEnd=\"{0}\"", this.StaEnd);
+                buff.Append("staEnd", this.StaEnd);
             }
             if ((object)this.StartWidth != null)
             {
-                buff.AppendFormat(" startWidth=\"{0}\"", this.StartWidth);
+                buff.Append("startWidth", this.StartWidth);
             }
             if ((object)this.EndWidth != null)
             {
-                buff.AppendFormat(" endWidth=\"{0}\"", this.EndWidth);
+                buff.Append("endWidth", this.EndWidth);
             }
-
 
             return buff.ToString();
         }
@@ -105,6 +104,15 @@ namespace XmlSchemaProcessor.LandXml20
         public double? EndWidth;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

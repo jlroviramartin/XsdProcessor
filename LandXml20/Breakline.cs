@@ -7,42 +7,42 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The breakline is defined by a 2D north/east or 3D north/east/elev list of points that define the geometry.
     /// is identified by the "name" attribute.
+    /// Sequence [1, 1]
+    ///     Choice [1, 1]
+    ///         PntList2D [1, 1]
+    ///         PntList3D [1, 1]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class Breakline : XsdBaseObject
+    public class Breakline : XsdBaseReader
     {
+        public Breakline(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.BrkType = XsdConverter.Instance.Convert<BreakLineType?>(
                     attributes.GetSafe("brkType"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
 
-
-
             this.M = XsdConverter.Instance.Convert<IList<int?>>(
                     attributes.GetSafe("m"));
-
-
 
             return true;
         }
@@ -73,36 +73,33 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("m = {0}", this.M).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.BrkType != null)
             {
-                buff.AppendFormat(" brkType=\"{0}\"", this.BrkType);
+                buff.Append("brkType", this.BrkType);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.M != null)
             {
-                buff.AppendFormat(" m=\"{0}\"", this.M);
+                buff.Append("m", this.M);
             }
-
 
             return buff.ToString();
         }
@@ -121,6 +118,23 @@ namespace XmlSchemaProcessor.LandXml20
         public IList<int?> M;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList3D"))
+            {
+                return Tuple.Create("PntList3D", this.NewReader<IList<double>>());
+            }
+            if (name.EqualsIgnoreCase("PntList2D"))
+            {
+                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

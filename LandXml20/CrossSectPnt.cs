@@ -7,52 +7,42 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : true
+    // includeContent : false
     public class CrossSectPnt : PointType
     {
+        public CrossSectPnt(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
-
 
             this.DataFormat = XsdConverter.Instance.Convert<DataFormatType?>(
                     attributes.GetSafe("dataFormat"),
                     XsdConverter.Instance.Convert<DataFormatType?>("Offset Elevation"));
 
-
             this.AlignRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("alignRef"));
-
-
 
             this.AlignRefStation = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("alignRefStation"));
 
-
-
             this.PlanFeatureRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("planFeatureRef"));
-
-
 
             this.PlanFeatureRefStation = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("planFeatureRefStation"));
 
-
-
             this.ParcelRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("parcelRef"));
-
-
 
             this.ParcelRefStation = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("parcelRefStation"));
 
-
-
             this.SurfaceRefs = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("surfaceRefs"));
-
-
 
             return true;
         }
@@ -95,48 +85,45 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("surfaceRefs = {0}", this.SurfaceRefs).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.DataFormat != null)
             {
-                buff.AppendFormat(" dataFormat=\"{0}\"", this.DataFormat);
+                buff.Append("dataFormat", this.DataFormat);
             }
             if ((object)this.AlignRef != null)
             {
-                buff.AppendFormat(" alignRef=\"{0}\"", this.AlignRef);
+                buff.Append("alignRef", this.AlignRef);
             }
             if ((object)this.AlignRefStation != null)
             {
-                buff.AppendFormat(" alignRefStation=\"{0}\"", this.AlignRefStation);
+                buff.Append("alignRefStation", this.AlignRefStation);
             }
             if ((object)this.PlanFeatureRef != null)
             {
-                buff.AppendFormat(" planFeatureRef=\"{0}\"", this.PlanFeatureRef);
+                buff.Append("planFeatureRef", this.PlanFeatureRef);
             }
             if ((object)this.PlanFeatureRefStation != null)
             {
-                buff.AppendFormat(" planFeatureRefStation=\"{0}\"", this.PlanFeatureRefStation);
+                buff.Append("planFeatureRefStation", this.PlanFeatureRefStation);
             }
             if ((object)this.ParcelRef != null)
             {
-                buff.AppendFormat(" parcelRef=\"{0}\"", this.ParcelRef);
+                buff.Append("parcelRef", this.ParcelRef);
             }
             if ((object)this.ParcelRefStation != null)
             {
-                buff.AppendFormat(" parcelRefStation=\"{0}\"", this.ParcelRefStation);
+                buff.Append("parcelRefStation", this.ParcelRefStation);
             }
             if ((object)this.SurfaceRefs != null)
             {
-                buff.AppendFormat(" surfaceRefs=\"{0}\"", this.SurfaceRefs);
+                buff.Append("surfaceRefs", this.SurfaceRefs);
             }
-
 
             return buff.ToString();
         }
@@ -179,6 +166,10 @@ namespace XmlSchemaProcessor.LandXml20
         public IList<string> SurfaceRefs;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

@@ -7,52 +7,49 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class PointResults : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     TargetPoint [0, 1]
+    ///     Choice [0, *]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
+    /// </summary>
+
+    public class PointResults : XsdBaseReader
     {
+        public PointResults(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.SetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID"));
-
-
 
             this.TargetSetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("targetSetupID"));
 
-
-
             this.MeanHorizAngle = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("meanHorizAngle"));
-
-
 
             this.HorizStdDeviation = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("horizStdDeviation"));
 
-
-
             this.MeanzenithAngle = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("meanzenithAngle"));
-
-
 
             this.VertStdDeviation = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("vertStdDeviation"));
 
-
-
             this.MeanSlopeDistance = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("meanSlopeDistance"));
 
-
-
             this.SlopeDistanceStdDeviation = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("slopeDistanceStdDeviation"));
-
-
 
             return true;
         }
@@ -95,48 +92,45 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("slopeDistanceStdDeviation = {0}", this.SlopeDistanceStdDeviation).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.SetupID != null)
             {
-                buff.AppendFormat(" setupID=\"{0}\"", this.SetupID);
+                buff.Append("setupID", this.SetupID);
             }
             if ((object)this.TargetSetupID != null)
             {
-                buff.AppendFormat(" targetSetupID=\"{0}\"", this.TargetSetupID);
+                buff.Append("targetSetupID", this.TargetSetupID);
             }
             if ((object)this.MeanHorizAngle != null)
             {
-                buff.AppendFormat(" meanHorizAngle=\"{0}\"", this.MeanHorizAngle);
+                buff.Append("meanHorizAngle", this.MeanHorizAngle);
             }
             if ((object)this.HorizStdDeviation != null)
             {
-                buff.AppendFormat(" horizStdDeviation=\"{0}\"", this.HorizStdDeviation);
+                buff.Append("horizStdDeviation", this.HorizStdDeviation);
             }
             if ((object)this.MeanzenithAngle != null)
             {
-                buff.AppendFormat(" meanzenithAngle=\"{0}\"", this.MeanzenithAngle);
+                buff.Append("meanzenithAngle", this.MeanzenithAngle);
             }
             if ((object)this.VertStdDeviation != null)
             {
-                buff.AppendFormat(" vertStdDeviation=\"{0}\"", this.VertStdDeviation);
+                buff.Append("vertStdDeviation", this.VertStdDeviation);
             }
             if ((object)this.MeanSlopeDistance != null)
             {
-                buff.AppendFormat(" meanSlopeDistance=\"{0}\"", this.MeanSlopeDistance);
+                buff.Append("meanSlopeDistance", this.MeanSlopeDistance);
             }
             if ((object)this.SlopeDistanceStdDeviation != null)
             {
-                buff.AppendFormat(" slopeDistanceStdDeviation=\"{0}\"", this.SlopeDistanceStdDeviation);
+                buff.Append("slopeDistanceStdDeviation", this.SlopeDistanceStdDeviation);
             }
-
 
             return buff.ToString();
         }
@@ -163,6 +157,23 @@ namespace XmlSchemaProcessor.LandXml20
         public double? SlopeDistanceStdDeviation;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

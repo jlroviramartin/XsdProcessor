@@ -7,52 +7,46 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class RoadSign : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class RoadSign : XsdBaseReader
     {
+        public RoadSign(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.MUTCDCode = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("MUTCDCode"));
-
-
 
             this.Station = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("station"));
 
-
-
             this.Offset = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("offset"));
-
-
 
             this.SideofRoad = XsdConverter.Instance.Convert<SideofRoadType?>(
                     attributes.GetSafe("sideofRoad"));
 
-
-
             this.Type = XsdConverter.Instance.Convert<RoadSignType?>(
                     attributes.GetSafe("type"));
-
-
 
             this.MountHeight = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("mountHeight"));
 
-
-
             this.Width = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("width"));
 
-
-
             this.Height = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("height"));
-
-
 
             return true;
         }
@@ -95,48 +89,45 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("height = {0}", this.Height).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.MUTCDCode != null)
             {
-                buff.AppendFormat(" MUTCDCode=\"{0}\"", this.MUTCDCode);
+                buff.Append("MUTCDCode", this.MUTCDCode);
             }
             if ((object)this.Station != null)
             {
-                buff.AppendFormat(" station=\"{0}\"", this.Station);
+                buff.Append("station", this.Station);
             }
             if ((object)this.Offset != null)
             {
-                buff.AppendFormat(" offset=\"{0}\"", this.Offset);
+                buff.Append("offset", this.Offset);
             }
             if ((object)this.SideofRoad != null)
             {
-                buff.AppendFormat(" sideofRoad=\"{0}\"", this.SideofRoad);
+                buff.Append("sideofRoad", this.SideofRoad);
             }
             if ((object)this.Type != null)
             {
-                buff.AppendFormat(" type=\"{0}\"", this.Type);
+                buff.Append("type", this.Type);
             }
             if ((object)this.MountHeight != null)
             {
-                buff.AppendFormat(" mountHeight=\"{0}\"", this.MountHeight);
+                buff.Append("mountHeight", this.MountHeight);
             }
             if ((object)this.Width != null)
             {
-                buff.AppendFormat(" width=\"{0}\"", this.Width);
+                buff.Append("width", this.Width);
             }
             if ((object)this.Height != null)
             {
-                buff.AppendFormat(" height=\"{0}\"", this.Height);
+                buff.Append("height", this.Height);
             }
-
 
             return buff.ToString();
         }
@@ -164,6 +155,15 @@ namespace XmlSchemaProcessor.LandXml11
         public double? Height;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

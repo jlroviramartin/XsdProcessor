@@ -7,37 +7,40 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    public class Backsight : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     BacksightPoint [0, 1]
+    ///     Choice [1, 1]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
+    /// </summary>
+
+    public class Backsight : XsdBaseReader
     {
+        public Backsight(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Id = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("id"));
-
-
 
             this.Azimuth = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("azimuth"));
 
-
-
             this.TargetHeight = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("targetHeight"));
-
-
 
             this.Circle = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("circle"));
 
-
-
             this.SetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID"));
-
-
 
             return true;
         }
@@ -68,36 +71,33 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("setupID = {0}", this.SetupID).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Id != null)
             {
-                buff.AppendFormat(" id=\"{0}\"", this.Id);
+                buff.Append("id", this.Id);
             }
             if ((object)this.Azimuth != null)
             {
-                buff.AppendFormat(" azimuth=\"{0}\"", this.Azimuth);
+                buff.Append("azimuth", this.Azimuth);
             }
             if ((object)this.TargetHeight != null)
             {
-                buff.AppendFormat(" targetHeight=\"{0}\"", this.TargetHeight);
+                buff.Append("targetHeight", this.TargetHeight);
             }
             if ((object)this.Circle != null)
             {
-                buff.AppendFormat(" circle=\"{0}\"", this.Circle);
+                buff.Append("circle", this.Circle);
             }
             if ((object)this.SetupID != null)
             {
-                buff.AppendFormat(" setupID=\"{0}\"", this.SetupID);
+                buff.Append("setupID", this.SetupID);
             }
-
 
             return buff.ToString();
         }
@@ -119,6 +119,23 @@ namespace XmlSchemaProcessor.LandXml10
         public string SetupID;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("BacksightPoint"))
+            {
+                return Tuple.Create("BacksightPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

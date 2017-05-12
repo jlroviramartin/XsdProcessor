@@ -7,57 +7,52 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class GPSAntennaDetails : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     Choice [0, *]
+    ///         Monument [0, *]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
+    /// </summary>
+
+    public class GPSAntennaDetails : XsdBaseReader
     {
+        public GPSAntennaDetails(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Id = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("id"));
-
-
 
             this.Manufacturer = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("manufacturer"));
 
-
-
             this.Model = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("model"));
-
-
 
             this.SerialNumber = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("serialNumber"));
 
-
-
             this.Latitude = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("latitude"));
-
-
 
             this.Longitude = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("longitude"));
 
-
-
             this.Altitude = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("altitude"));
-
-
 
             this.EllipsiodnalHeight = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("ellipsiodnalHeight"));
 
-
-
             this.OrthometricHeight = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("orthometricHeight"));
-
-
 
             return true;
         }
@@ -104,52 +99,49 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("orthometricHeight = {0}", this.OrthometricHeight).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Id != null)
             {
-                buff.AppendFormat(" id=\"{0}\"", this.Id);
+                buff.Append("id", this.Id);
             }
             if ((object)this.Manufacturer != null)
             {
-                buff.AppendFormat(" manufacturer=\"{0}\"", this.Manufacturer);
+                buff.Append("manufacturer", this.Manufacturer);
             }
             if ((object)this.Model != null)
             {
-                buff.AppendFormat(" model=\"{0}\"", this.Model);
+                buff.Append("model", this.Model);
             }
             if ((object)this.SerialNumber != null)
             {
-                buff.AppendFormat(" serialNumber=\"{0}\"", this.SerialNumber);
+                buff.Append("serialNumber", this.SerialNumber);
             }
             if ((object)this.Latitude != null)
             {
-                buff.AppendFormat(" latitude=\"{0}\"", this.Latitude);
+                buff.Append("latitude", this.Latitude);
             }
             if ((object)this.Longitude != null)
             {
-                buff.AppendFormat(" longitude=\"{0}\"", this.Longitude);
+                buff.Append("longitude", this.Longitude);
             }
             if ((object)this.Altitude != null)
             {
-                buff.AppendFormat(" altitude=\"{0}\"", this.Altitude);
+                buff.Append("altitude", this.Altitude);
             }
             if ((object)this.EllipsiodnalHeight != null)
             {
-                buff.AppendFormat(" ellipsiodnalHeight=\"{0}\"", this.EllipsiodnalHeight);
+                buff.Append("ellipsiodnalHeight", this.EllipsiodnalHeight);
             }
             if ((object)this.OrthometricHeight != null)
             {
-                buff.AppendFormat(" orthometricHeight=\"{0}\"", this.OrthometricHeight);
+                buff.Append("orthometricHeight", this.OrthometricHeight);
             }
-
 
             return buff.ToString();
         }
@@ -173,6 +165,23 @@ namespace XmlSchemaProcessor.LandXml11
         public double? OrthometricHeight;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("Monument"))
+            {
+                return Tuple.Create("Monument", this.NewReader<Monument>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

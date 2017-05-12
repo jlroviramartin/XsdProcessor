@@ -7,57 +7,51 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class GradeSurface : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [1, *]
+    ///     Start [0, 1]
+    ///     Zones [1, 2]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class GradeSurface : XsdBaseReader
     {
+        public GradeSurface(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.AlignmentRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("alignmentRef"));
-
-
 
             this.StationAlignmentRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("stationAlignmentRef"));
 
-
-
             this.SurfaceType = XsdConverter.Instance.Convert<ZoneSurfaceType>(
                     attributes.GetSafe("surfaceType"));
-
-
 
             this.SurfaceRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("surfaceRef"));
 
-
-
             this.SurfaceRefs = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("surfaceRefs"));
-
-
 
             this.CgPointRefs = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("cgPointRefs"));
 
-
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             return true;
         }
@@ -104,52 +98,49 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.AlignmentRef != null)
             {
-                buff.AppendFormat(" alignmentRef=\"{0}\"", this.AlignmentRef);
+                buff.Append("alignmentRef", this.AlignmentRef);
             }
             if ((object)this.StationAlignmentRef != null)
             {
-                buff.AppendFormat(" stationAlignmentRef=\"{0}\"", this.StationAlignmentRef);
+                buff.Append("stationAlignmentRef", this.StationAlignmentRef);
             }
             if ((object)this.SurfaceType != null)
             {
-                buff.AppendFormat(" surfaceType=\"{0}\"", this.SurfaceType);
+                buff.Append("surfaceType", this.SurfaceType);
             }
             if ((object)this.SurfaceRef != null)
             {
-                buff.AppendFormat(" surfaceRef=\"{0}\"", this.SurfaceRef);
+                buff.Append("surfaceRef", this.SurfaceRef);
             }
             if ((object)this.SurfaceRefs != null)
             {
-                buff.AppendFormat(" surfaceRefs=\"{0}\"", this.SurfaceRefs);
+                buff.Append("surfaceRefs", this.SurfaceRefs);
             }
             if ((object)this.CgPointRefs != null)
             {
-                buff.AppendFormat(" cgPointRefs=\"{0}\"", this.CgPointRefs);
+                buff.Append("cgPointRefs", this.CgPointRefs);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
-
 
             return buff.ToString();
         }
@@ -189,6 +180,23 @@ namespace XmlSchemaProcessor.LandXml11
         public StateType? State;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Zones"))
+            {
+                return Tuple.Create("Zones", this.NewReader<Zones>());
+            }
+            if (name.EqualsIgnoreCase("Start"))
+            {
+                return Tuple.Create("Start", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

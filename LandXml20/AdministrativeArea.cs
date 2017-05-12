@@ -7,36 +7,33 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// This element stores the administrative boundaries for a survey
     /// </summary>
 
-    public class AdministrativeArea : XsdBaseObject
+    public class AdministrativeArea : XsdBaseReader
     {
+        public AdministrativeArea(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.AdminAreaType = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("adminAreaType"));
-
-
 
             this.AdminAreaName = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("adminAreaName"));
 
-
-
             this.AdminAreaCode = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("adminAreaCode"));
 
-
-
             this.PclRef = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("pclRef"));
-
-
 
             return true;
         }
@@ -63,32 +60,29 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.AdminAreaType != null)
             {
-                buff.AppendFormat(" adminAreaType=\"{0}\"", this.AdminAreaType);
+                buff.Append("adminAreaType", this.AdminAreaType);
             }
             if ((object)this.AdminAreaName != null)
             {
-                buff.AppendFormat(" adminAreaName=\"{0}\"", this.AdminAreaName);
+                buff.Append("adminAreaName", this.AdminAreaName);
             }
             if ((object)this.AdminAreaCode != null)
             {
-                buff.AppendFormat(" adminAreaCode=\"{0}\"", this.AdminAreaCode);
+                buff.Append("adminAreaCode", this.AdminAreaCode);
             }
             if ((object)this.PclRef != null)
             {
-                buff.AppendFormat(" pclRef=\"{0}\"", this.PclRef);
+                buff.Append("pclRef", this.PclRef);
             }
-
 
             return buff.ToString();
         }
@@ -109,6 +103,10 @@ namespace XmlSchemaProcessor.LandXml20
         public IList<string> PclRef;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

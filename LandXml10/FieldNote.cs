@@ -7,17 +7,24 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// Place the note as a text value between the FieldNote element tags.
     ///    You may also place any valid XML structure inside this tag.
+    /// Choice [1, *]
+    ///     XmlSchemaProcessor.Xsd.XsdParticleAny
     /// </summary>
 
-    public class FieldNote : XsdBaseObject
+    public class FieldNote : XsdBaseReader
     {
+        public FieldNote(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
-
 
             return true;
         }
@@ -27,20 +34,21 @@ namespace XmlSchemaProcessor.LandXml10
             System.Text.StringBuilder buff = new System.Text.StringBuilder();
             buff.AppendLine(base.ToString());
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
-
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             return buff.ToString();
         }
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

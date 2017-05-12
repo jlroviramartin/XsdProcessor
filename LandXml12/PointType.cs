@@ -7,111 +7,79 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : true
+    // includeContent : true
     /// <summary>
     /// All elements derived from PointType will either contain a coordinate text value ( "north east" or "north east elev"), a "pntRef" attribute value, or both. The "pntRef" attribute contains the value of a PointType derived element "name" attribute that exists elsewhere the instance data. If this element has a "pntRef" value, then it's coordinates will be retrieved from the referenced element. If an element contains both a coordinate value and a pntRef, the coordinate value should be used as the point location and the referenced point is either ignored or is used for point attributes such as number or desc.
     /// The featureRef attribute points to a specific named Feature element that contains feature data related to the point.
     ///    The suggested form is to refer to a feature element within the same CgPoints group or parent element of the point element.
     /// </summary>
 
-    public class PointType : XsdBaseObject
+    public class PointType : XsdBaseReader
     {
+        public PointType(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.Code = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("code"));
-
-
 
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
 
-
-
             this.PntRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("pntRef"));
-
-
 
             this.FeatureRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("featureRef"));
 
-
-
             this.PointGeometry = XsdConverter.Instance.Convert<PointGeometryType?>(
                     attributes.GetSafe("pointGeometry"));
-
-
 
             this.DTMAttribute = XsdConverter.Instance.Convert<DTMAttributeType?>(
                     attributes.GetSafe("DTMAttribute"));
 
-
-
             this.TimeStamp = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("timeStamp"));
-
-
 
             this.Role = XsdConverter.Instance.Convert<SurveyRoleType?>(
                     attributes.GetSafe("role"));
 
-
-
             this.DeterminedTimeStamp = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("determinedTimeStamp"));
-
-
 
             this.EllipsoidHeight = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("ellipsoidHeight"));
 
-
-
             this.Latitude = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("latitude"));
-
-
 
             this.Longitude = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("longitude"));
 
-
-
             this.Zone = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("zone"));
-
-
 
             this.NorthingStdError = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("northingStdError"));
 
-
-
             this.EastingStdError = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("eastingStdError"));
-
-
 
             this.ElevationStdError = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("elevationStdError"));
 
-
-
             this.Content = XsdConverter.Instance.Convert<IList<double>>(text);
-
             return true;
         }
 
@@ -193,99 +161,94 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("elevationStdError = {0}", this.ElevationStdError).AppendLine();
             }
 
-
             if ((object)this.Content != null)
             {
                 buff.AppendFormat("content = {0}", this.Content).AppendLine();
             }
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Code != null)
             {
-                buff.AppendFormat(" code=\"{0}\"", this.Code);
+                buff.Append("code", this.Code);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.PntRef != null)
             {
-                buff.AppendFormat(" pntRef=\"{0}\"", this.PntRef);
+                buff.Append("pntRef", this.PntRef);
             }
             if ((object)this.FeatureRef != null)
             {
-                buff.AppendFormat(" featureRef=\"{0}\"", this.FeatureRef);
+                buff.Append("featureRef", this.FeatureRef);
             }
             if ((object)this.PointGeometry != null)
             {
-                buff.AppendFormat(" pointGeometry=\"{0}\"", this.PointGeometry);
+                buff.Append("pointGeometry", this.PointGeometry);
             }
             if ((object)this.DTMAttribute != null)
             {
-                buff.AppendFormat(" DTMAttribute=\"{0}\"", this.DTMAttribute);
+                buff.Append("DTMAttribute", this.DTMAttribute);
             }
             if ((object)this.TimeStamp != null)
             {
-                buff.AppendFormat(" timeStamp=\"{0}\"", this.TimeStamp);
+                buff.Append("timeStamp", this.TimeStamp);
             }
             if ((object)this.Role != null)
             {
-                buff.AppendFormat(" role=\"{0}\"", this.Role);
+                buff.Append("role", this.Role);
             }
             if ((object)this.DeterminedTimeStamp != null)
             {
-                buff.AppendFormat(" determinedTimeStamp=\"{0}\"", this.DeterminedTimeStamp);
+                buff.Append("determinedTimeStamp", this.DeterminedTimeStamp);
             }
             if ((object)this.EllipsoidHeight != null)
             {
-                buff.AppendFormat(" ellipsoidHeight=\"{0}\"", this.EllipsoidHeight);
+                buff.Append("ellipsoidHeight", this.EllipsoidHeight);
             }
             if ((object)this.Latitude != null)
             {
-                buff.AppendFormat(" latitude=\"{0}\"", this.Latitude);
+                buff.Append("latitude", this.Latitude);
             }
             if ((object)this.Longitude != null)
             {
-                buff.AppendFormat(" longitude=\"{0}\"", this.Longitude);
+                buff.Append("longitude", this.Longitude);
             }
             if ((object)this.Zone != null)
             {
-                buff.AppendFormat(" zone=\"{0}\"", this.Zone);
+                buff.Append("zone", this.Zone);
             }
             if ((object)this.NorthingStdError != null)
             {
-                buff.AppendFormat(" northingStdError=\"{0}\"", this.NorthingStdError);
+                buff.Append("northingStdError", this.NorthingStdError);
             }
             if ((object)this.EastingStdError != null)
             {
-                buff.AppendFormat(" eastingStdError=\"{0}\"", this.EastingStdError);
+                buff.Append("eastingStdError", this.EastingStdError);
             }
             if ((object)this.ElevationStdError != null)
             {
-                buff.AppendFormat(" elevationStdError=\"{0}\"", this.ElevationStdError);
+                buff.Append("elevationStdError", this.ElevationStdError);
             }
-
 
             if ((object)this.Content != null)
             {
-                buff.AppendFormat(" content = \"{0}\"", this.Content);
+                buff.Append("content", this.Content);
             }
-
             return buff.ToString();
         }
 
@@ -341,7 +304,14 @@ namespace XmlSchemaProcessor.LandXml12
         public double? ElevationStdError;
 
 
+        protected override bool NeedContent { get { return true; } }
+
         public IList<double> Content;
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

@@ -7,6 +7,8 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : true
+    // includeContent : true
     /// <summary>
     /// A text value that is a space delimited list of CgPoint names that form a linear connected chain. 
     ///    example: 
@@ -14,70 +16,50 @@ namespace XmlSchemaProcessor.LandXml20
     ///    represents a linear connection between CgPoint name 1, 23, 45 and 34.
     /// </summary>
 
-    public class Chain : XsdBaseObject
+    public class Chain : XsdBaseReader
     {
+        public Chain(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.Code = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("code"));
-
-
 
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
 
-
-
             this.PointGeometry = XsdConverter.Instance.Convert<PointGeometryType?>(
                     attributes.GetSafe("pointGeometry"));
-
-
 
             this.DTMAttribute = XsdConverter.Instance.Convert<DTMAttributeType?>(
                     attributes.GetSafe("DTMAttribute"));
 
-
-
             this.TimeStamp = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("timeStamp"));
-
-
 
             this.Role = XsdConverter.Instance.Convert<SurveyRoleType?>(
                     attributes.GetSafe("role"));
 
-
-
             this.Station = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("station"));
-
-
 
             this.Zone = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("zone"));
 
-
-
             this.Status = XsdConverter.Instance.Convert<ObservationStatusType?>(
                     attributes.GetSafe("status"));
 
-
-
             this.Content = XsdConverter.Instance.Convert<IList<string>>(text);
-
             return true;
         }
 
@@ -131,71 +113,66 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("status = {0}", this.Status).AppendLine();
             }
 
-
             if ((object)this.Content != null)
             {
                 buff.AppendFormat("content = {0}", this.Content).AppendLine();
             }
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Code != null)
             {
-                buff.AppendFormat(" code=\"{0}\"", this.Code);
+                buff.Append("code", this.Code);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.PointGeometry != null)
             {
-                buff.AppendFormat(" pointGeometry=\"{0}\"", this.PointGeometry);
+                buff.Append("pointGeometry", this.PointGeometry);
             }
             if ((object)this.DTMAttribute != null)
             {
-                buff.AppendFormat(" DTMAttribute=\"{0}\"", this.DTMAttribute);
+                buff.Append("DTMAttribute", this.DTMAttribute);
             }
             if ((object)this.TimeStamp != null)
             {
-                buff.AppendFormat(" timeStamp=\"{0}\"", this.TimeStamp);
+                buff.Append("timeStamp", this.TimeStamp);
             }
             if ((object)this.Role != null)
             {
-                buff.AppendFormat(" role=\"{0}\"", this.Role);
+                buff.Append("role", this.Role);
             }
             if ((object)this.Station != null)
             {
-                buff.AppendFormat(" station=\"{0}\"", this.Station);
+                buff.Append("station", this.Station);
             }
             if ((object)this.Zone != null)
             {
-                buff.AppendFormat(" zone=\"{0}\"", this.Zone);
+                buff.Append("zone", this.Zone);
             }
             if ((object)this.Status != null)
             {
-                buff.AppendFormat(" status=\"{0}\"", this.Status);
+                buff.Append("status", this.Status);
             }
-
 
             if ((object)this.Content != null)
             {
-                buff.AppendFormat(" content = \"{0}\"", this.Content);
+                buff.Append("content", this.Content);
             }
-
             return buff.ToString();
         }
 
@@ -225,7 +202,14 @@ namespace XmlSchemaProcessor.LandXml20
         public ObservationStatusType? Status;
 
 
+        protected override bool NeedContent { get { return true; } }
+
         public IList<string> Content;
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

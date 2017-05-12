@@ -7,112 +7,85 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// An "infinite" spiral radius is denoted by the value "INF". 
     /// This conforms to XML Schema which defines infinity as "INF" or "-INF" for all numeric datatypes 
+    /// Sequence [1, 1]
+    ///     Choice [3, 3]
+    ///         Start [1, 1]
+    ///         PI [1, 1]
+    ///         End [1, 1]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class Spiral : XsdBaseObject
+    public class Spiral : XsdBaseReader
     {
+        public Spiral(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Length = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("length"));
-
-
 
             this.RadiusEnd = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("radiusEnd"));
 
-
-
             this.RadiusStart = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("radiusStart"));
-
-
 
             this.Rot = XsdConverter.Instance.Convert<Clockwise>(
                     attributes.GetSafe("rot"));
 
-
-
             this.SpiType = XsdConverter.Instance.Convert<SpiralType>(
                     attributes.GetSafe("spiType"));
-
-
 
             this.Chord = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("chord"));
 
-
-
             this.Constant = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("constant"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.DirEnd = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("dirEnd"));
-
-
 
             this.DirStart = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("dirStart"));
 
-
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Theta = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("theta"));
 
-
-
             this.TotalY = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("totalY"));
-
-
 
             this.TotalX = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("totalX"));
 
-
-
             this.StaStart = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("staStart"));
-
-
 
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
 
-
-
             this.TanLong = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("tanLong"));
-
-
 
             this.TanShort = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("tanShort"));
 
-
-
             this.OID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("oID"));
-
-
 
             return true;
         }
@@ -199,92 +172,89 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("oID = {0}", this.OID).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Length != null)
             {
-                buff.AppendFormat(" length=\"{0}\"", this.Length);
+                buff.Append("length", this.Length);
             }
             if ((object)this.RadiusEnd != null)
             {
-                buff.AppendFormat(" radiusEnd=\"{0}\"", this.RadiusEnd);
+                buff.Append("radiusEnd", this.RadiusEnd);
             }
             if ((object)this.RadiusStart != null)
             {
-                buff.AppendFormat(" radiusStart=\"{0}\"", this.RadiusStart);
+                buff.Append("radiusStart", this.RadiusStart);
             }
             if ((object)this.Rot != null)
             {
-                buff.AppendFormat(" rot=\"{0}\"", this.Rot);
+                buff.Append("rot", this.Rot);
             }
             if ((object)this.SpiType != null)
             {
-                buff.AppendFormat(" spiType=\"{0}\"", this.SpiType);
+                buff.Append("spiType", this.SpiType);
             }
             if ((object)this.Chord != null)
             {
-                buff.AppendFormat(" chord=\"{0}\"", this.Chord);
+                buff.Append("chord", this.Chord);
             }
             if ((object)this.Constant != null)
             {
-                buff.AppendFormat(" constant=\"{0}\"", this.Constant);
+                buff.Append("constant", this.Constant);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.DirEnd != null)
             {
-                buff.AppendFormat(" dirEnd=\"{0}\"", this.DirEnd);
+                buff.Append("dirEnd", this.DirEnd);
             }
             if ((object)this.DirStart != null)
             {
-                buff.AppendFormat(" dirStart=\"{0}\"", this.DirStart);
+                buff.Append("dirStart", this.DirStart);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Theta != null)
             {
-                buff.AppendFormat(" theta=\"{0}\"", this.Theta);
+                buff.Append("theta", this.Theta);
             }
             if ((object)this.TotalY != null)
             {
-                buff.AppendFormat(" totalY=\"{0}\"", this.TotalY);
+                buff.Append("totalY", this.TotalY);
             }
             if ((object)this.TotalX != null)
             {
-                buff.AppendFormat(" totalX=\"{0}\"", this.TotalX);
+                buff.Append("totalX", this.TotalX);
             }
             if ((object)this.StaStart != null)
             {
-                buff.AppendFormat(" staStart=\"{0}\"", this.StaStart);
+                buff.Append("staStart", this.StaStart);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.TanLong != null)
             {
-                buff.AppendFormat(" tanLong=\"{0}\"", this.TanLong);
+                buff.Append("tanLong", this.TanLong);
             }
             if ((object)this.TanShort != null)
             {
-                buff.AppendFormat(" tanShort=\"{0}\"", this.TanShort);
+                buff.Append("tanShort", this.TanShort);
             }
             if ((object)this.OID != null)
             {
-                buff.AppendFormat(" oID=\"{0}\"", this.OID);
+                buff.Append("oID", this.OID);
             }
-
 
             return buff.ToString();
         }
@@ -337,6 +307,27 @@ namespace XmlSchemaProcessor.LandXml12
         public string OID;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("End"))
+            {
+                return Tuple.Create("End", this.NewReader<PointType>());
+            }
+            if (name.EqualsIgnoreCase("PI"))
+            {
+                return Tuple.Create("PI", this.NewReader<PointType>());
+            }
+            if (name.EqualsIgnoreCase("Start"))
+            {
+                return Tuple.Create("Start", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

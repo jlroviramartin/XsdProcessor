@@ -7,87 +7,71 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class RawObservation : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     TargetPoint [1, 1]
+    ///     OffsetVals [0, 1]
+    ///     Choice [0, *]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
+    /// </summary>
+
+    public class RawObservation : XsdBaseReader
     {
+        public RawObservation(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.SetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID"));
-
-
 
             this.TargetSetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("targetSetupID"));
 
-
-
             this.SetID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setID"));
-
-
 
             this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
                     attributes.GetSafe("purpose"));
 
-
-
             this.TargetHeight = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("targetHeight"));
-
-
 
             this.HorizAngle = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("horizAngle"));
 
-
-
             this.SlopeDistance = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("slopeDistance"));
-
-
 
             this.ZenithAngle = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("zenithAngle"));
 
-
-
             this.HorizDistance = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("horizDistance"));
-
-
 
             this.VertDistance = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("vertDistance"));
 
-
-
             this.Azimuth = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("azimuth"));
-
-
 
             this.Unused = XsdConverter.Instance.Convert<bool?>(
                     attributes.GetSafe("unused"));
 
-
-
             this.DirectFace = XsdConverter.Instance.Convert<bool?>(
                     attributes.GetSafe("directFace"));
-
-
 
             this.CoordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("coordGeomRefs"));
 
-
-
             this.TimeStamp = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("timeStamp"));
-
-
 
             return true;
         }
@@ -158,76 +142,73 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("timeStamp = {0}", this.TimeStamp).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.SetupID != null)
             {
-                buff.AppendFormat(" setupID=\"{0}\"", this.SetupID);
+                buff.Append("setupID", this.SetupID);
             }
             if ((object)this.TargetSetupID != null)
             {
-                buff.AppendFormat(" targetSetupID=\"{0}\"", this.TargetSetupID);
+                buff.Append("targetSetupID", this.TargetSetupID);
             }
             if ((object)this.SetID != null)
             {
-                buff.AppendFormat(" setID=\"{0}\"", this.SetID);
+                buff.Append("setID", this.SetID);
             }
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.TargetHeight != null)
             {
-                buff.AppendFormat(" targetHeight=\"{0}\"", this.TargetHeight);
+                buff.Append("targetHeight", this.TargetHeight);
             }
             if ((object)this.HorizAngle != null)
             {
-                buff.AppendFormat(" horizAngle=\"{0}\"", this.HorizAngle);
+                buff.Append("horizAngle", this.HorizAngle);
             }
             if ((object)this.SlopeDistance != null)
             {
-                buff.AppendFormat(" slopeDistance=\"{0}\"", this.SlopeDistance);
+                buff.Append("slopeDistance", this.SlopeDistance);
             }
             if ((object)this.ZenithAngle != null)
             {
-                buff.AppendFormat(" zenithAngle=\"{0}\"", this.ZenithAngle);
+                buff.Append("zenithAngle", this.ZenithAngle);
             }
             if ((object)this.HorizDistance != null)
             {
-                buff.AppendFormat(" horizDistance=\"{0}\"", this.HorizDistance);
+                buff.Append("horizDistance", this.HorizDistance);
             }
             if ((object)this.VertDistance != null)
             {
-                buff.AppendFormat(" vertDistance=\"{0}\"", this.VertDistance);
+                buff.Append("vertDistance", this.VertDistance);
             }
             if ((object)this.Azimuth != null)
             {
-                buff.AppendFormat(" azimuth=\"{0}\"", this.Azimuth);
+                buff.Append("azimuth", this.Azimuth);
             }
             if ((object)this.Unused != null)
             {
-                buff.AppendFormat(" unused=\"{0}\"", this.Unused);
+                buff.Append("unused", this.Unused);
             }
             if ((object)this.DirectFace != null)
             {
-                buff.AppendFormat(" directFace=\"{0}\"", this.DirectFace);
+                buff.Append("directFace", this.DirectFace);
             }
             if ((object)this.CoordGeomRefs != null)
             {
-                buff.AppendFormat(" coordGeomRefs=\"{0}\"", this.CoordGeomRefs);
+                buff.Append("coordGeomRefs", this.CoordGeomRefs);
             }
             if ((object)this.TimeStamp != null)
             {
-                buff.AppendFormat(" timeStamp=\"{0}\"", this.TimeStamp);
+                buff.Append("timeStamp", this.TimeStamp);
             }
-
 
             return buff.ToString();
         }
@@ -280,6 +261,27 @@ namespace XmlSchemaProcessor.LandXml11
         public DateTime? TimeStamp;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("OffsetVals"))
+            {
+                return Tuple.Create("OffsetVals", this.NewReader<OffsetVals>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

@@ -7,32 +7,34 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The retaining wall is defined by a sequential collection of points along the wall.
     /// Each point has a location (northing/easting/elevation),  height of wall and offset to the wall point.
+    /// Sequence [1, 1]
+    ///     RetWallPnt [2, *]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class RetWall : XsdBaseObject
+    public class RetWall : XsdBaseReader
     {
+        public RetWall(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             return true;
         }
@@ -55,28 +57,25 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
-
 
             return buff.ToString();
         }
@@ -88,6 +87,19 @@ namespace XmlSchemaProcessor.LandXml10
         public StateType? State;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("RetWallPnt"))
+            {
+                return Tuple.Create("RetWallPnt", this.NewReader<RetWallPnt>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

@@ -1,0 +1,23 @@
+﻿delimiters "$", "$"
+
+XmlReader(namespace, xmlReaderTypeName, namespacesURI, events) ::= <<
+$Pre(namespace)$
+    public class $xmlReaderTypeName$ : SimpleReader
+    {
+        public LandXmlReader(ILandXmlEvents events)
+            : base($namespacesURI: {uri | "$uri$"}; separator=", "$)
+        {
+            $events:{x | $EventRegister(x)$}$
+        }
+    }
+$Post()$
+
+>>
+
+EventRegister(simpleEvent) ::= <<
+this.Register<$simpleEvent.ArgType$>("$simpleEvent.Name$",
+        events.BeginRead$simpleEvent.Name; format="FirstUpper"$,
+        events.EndRead$simpleEvent.Name; format="FirstUpper"$,
+        $simpleEvent.NeedContent$);
+
+>>

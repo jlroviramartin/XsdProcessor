@@ -7,31 +7,32 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// Records the dealing information to allow  audit trail between the survey document and the titling system
+    /// Sequence [1, 1]
+    ///     AmendmentItem [1, *]
     /// </summary>
 
-    public class Amendment : XsdBaseObject
+    public class Amendment : XsdBaseReader
     {
+        public Amendment(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.DealingNumber = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("dealingNumber"));
-
-
 
             this.AmendmentDate = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("amendmentDate"));
 
-
-
             this.Comments = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("comments"));
-
-
 
             return true;
         }
@@ -54,28 +55,25 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("comments = {0}", this.Comments).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.DealingNumber != null)
             {
-                buff.AppendFormat(" dealingNumber=\"{0}\"", this.DealingNumber);
+                buff.Append("dealingNumber", this.DealingNumber);
             }
             if ((object)this.AmendmentDate != null)
             {
-                buff.AppendFormat(" amendmentDate=\"{0}\"", this.AmendmentDate);
+                buff.Append("amendmentDate", this.AmendmentDate);
             }
             if ((object)this.Comments != null)
             {
-                buff.AppendFormat(" comments=\"{0}\"", this.Comments);
+                buff.Append("comments", this.Comments);
             }
-
 
             return buff.ToString();
         }
@@ -87,6 +85,15 @@ namespace XmlSchemaProcessor.LandXml12
         public string Comments;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("AmendmentItem"))
+            {
+                return Tuple.Create("AmendmentItem", this.NewReader<AmendmentItem>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

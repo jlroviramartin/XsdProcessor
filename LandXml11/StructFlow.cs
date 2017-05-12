@@ -7,57 +7,49 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class StructFlow : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class StructFlow : XsdBaseReader
     {
+        public StructFlow(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.LossIn = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("lossIn"));
-
-
 
             this.LossOut = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("lossOut"));
 
-
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.HglIn = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("hglIn"));
 
-
-
             this.HglOut = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("hglOut"));
-
-
 
             this.LocalDepression = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("localDepression"));
 
-
-
             this.SlopeSurf = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("slopeSurf"));
-
-
 
             this.SlopeGutter = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("slopeGutter"));
 
-
-
             this.WidthGutter = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("widthGutter"));
-
-
 
             return true;
         }
@@ -104,52 +96,49 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("widthGutter = {0}", this.WidthGutter).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.LossIn != null)
             {
-                buff.AppendFormat(" lossIn=\"{0}\"", this.LossIn);
+                buff.Append("lossIn", this.LossIn);
             }
             if ((object)this.LossOut != null)
             {
-                buff.AppendFormat(" lossOut=\"{0}\"", this.LossOut);
+                buff.Append("lossOut", this.LossOut);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.HglIn != null)
             {
-                buff.AppendFormat(" hglIn=\"{0}\"", this.HglIn);
+                buff.Append("hglIn", this.HglIn);
             }
             if ((object)this.HglOut != null)
             {
-                buff.AppendFormat(" hglOut=\"{0}\"", this.HglOut);
+                buff.Append("hglOut", this.HglOut);
             }
             if ((object)this.LocalDepression != null)
             {
-                buff.AppendFormat(" localDepression=\"{0}\"", this.LocalDepression);
+                buff.Append("localDepression", this.LocalDepression);
             }
             if ((object)this.SlopeSurf != null)
             {
-                buff.AppendFormat(" slopeSurf=\"{0}\"", this.SlopeSurf);
+                buff.Append("slopeSurf", this.SlopeSurf);
             }
             if ((object)this.SlopeGutter != null)
             {
-                buff.AppendFormat(" slopeGutter=\"{0}\"", this.SlopeGutter);
+                buff.Append("slopeGutter", this.SlopeGutter);
             }
             if ((object)this.WidthGutter != null)
             {
-                buff.AppendFormat(" widthGutter=\"{0}\"", this.WidthGutter);
+                buff.Append("widthGutter", this.WidthGutter);
             }
-
 
             return buff.ToString();
         }
@@ -173,6 +162,15 @@ namespace XmlSchemaProcessor.LandXml11
         public double? WidthGutter;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

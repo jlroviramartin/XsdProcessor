@@ -2,6 +2,7 @@
 
 import "BuildEnum.stg"
 import "BuildType.stg"
+import "BuildType_v2.stg"
 import "EventsImplementation.stg"
 import "EventsInterface.stg"
 import "EventsTest.stg"

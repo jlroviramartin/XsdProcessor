@@ -7,106 +7,78 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// This element is used to define the Reduced Horizontal Position. The coordinates given in Geographical Coordinates may come in variety of means.     
+    /// Choice [0, *]
+    ///     FieldNote [0, *]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class RedHorizontalPosition : XsdBaseObject
+    public class RedHorizontalPosition : XsdBaseReader
     {
+        public RedHorizontalPosition(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
 
-
-
             this.State = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("state"));
-
-
 
             this.OID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("oID"));
 
-
-
             this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
                     attributes.GetSafe("purpose"));
-
-
 
             this.SetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID"));
 
-
-
             this.Date = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("date"));
-
-
 
             this.EquipmentUsed = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("equipmentUsed"));
 
-
-
             this.HorizontalDatum = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("horizontalDatum"));
-
-
 
             this.HorizontalAdjustment = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("horizontalAdjustment"));
 
-
-
             this.Latitude = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("latitude"));
-
-
 
             this.Longitude = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("longitude"));
 
-
-
             this.HorizontalFix = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("horizontalFix"));
-
-
 
             this.CurrencyDate = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("currencyDate"));
 
-
-
             this.LocalUncertainity = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("localUncertainity"));
-
-
 
             this.Class = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("class"));
 
-
-
             this.Order = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("order"));
 
-
-
             this.PositionalUncertainity = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("positionalUncertainity"));
-
-
 
             return true;
         }
@@ -189,88 +161,85 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("positionalUncertainity = {0}", this.PositionalUncertainity).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.OID != null)
             {
-                buff.AppendFormat(" oID=\"{0}\"", this.OID);
+                buff.Append("oID", this.OID);
             }
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.SetupID != null)
             {
-                buff.AppendFormat(" setupID=\"{0}\"", this.SetupID);
+                buff.Append("setupID", this.SetupID);
             }
             if ((object)this.Date != null)
             {
-                buff.AppendFormat(" date=\"{0}\"", this.Date);
+                buff.Append("date", this.Date);
             }
             if ((object)this.EquipmentUsed != null)
             {
-                buff.AppendFormat(" equipmentUsed=\"{0}\"", this.EquipmentUsed);
+                buff.Append("equipmentUsed", this.EquipmentUsed);
             }
             if ((object)this.HorizontalDatum != null)
             {
-                buff.AppendFormat(" horizontalDatum=\"{0}\"", this.HorizontalDatum);
+                buff.Append("horizontalDatum", this.HorizontalDatum);
             }
             if ((object)this.HorizontalAdjustment != null)
             {
-                buff.AppendFormat(" horizontalAdjustment=\"{0}\"", this.HorizontalAdjustment);
+                buff.Append("horizontalAdjustment", this.HorizontalAdjustment);
             }
             if ((object)this.Latitude != null)
             {
-                buff.AppendFormat(" latitude=\"{0}\"", this.Latitude);
+                buff.Append("latitude", this.Latitude);
             }
             if ((object)this.Longitude != null)
             {
-                buff.AppendFormat(" longitude=\"{0}\"", this.Longitude);
+                buff.Append("longitude", this.Longitude);
             }
             if ((object)this.HorizontalFix != null)
             {
-                buff.AppendFormat(" horizontalFix=\"{0}\"", this.HorizontalFix);
+                buff.Append("horizontalFix", this.HorizontalFix);
             }
             if ((object)this.CurrencyDate != null)
             {
-                buff.AppendFormat(" currencyDate=\"{0}\"", this.CurrencyDate);
+                buff.Append("currencyDate", this.CurrencyDate);
             }
             if ((object)this.LocalUncertainity != null)
             {
-                buff.AppendFormat(" localUncertainity=\"{0}\"", this.LocalUncertainity);
+                buff.Append("localUncertainity", this.LocalUncertainity);
             }
             if ((object)this.Class != null)
             {
-                buff.AppendFormat(" class=\"{0}\"", this.Class);
+                buff.Append("class", this.Class);
             }
             if ((object)this.Order != null)
             {
-                buff.AppendFormat(" order=\"{0}\"", this.Order);
+                buff.Append("order", this.Order);
             }
             if ((object)this.PositionalUncertainity != null)
             {
-                buff.AppendFormat(" positionalUncertainity=\"{0}\"", this.PositionalUncertainity);
+                buff.Append("positionalUncertainity", this.PositionalUncertainity);
             }
-
 
             return buff.ToString();
         }
@@ -318,6 +287,19 @@ namespace XmlSchemaProcessor.LandXml12
         public double? PositionalUncertainity;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

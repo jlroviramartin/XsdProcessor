@@ -4,6 +4,9 @@ namespace XmlSchemaProcessor.Xsd
 {
     public class XsdObject
     {
+        /// <summary>
+        /// This indicates if the parent of the object is the root.
+        /// </summary>
         public bool TopLevel { get; set; }
     }
 

@@ -7,27 +7,33 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class Roadways : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [1, 1]
+    ///     Roadway [1, *]
+    ///     Intersections [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class Roadways : XsdBaseReader
     {
+        public Roadways(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             return true;
         }
@@ -50,28 +56,25 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
-
 
             return buff.ToString();
         }
@@ -83,6 +86,23 @@ namespace XmlSchemaProcessor.LandXml20
         public StateType? State;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Intersections"))
+            {
+                return Tuple.Create("Intersections", this.NewReader<Intersections>());
+            }
+            if (name.EqualsIgnoreCase("Roadway"))
+            {
+                return Tuple.Create("Roadway", this.NewReader<Roadway>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

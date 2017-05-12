@@ -7,67 +7,63 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class ZoneCrossSectStructure : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     PntList2D [1, 1]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class ZoneCrossSectStructure : XsdBaseReader
     {
+        public ZoneCrossSectStructure(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.InnerConnectPnt = XsdConverter.Instance.Convert<IList<double>>(
                     attributes.GetSafe("innerConnectPnt"));
 
-
-
             this.OuterConnectPnt = XsdConverter.Instance.Convert<IList<double>>(
                     attributes.GetSafe("outerConnectPnt"));
-
-
 
             this.OffsetMode = XsdConverter.Instance.Convert<ZoneOffsetType?>(
                     attributes.GetSafe("offsetMode"),
                     XsdConverter.Instance.Convert<ZoneOffsetType?>("zone"));
 
-
             this.StartOffset = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("startOffset"),
                     XsdConverter.Instance.Convert<double?>("0.0"));
-
 
             this.StartOffsetElev = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("startOffsetElev"),
                     XsdConverter.Instance.Convert<double?>("0.0"));
 
-
             this.EndOffset = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("endOffset"),
                     XsdConverter.Instance.Convert<double?>("0.0"));
-
 
             this.EndOffsetElev = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("endOffsetElev"),
                     XsdConverter.Instance.Convert<double?>("0.0"));
 
-
             this.Transition = XsdConverter.Instance.Convert<ZoneTransitionType?>(
                     attributes.GetSafe("transition"),
                     XsdConverter.Instance.Convert<ZoneTransitionType?>("parallel"));
-
 
             this.Placement = XsdConverter.Instance.Convert<ZonePlacementType?>(
                     attributes.GetSafe("placement"),
                     XsdConverter.Instance.Convert<ZonePlacementType?>("dependent"));
 
-
             this.CatalogReference = XsdConverter.Instance.Convert<Uri>(
                     attributes.GetSafe("catalogReference"));
-
-
 
             return true;
         }
@@ -122,60 +118,57 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("catalogReference = {0}", this.CatalogReference).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.InnerConnectPnt != null)
             {
-                buff.AppendFormat(" innerConnectPnt=\"{0}\"", this.InnerConnectPnt);
+                buff.Append("innerConnectPnt", this.InnerConnectPnt);
             }
             if ((object)this.OuterConnectPnt != null)
             {
-                buff.AppendFormat(" outerConnectPnt=\"{0}\"", this.OuterConnectPnt);
+                buff.Append("outerConnectPnt", this.OuterConnectPnt);
             }
             if ((object)this.OffsetMode != null)
             {
-                buff.AppendFormat(" offsetMode=\"{0}\"", this.OffsetMode);
+                buff.Append("offsetMode", this.OffsetMode);
             }
             if ((object)this.StartOffset != null)
             {
-                buff.AppendFormat(" startOffset=\"{0}\"", this.StartOffset);
+                buff.Append("startOffset", this.StartOffset);
             }
             if ((object)this.StartOffsetElev != null)
             {
-                buff.AppendFormat(" startOffsetElev=\"{0}\"", this.StartOffsetElev);
+                buff.Append("startOffsetElev", this.StartOffsetElev);
             }
             if ((object)this.EndOffset != null)
             {
-                buff.AppendFormat(" endOffset=\"{0}\"", this.EndOffset);
+                buff.Append("endOffset", this.EndOffset);
             }
             if ((object)this.EndOffsetElev != null)
             {
-                buff.AppendFormat(" endOffsetElev=\"{0}\"", this.EndOffsetElev);
+                buff.Append("endOffsetElev", this.EndOffsetElev);
             }
             if ((object)this.Transition != null)
             {
-                buff.AppendFormat(" transition=\"{0}\"", this.Transition);
+                buff.Append("transition", this.Transition);
             }
             if ((object)this.Placement != null)
             {
-                buff.AppendFormat(" placement=\"{0}\"", this.Placement);
+                buff.Append("placement", this.Placement);
             }
             if ((object)this.CatalogReference != null)
             {
-                buff.AppendFormat(" catalogReference=\"{0}\"", this.CatalogReference);
+                buff.Append("catalogReference", this.CatalogReference);
             }
-
 
             return buff.ToString();
         }
@@ -231,6 +224,19 @@ namespace XmlSchemaProcessor.LandXml11
         public Uri CatalogReference;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList2D"))
+            {
+                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

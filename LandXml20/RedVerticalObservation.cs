@@ -7,117 +7,86 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class RedVerticalObservation : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     FieldNote [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class RedVerticalObservation : XsdBaseReader
     {
+        public RedVerticalObservation(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
 
-
-
             this.State = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("state"));
-
-
 
             this.OID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("oID"));
 
-
-
             this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
                     attributes.GetSafe("purpose"));
-
-
 
             this.SetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID"));
 
-
-
             this.Date = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("date"));
-
-
 
             this.EquipmentUsed = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("equipmentUsed"));
 
-
-
             this.Height = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("height"));
-
-
 
             this.VerticalAdjustment = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("verticalAdjustment"));
 
-
-
             this.VerticalFix = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("verticalFix"));
-
-
 
             this.Geosphoid = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("geosphoid"));
 
-
-
             this.GsDatum = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("gsDatum"));
-
-
 
             this.GsModel = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("gsModel"));
 
-
-
             this.GsMethod = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("gsMethod"));
-
-
 
             this.OriginMark = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("originMark"));
 
-
-
             this.VerticalDatum = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("verticalDatum"));
-
-
 
             this.LocalUncertainity = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("localUncertainity"));
 
-
-
             this.Class = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("class"));
-
-
 
             this.Order = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("order"));
 
-
-
             this.PositionalUncertainity = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("positionalUncertainity"));
-
-
 
             return true;
         }
@@ -212,100 +181,97 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("positionalUncertainity = {0}", this.PositionalUncertainity).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.OID != null)
             {
-                buff.AppendFormat(" oID=\"{0}\"", this.OID);
+                buff.Append("oID", this.OID);
             }
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.SetupID != null)
             {
-                buff.AppendFormat(" setupID=\"{0}\"", this.SetupID);
+                buff.Append("setupID", this.SetupID);
             }
             if ((object)this.Date != null)
             {
-                buff.AppendFormat(" date=\"{0}\"", this.Date);
+                buff.Append("date", this.Date);
             }
             if ((object)this.EquipmentUsed != null)
             {
-                buff.AppendFormat(" equipmentUsed=\"{0}\"", this.EquipmentUsed);
+                buff.Append("equipmentUsed", this.EquipmentUsed);
             }
             if ((object)this.Height != null)
             {
-                buff.AppendFormat(" height=\"{0}\"", this.Height);
+                buff.Append("height", this.Height);
             }
             if ((object)this.VerticalAdjustment != null)
             {
-                buff.AppendFormat(" verticalAdjustment=\"{0}\"", this.VerticalAdjustment);
+                buff.Append("verticalAdjustment", this.VerticalAdjustment);
             }
             if ((object)this.VerticalFix != null)
             {
-                buff.AppendFormat(" verticalFix=\"{0}\"", this.VerticalFix);
+                buff.Append("verticalFix", this.VerticalFix);
             }
             if ((object)this.Geosphoid != null)
             {
-                buff.AppendFormat(" geosphoid=\"{0}\"", this.Geosphoid);
+                buff.Append("geosphoid", this.Geosphoid);
             }
             if ((object)this.GsDatum != null)
             {
-                buff.AppendFormat(" gsDatum=\"{0}\"", this.GsDatum);
+                buff.Append("gsDatum", this.GsDatum);
             }
             if ((object)this.GsModel != null)
             {
-                buff.AppendFormat(" gsModel=\"{0}\"", this.GsModel);
+                buff.Append("gsModel", this.GsModel);
             }
             if ((object)this.GsMethod != null)
             {
-                buff.AppendFormat(" gsMethod=\"{0}\"", this.GsMethod);
+                buff.Append("gsMethod", this.GsMethod);
             }
             if ((object)this.OriginMark != null)
             {
-                buff.AppendFormat(" originMark=\"{0}\"", this.OriginMark);
+                buff.Append("originMark", this.OriginMark);
             }
             if ((object)this.VerticalDatum != null)
             {
-                buff.AppendFormat(" verticalDatum=\"{0}\"", this.VerticalDatum);
+                buff.Append("verticalDatum", this.VerticalDatum);
             }
             if ((object)this.LocalUncertainity != null)
             {
-                buff.AppendFormat(" localUncertainity=\"{0}\"", this.LocalUncertainity);
+                buff.Append("localUncertainity", this.LocalUncertainity);
             }
             if ((object)this.Class != null)
             {
-                buff.AppendFormat(" class=\"{0}\"", this.Class);
+                buff.Append("class", this.Class);
             }
             if ((object)this.Order != null)
             {
-                buff.AppendFormat(" order=\"{0}\"", this.Order);
+                buff.Append("order", this.Order);
             }
             if ((object)this.PositionalUncertainity != null)
             {
-                buff.AppendFormat(" positionalUncertainity=\"{0}\"", this.PositionalUncertainity);
+                buff.Append("positionalUncertainity", this.PositionalUncertainity);
             }
-
 
             return buff.ToString();
         }
@@ -359,6 +325,19 @@ namespace XmlSchemaProcessor.LandXml20
         public double? PositionalUncertainity;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

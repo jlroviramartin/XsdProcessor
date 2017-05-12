@@ -7,27 +7,31 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
-    public class ZoneMaterial : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class ZoneMaterial : XsdBaseReader
     {
+        public ZoneMaterial(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.StaStart = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staStart"));
-
-
 
             this.StaEnd = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("staEnd"));
 
-
-
             this.Material = XsdConverter.Instance.Convert<ZoneMaterialType>(
                     attributes.GetSafe("material"));
-
-
 
             return true;
         }
@@ -50,28 +54,25 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("material = {0}", this.Material).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.StaStart != null)
             {
-                buff.AppendFormat(" staStart=\"{0}\"", this.StaStart);
+                buff.Append("staStart", this.StaStart);
             }
             if ((object)this.StaEnd != null)
             {
-                buff.AppendFormat(" staEnd=\"{0}\"", this.StaEnd);
+                buff.Append("staEnd", this.StaEnd);
             }
             if ((object)this.Material != null)
             {
-                buff.AppendFormat(" material=\"{0}\"", this.Material);
+                buff.Append("material", this.Material);
             }
-
 
             return buff.ToString();
         }
@@ -90,6 +91,15 @@ namespace XmlSchemaProcessor.LandXml20
         public ZoneMaterialType Material;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

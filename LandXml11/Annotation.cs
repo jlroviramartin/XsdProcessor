@@ -7,36 +7,33 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// Annotation is a descriptive string use to describe an action on survey
     /// </summary>
 
-    public class Annotation : XsdBaseObject
+    public class Annotation : XsdBaseReader
     {
+        public Annotation(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Type = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("type"));
-
-
 
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
 
-
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.PclRef = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("pclRef"));
-
-
 
             return true;
         }
@@ -63,32 +60,29 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("pclRef = {0}", this.PclRef).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Type != null)
             {
-                buff.AppendFormat(" type=\"{0}\"", this.Type);
+                buff.Append("type", this.Type);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.PclRef != null)
             {
-                buff.AppendFormat(" pclRef=\"{0}\"", this.PclRef);
+                buff.Append("pclRef", this.PclRef);
             }
-
 
             return buff.ToString();
         }
@@ -109,6 +103,10 @@ namespace XmlSchemaProcessor.LandXml11
         public IList<string> PclRef;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

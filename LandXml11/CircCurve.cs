@@ -7,35 +7,33 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : true
+    // includeContent : true
     /// <summary>
     /// A  Point of Vertical Intersection with a space delimited "station elevation" text value
     /// with a circular vertical curve defined by "length and "radius" attributes.
     /// </summary>
 
-    public class CircCurve : XsdBaseObject
+    public class CircCurve : XsdBaseReader
     {
+        public CircCurve(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Length = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("length"));
-
-
 
             this.Radius = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("radius"));
 
-
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.Content = XsdConverter.Instance.Convert<IList<double>>(text);
-
             return true;
         }
 
@@ -57,39 +55,34 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("desc = {0}", this.Desc).AppendLine();
             }
 
-
             if ((object)this.Content != null)
             {
                 buff.AppendFormat("content = {0}", this.Content).AppendLine();
             }
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Length != null)
             {
-                buff.AppendFormat(" length=\"{0}\"", this.Length);
+                buff.Append("length", this.Length);
             }
             if ((object)this.Radius != null)
             {
-                buff.AppendFormat(" radius=\"{0}\"", this.Radius);
+                buff.Append("radius", this.Radius);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
-
 
             if ((object)this.Content != null)
             {
-                buff.AppendFormat(" content = \"{0}\"", this.Content);
+                buff.Append("content", this.Content);
             }
-
             return buff.ToString();
         }
 
@@ -100,7 +93,14 @@ namespace XmlSchemaProcessor.LandXml11
         public string Desc;
 
 
+        protected override bool NeedContent { get { return true; } }
+
         public IList<double> Content;
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

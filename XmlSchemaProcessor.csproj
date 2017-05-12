@@ -1141,6 +1141,8 @@
     <Compile Include="Processors\SimpleReader.cs" />
     <Compile Include="Processors\Path.cs" />
     <Compile Include="Processors\IPropertyMap.cs" />
+    <Compile Include="Processors\XsdBaseReader.cs" />
+    <Compile Include="Processors\XsdToNetProcess_v2.cs" />
     <Compile Include="Processors\XsdTypeNetRenderer.cs" />
     <Compile Include="Processors\StringValueAttribute.cs" />
     <Compile Include="Processors\XsdConverter.cs" />
@@ -1237,6 +1239,33 @@
     <None Include="Documentation\XMLSchema.cd" />
     <None Include="Resources\Samples\MyXMLSchema1.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\Templates\csharp\BuildType_v2.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Templates\csharp\MainTemplateGroup_v2.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Templates\java\BuildEnum.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Templates\java\BuildType.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Templates\java\EventsImplementation.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Templates\java\EventsInterface.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Templates\java\EventsTest.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Templates\java\MainTemplateGroup.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Templates\java\XmlReader.stg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Templates\csharp\BuildEnum.stg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

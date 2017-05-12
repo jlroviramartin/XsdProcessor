@@ -7,22 +7,23 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    public class Personnel : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    public class Personnel : XsdBaseReader
     {
+        public Personnel(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
 
-
-
             this.Role = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("role"));
-
-
 
             return true;
         }
@@ -41,24 +42,21 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("role = {0}", this.Role).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Role != null)
             {
-                buff.AppendFormat(" role=\"{0}\"", this.Role);
+                buff.Append("role", this.Role);
             }
-
 
             return buff.ToString();
         }
@@ -68,6 +66,10 @@ namespace XmlSchemaProcessor.LandXml10
         public string Role;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

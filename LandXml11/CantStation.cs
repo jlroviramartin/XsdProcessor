@@ -7,6 +7,8 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// A cant station.
     ///             The “station” is a required double that is internal station value.
@@ -24,77 +26,54 @@ namespace XmlSchemaProcessor.LandXml11
     /// The “adverse” is an optional Boolean that indicates whether the cant is adverse.
     /// </summary>
 
-    public class CantStation : XsdBaseObject
+    public class CantStation : XsdBaseReader
     {
+        public CantStation(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Station = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("station"));
-
-
 
             this.EquilibriumCant = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("equilibriumCant"));
 
-
-
             this.AppliedCant = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("appliedCant"));
-
-
 
             this.CantDeficiency = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("cantDeficiency"));
 
-
-
             this.CantExcess = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("cantExcess"));
-
-
 
             this.RateOfChangeOfAppliedCantOverTime = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("rateOfChangeOfAppliedCantOverTime"));
 
-
-
             this.RateOfChangeOfAppliedCantOverLength = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("rateOfChangeOfAppliedCantOverLength"));
-
-
 
             this.RateOfChangeOfCantDeficiencyOverTime = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("rateOfChangeOfCantDeficiencyOverTime"));
 
-
-
             this.CantGradient = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("cantGradient"));
-
-
 
             this.Speed = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("speed"));
 
-
-
             this.TransitionType = XsdConverter.Instance.Convert<SpiralType?>(
                     attributes.GetSafe("transitionType"));
-
-
 
             this.Curvature = XsdConverter.Instance.Convert<Clockwise>(
                     attributes.GetSafe("curvature"));
 
-
-
             this.Adverse = XsdConverter.Instance.Convert<bool?>(
                     attributes.GetSafe("adverse"));
-
-
 
             return true;
         }
@@ -157,68 +136,65 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("adverse = {0}", this.Adverse).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Station != null)
             {
-                buff.AppendFormat(" station=\"{0}\"", this.Station);
+                buff.Append("station", this.Station);
             }
             if ((object)this.EquilibriumCant != null)
             {
-                buff.AppendFormat(" equilibriumCant=\"{0}\"", this.EquilibriumCant);
+                buff.Append("equilibriumCant", this.EquilibriumCant);
             }
             if ((object)this.AppliedCant != null)
             {
-                buff.AppendFormat(" appliedCant=\"{0}\"", this.AppliedCant);
+                buff.Append("appliedCant", this.AppliedCant);
             }
             if ((object)this.CantDeficiency != null)
             {
-                buff.AppendFormat(" cantDeficiency=\"{0}\"", this.CantDeficiency);
+                buff.Append("cantDeficiency", this.CantDeficiency);
             }
             if ((object)this.CantExcess != null)
             {
-                buff.AppendFormat(" cantExcess=\"{0}\"", this.CantExcess);
+                buff.Append("cantExcess", this.CantExcess);
             }
             if ((object)this.RateOfChangeOfAppliedCantOverTime != null)
             {
-                buff.AppendFormat(" rateOfChangeOfAppliedCantOverTime=\"{0}\"", this.RateOfChangeOfAppliedCantOverTime);
+                buff.Append("rateOfChangeOfAppliedCantOverTime", this.RateOfChangeOfAppliedCantOverTime);
             }
             if ((object)this.RateOfChangeOfAppliedCantOverLength != null)
             {
-                buff.AppendFormat(" rateOfChangeOfAppliedCantOverLength=\"{0}\"", this.RateOfChangeOfAppliedCantOverLength);
+                buff.Append("rateOfChangeOfAppliedCantOverLength", this.RateOfChangeOfAppliedCantOverLength);
             }
             if ((object)this.RateOfChangeOfCantDeficiencyOverTime != null)
             {
-                buff.AppendFormat(" rateOfChangeOfCantDeficiencyOverTime=\"{0}\"", this.RateOfChangeOfCantDeficiencyOverTime);
+                buff.Append("rateOfChangeOfCantDeficiencyOverTime", this.RateOfChangeOfCantDeficiencyOverTime);
             }
             if ((object)this.CantGradient != null)
             {
-                buff.AppendFormat(" cantGradient=\"{0}\"", this.CantGradient);
+                buff.Append("cantGradient", this.CantGradient);
             }
             if ((object)this.Speed != null)
             {
-                buff.AppendFormat(" speed=\"{0}\"", this.Speed);
+                buff.Append("speed", this.Speed);
             }
             if ((object)this.TransitionType != null)
             {
-                buff.AppendFormat(" transitionType=\"{0}\"", this.TransitionType);
+                buff.Append("transitionType", this.TransitionType);
             }
             if ((object)this.Curvature != null)
             {
-                buff.AppendFormat(" curvature=\"{0}\"", this.Curvature);
+                buff.Append("curvature", this.Curvature);
             }
             if ((object)this.Adverse != null)
             {
-                buff.AppendFormat(" adverse=\"{0}\"", this.Adverse);
+                buff.Append("adverse", this.Adverse);
             }
-
 
             return buff.ToString();
         }
@@ -250,6 +226,10 @@ namespace XmlSchemaProcessor.LandXml11
         public bool? Adverse;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

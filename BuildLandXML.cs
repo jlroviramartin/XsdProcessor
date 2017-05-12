@@ -49,7 +49,8 @@ namespace XmlSchemaProcessor
             XsdSchema schema = new ProcessXmlSchema(xmlSchema).GetSchema();
             schema.ResolveAnonymousSimpleTypes();
 
-            XsdToNetProcess xsdToNetReader = new XsdToNetProcess(@namespace, path);
+            //XsdToNetProcess xsdToNetReader = new XsdToNetProcess(@namespace, path);
+            XsdToNetProcess_v2 xsdToNetReader = new XsdToNetProcess_v2(@namespace, path);
             xsdToNetReader.PropertyMap = new LandXmlPropertyMap();
             foreach (string uri in namespacesURI)
             {

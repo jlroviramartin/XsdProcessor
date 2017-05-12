@@ -7,36 +7,33 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// GPS Time = Nbr of GPS weeks * 604800 (seconds in a week) + seconds in GPS week     
     /// </summary>
 
-    public class GPSQCInfoLevel1 : XsdBaseObject
+    public class GPSQCInfoLevel1 : XsdBaseReader
     {
+        public GPSQCInfoLevel1(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.GPSSolnType = XsdConverter.Instance.Convert<GPSSolutionTypeEnum?>(
                     attributes.GetSafe("GPSSolnType"));
-
-
 
             this.GPSSolnFreq = XsdConverter.Instance.Convert<GPSSolutionFrequencyEnum?>(
                     attributes.GetSafe("GPSSolnFreq"));
 
-
-
             this.NbrSatellites = XsdConverter.Instance.Convert<int?>(
                     attributes.GetSafe("nbrSatellites"));
 
-
-
             this.RDOP = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("RDOP"));
-
-
 
             return true;
         }
@@ -63,32 +60,29 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("RDOP = {0}", this.RDOP).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.GPSSolnType != null)
             {
-                buff.AppendFormat(" GPSSolnType=\"{0}\"", this.GPSSolnType);
+                buff.Append("GPSSolnType", this.GPSSolnType);
             }
             if ((object)this.GPSSolnFreq != null)
             {
-                buff.AppendFormat(" GPSSolnFreq=\"{0}\"", this.GPSSolnFreq);
+                buff.Append("GPSSolnFreq", this.GPSSolnFreq);
             }
             if ((object)this.NbrSatellites != null)
             {
-                buff.AppendFormat(" nbrSatellites=\"{0}\"", this.NbrSatellites);
+                buff.Append("nbrSatellites", this.NbrSatellites);
             }
             if ((object)this.RDOP != null)
             {
-                buff.AppendFormat(" RDOP=\"{0}\"", this.RDOP);
+                buff.Append("RDOP", this.RDOP);
             }
-
 
             return buff.ToString();
         }
@@ -109,6 +103,10 @@ namespace XmlSchemaProcessor.LandXml10
         public double? RDOP;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

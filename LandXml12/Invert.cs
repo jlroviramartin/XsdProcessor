@@ -7,32 +7,29 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    public class Invert : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    public class Invert : XsdBaseReader
     {
+        public Invert(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.Elev = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("elev"));
 
-
-
             this.FlowDir = XsdConverter.Instance.Convert<InOut>(
                     attributes.GetSafe("flowDir"));
 
-
-
             this.RefPipe = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("refPipe"));
-
-
 
             return true;
         }
@@ -59,32 +56,29 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("refPipe = {0}", this.RefPipe).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Elev != null)
             {
-                buff.AppendFormat(" elev=\"{0}\"", this.Elev);
+                buff.Append("elev", this.Elev);
             }
             if ((object)this.FlowDir != null)
             {
-                buff.AppendFormat(" flowDir=\"{0}\"", this.FlowDir);
+                buff.Append("flowDir", this.FlowDir);
             }
             if ((object)this.RefPipe != null)
             {
-                buff.AppendFormat(" refPipe=\"{0}\"", this.RefPipe);
+                buff.Append("refPipe", this.RefPipe);
             }
-
 
             return buff.ToString();
         }
@@ -101,6 +95,10 @@ namespace XmlSchemaProcessor.LandXml12
         public string RefPipe;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

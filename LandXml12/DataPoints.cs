@@ -7,52 +7,46 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The sub element PntList3D is group of points is defined by a 3D
     ///  north/east/elev list of points that define the geometry.
+    /// Sequence [1, *]
+    ///     PntList3D [0, *]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class DataPoints : XsdBaseObject
+    public class DataPoints : XsdBaseReader
     {
+        public DataPoints(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.Code = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("code"));
-
-
 
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
 
-
-
             this.PntRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("pntRef"));
-
-
 
             this.PointGeometry = XsdConverter.Instance.Convert<PointGeometryType?>(
                     attributes.GetSafe("pointGeometry"));
 
-
-
             this.DTMAttribute = XsdConverter.Instance.Convert<DTMAttributeType?>(
                     attributes.GetSafe("DTMAttribute"));
-
-
 
             return true;
         }
@@ -91,44 +85,41 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("DTMAttribute = {0}", this.DTMAttribute).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Code != null)
             {
-                buff.AppendFormat(" code=\"{0}\"", this.Code);
+                buff.Append("code", this.Code);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.PntRef != null)
             {
-                buff.AppendFormat(" pntRef=\"{0}\"", this.PntRef);
+                buff.Append("pntRef", this.PntRef);
             }
             if ((object)this.PointGeometry != null)
             {
-                buff.AppendFormat(" pointGeometry=\"{0}\"", this.PointGeometry);
+                buff.Append("pointGeometry", this.PointGeometry);
             }
             if ((object)this.DTMAttribute != null)
             {
-                buff.AppendFormat(" DTMAttribute=\"{0}\"", this.DTMAttribute);
+                buff.Append("DTMAttribute", this.DTMAttribute);
             }
-
 
             return buff.ToString();
         }
@@ -151,6 +142,19 @@ namespace XmlSchemaProcessor.LandXml12
         public DTMAttributeType? DTMAttribute;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList3D"))
+            {
+                return Tuple.Create("PntList3D", this.NewReader<IList<double>>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

@@ -7,66 +7,53 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// This relates the new monument element to a survey - indicating its purpose in the survey and distrubed / replaced info as well
+    /// Sequence [1, 1]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class SurveyMonument : XsdBaseObject
+    public class SurveyMonument : XsdBaseReader
     {
+        public SurveyMonument(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.MntRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("mntRef"));
-
-
 
             this.Purpose = XsdConverter.Instance.Convert<IList<MonumentPurpose_anonymous>>(
                     attributes.GetSafe("purpose"));
 
-
-
             this.State = XsdConverter.Instance.Convert<MonumentState?>(
                     attributes.GetSafe("state"));
-
-
 
             this.AdoptedSurvey = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("adoptedSurvey"));
 
-
-
             this.DisturbedMonument = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("disturbedMonument"));
-
-
 
             this.DisturbedDate = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("disturbedDate"));
 
-
-
             this.DisturbedAnnotation = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("disturbedAnnotation"));
-
-
 
             this.ReplacedMonument = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("replacedMonument"));
 
-
-
             this.ReplacedDate = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("replacedDate"));
 
-
-
             this.ReplacedAnnotation = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("replacedAnnotation"));
-
-
 
             return true;
         }
@@ -117,56 +104,53 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("replacedAnnotation = {0}", this.ReplacedAnnotation).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.MntRef != null)
             {
-                buff.AppendFormat(" mntRef=\"{0}\"", this.MntRef);
+                buff.Append("mntRef", this.MntRef);
             }
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.AdoptedSurvey != null)
             {
-                buff.AppendFormat(" adoptedSurvey=\"{0}\"", this.AdoptedSurvey);
+                buff.Append("adoptedSurvey", this.AdoptedSurvey);
             }
             if ((object)this.DisturbedMonument != null)
             {
-                buff.AppendFormat(" disturbedMonument=\"{0}\"", this.DisturbedMonument);
+                buff.Append("disturbedMonument", this.DisturbedMonument);
             }
             if ((object)this.DisturbedDate != null)
             {
-                buff.AppendFormat(" disturbedDate=\"{0}\"", this.DisturbedDate);
+                buff.Append("disturbedDate", this.DisturbedDate);
             }
             if ((object)this.DisturbedAnnotation != null)
             {
-                buff.AppendFormat(" disturbedAnnotation=\"{0}\"", this.DisturbedAnnotation);
+                buff.Append("disturbedAnnotation", this.DisturbedAnnotation);
             }
             if ((object)this.ReplacedMonument != null)
             {
-                buff.AppendFormat(" replacedMonument=\"{0}\"", this.ReplacedMonument);
+                buff.Append("replacedMonument", this.ReplacedMonument);
             }
             if ((object)this.ReplacedDate != null)
             {
-                buff.AppendFormat(" replacedDate=\"{0}\"", this.ReplacedDate);
+                buff.Append("replacedDate", this.ReplacedDate);
             }
             if ((object)this.ReplacedAnnotation != null)
             {
-                buff.AppendFormat(" replacedAnnotation=\"{0}\"", this.ReplacedAnnotation);
+                buff.Append("replacedAnnotation", this.ReplacedAnnotation);
             }
-
 
             return buff.ToString();
         }
@@ -202,6 +186,15 @@ namespace XmlSchemaProcessor.LandXml10
         public string ReplacedAnnotation;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

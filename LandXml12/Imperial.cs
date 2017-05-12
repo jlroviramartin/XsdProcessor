@@ -7,82 +7,63 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    public class Imperial : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    public class Imperial : XsdBaseReader
     {
+        public Imperial(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.AreaUnit = XsdConverter.Instance.Convert<ImpArea>(
                     attributes.GetSafe("areaUnit"));
-
-
 
             this.LinearUnit = XsdConverter.Instance.Convert<ImpLinear>(
                     attributes.GetSafe("linearUnit"));
 
-
-
             this.VolumeUnit = XsdConverter.Instance.Convert<ImpVolume>(
                     attributes.GetSafe("volumeUnit"));
-
-
 
             this.TemperatureUnit = XsdConverter.Instance.Convert<ImpTemperature>(
                     attributes.GetSafe("temperatureUnit"));
 
-
-
             this.PressureUnit = XsdConverter.Instance.Convert<ImpPressure>(
                     attributes.GetSafe("pressureUnit"));
-
-
 
             this.DiameterUnit = XsdConverter.Instance.Convert<ImpDiameter?>(
                     attributes.GetSafe("diameterUnit"));
 
-
-
             this.WidthUnit = XsdConverter.Instance.Convert<ImpWidth?>(
                     attributes.GetSafe("widthUnit"));
-
-
 
             this.HeightUnit = XsdConverter.Instance.Convert<ImpHeight?>(
                     attributes.GetSafe("heightUnit"));
 
-
-
             this.VelocityUnit = XsdConverter.Instance.Convert<ImpVelocity?>(
                     attributes.GetSafe("velocityUnit"));
 
-
-
             this.FlowUnit = XsdConverter.Instance.Convert<ImpFlow?>(
                     attributes.GetSafe("flowUnit"));
-
-
 
             this.AngularUnit = XsdConverter.Instance.Convert<AngularType?>(
                     attributes.GetSafe("angularUnit"),
                     XsdConverter.Instance.Convert<AngularType?>("radians"));
 
-
             this.DirectionUnit = XsdConverter.Instance.Convert<AngularType?>(
                     attributes.GetSafe("directionUnit"),
                     XsdConverter.Instance.Convert<AngularType?>("radians"));
-
 
             this.LatLongAngularUnit = XsdConverter.Instance.Convert<LatLongAngularType?>(
                     attributes.GetSafe("latLongAngularUnit"),
                     XsdConverter.Instance.Convert<LatLongAngularType?>("decimal degrees"));
 
-
             this.ElevationUnit = XsdConverter.Instance.Convert<ElevationType?>(
                     attributes.GetSafe("elevationUnit"),
                     XsdConverter.Instance.Convert<ElevationType?>("meter"));
-
 
             return true;
         }
@@ -149,72 +130,69 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("elevationUnit = {0} defvalue = {1}", this.ElevationUnit, "meter").AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.AreaUnit != null)
             {
-                buff.AppendFormat(" areaUnit=\"{0}\"", this.AreaUnit);
+                buff.Append("areaUnit", this.AreaUnit);
             }
             if ((object)this.LinearUnit != null)
             {
-                buff.AppendFormat(" linearUnit=\"{0}\"", this.LinearUnit);
+                buff.Append("linearUnit", this.LinearUnit);
             }
             if ((object)this.VolumeUnit != null)
             {
-                buff.AppendFormat(" volumeUnit=\"{0}\"", this.VolumeUnit);
+                buff.Append("volumeUnit", this.VolumeUnit);
             }
             if ((object)this.TemperatureUnit != null)
             {
-                buff.AppendFormat(" temperatureUnit=\"{0}\"", this.TemperatureUnit);
+                buff.Append("temperatureUnit", this.TemperatureUnit);
             }
             if ((object)this.PressureUnit != null)
             {
-                buff.AppendFormat(" pressureUnit=\"{0}\"", this.PressureUnit);
+                buff.Append("pressureUnit", this.PressureUnit);
             }
             if ((object)this.DiameterUnit != null)
             {
-                buff.AppendFormat(" diameterUnit=\"{0}\"", this.DiameterUnit);
+                buff.Append("diameterUnit", this.DiameterUnit);
             }
             if ((object)this.WidthUnit != null)
             {
-                buff.AppendFormat(" widthUnit=\"{0}\"", this.WidthUnit);
+                buff.Append("widthUnit", this.WidthUnit);
             }
             if ((object)this.HeightUnit != null)
             {
-                buff.AppendFormat(" heightUnit=\"{0}\"", this.HeightUnit);
+                buff.Append("heightUnit", this.HeightUnit);
             }
             if ((object)this.VelocityUnit != null)
             {
-                buff.AppendFormat(" velocityUnit=\"{0}\"", this.VelocityUnit);
+                buff.Append("velocityUnit", this.VelocityUnit);
             }
             if ((object)this.FlowUnit != null)
             {
-                buff.AppendFormat(" flowUnit=\"{0}\"", this.FlowUnit);
+                buff.Append("flowUnit", this.FlowUnit);
             }
             if ((object)this.AngularUnit != null)
             {
-                buff.AppendFormat(" angularUnit=\"{0}\"", this.AngularUnit);
+                buff.Append("angularUnit", this.AngularUnit);
             }
             if ((object)this.DirectionUnit != null)
             {
-                buff.AppendFormat(" directionUnit=\"{0}\"", this.DirectionUnit);
+                buff.Append("directionUnit", this.DirectionUnit);
             }
             if ((object)this.LatLongAngularUnit != null)
             {
-                buff.AppendFormat(" latLongAngularUnit=\"{0}\"", this.LatLongAngularUnit);
+                buff.Append("latLongAngularUnit", this.LatLongAngularUnit);
             }
             if ((object)this.ElevationUnit != null)
             {
-                buff.AppendFormat(" elevationUnit=\"{0}\"", this.ElevationUnit);
+                buff.Append("elevationUnit", this.ElevationUnit);
             }
-
 
             return buff.ToString();
         }
@@ -262,6 +240,10 @@ namespace XmlSchemaProcessor.LandXml12
         public ElevationType? ElevationUnit;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

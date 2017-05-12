@@ -7,34 +7,36 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The "ProfSurf" element will typically represent an existing ground surface for a profile. 
     /// It is defined with a space delimited PntList2D of station/elevations pairs. 
     /// Example: "0.000 86.52 6.267 86.89 12.413 87.01 26.020 87.83" 
     /// Note: Gaps in the profile are handled by having 2 or more PntList2D elements.
+    /// Sequence [1, 1]
+    ///     PntList2D [1, *]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class ProfSurf : XsdBaseObject
+    public class ProfSurf : XsdBaseReader
     {
+        public ProfSurf(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             return true;
         }
@@ -57,28 +59,25 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
-
 
             return buff.ToString();
         }
@@ -90,6 +89,19 @@ namespace XmlSchemaProcessor.LandXml12
         public StateType? State;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("PntList2D"))
+            {
+                return Tuple.Create("PntList2D", this.NewReader<IList<double>>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

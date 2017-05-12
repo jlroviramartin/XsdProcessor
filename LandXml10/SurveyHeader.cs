@@ -7,116 +7,88 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// We seemed to have doubled up on the survey purpose here, but the two are quite different - maybe need a different name
+    /// Choice [0, *]
+    ///     CoordinateSystem [0, 1]
+    ///     Units [0, 1]
+    ///     MapPoint [0, *]
+    ///     Personnel [0, *]
+    ///     FieldNote [0, *]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class SurveyHeader : XsdBaseObject
+    public class SurveyHeader : XsdBaseReader
     {
+        public SurveyHeader(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
                     attributes.GetSafe("purpose"));
-
-
 
             this.StartTime = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("startTime"));
 
-
-
             this.EndTime = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("endTime"));
-
-
 
             this.Surveyor = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("surveyor"));
 
-
-
             this.SurveyorFirm = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("surveyorFirm"));
-
-
 
             this.SurveyorReference = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("surveyorReference"));
 
-
-
             this.SurveyorRegistration = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("surveyorRegistration"));
-
-
 
             this.SurveyPurpose = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("surveyPurpose"));
 
-
-
             this.Type = XsdConverter.Instance.Convert<SurveyType?>(
                     attributes.GetSafe("type"));
-
-
 
             this.Class = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("class"));
 
-
-
             this.County = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("county"));
-
-
 
             this.ApplyAtmosphericCorrection = XsdConverter.Instance.Convert<bool?>(
                     attributes.GetSafe("applyAtmosphericCorrection"));
 
-
-
             this.Pressure = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("pressure"));
-
-
 
             this.Temperature = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("temperature"));
 
-
-
             this.ApplySeaLevelCorrection = XsdConverter.Instance.Convert<bool?>(
                     attributes.GetSafe("applySeaLevelCorrection"));
-
-
 
             this.ScaleFactor = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("scaleFactor"));
 
-
-
             this.SeaLevelCorrectionFactor = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("seaLevelCorrectionFactor"));
 
-
-
             this.CombinedFactor = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("combinedFactor"));
-
-
 
             return true;
         }
@@ -207,96 +179,93 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("combinedFactor = {0}", this.CombinedFactor).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.StartTime != null)
             {
-                buff.AppendFormat(" startTime=\"{0}\"", this.StartTime);
+                buff.Append("startTime", this.StartTime);
             }
             if ((object)this.EndTime != null)
             {
-                buff.AppendFormat(" endTime=\"{0}\"", this.EndTime);
+                buff.Append("endTime", this.EndTime);
             }
             if ((object)this.Surveyor != null)
             {
-                buff.AppendFormat(" surveyor=\"{0}\"", this.Surveyor);
+                buff.Append("surveyor", this.Surveyor);
             }
             if ((object)this.SurveyorFirm != null)
             {
-                buff.AppendFormat(" surveyorFirm=\"{0}\"", this.SurveyorFirm);
+                buff.Append("surveyorFirm", this.SurveyorFirm);
             }
             if ((object)this.SurveyorReference != null)
             {
-                buff.AppendFormat(" surveyorReference=\"{0}\"", this.SurveyorReference);
+                buff.Append("surveyorReference", this.SurveyorReference);
             }
             if ((object)this.SurveyorRegistration != null)
             {
-                buff.AppendFormat(" surveyorRegistration=\"{0}\"", this.SurveyorRegistration);
+                buff.Append("surveyorRegistration", this.SurveyorRegistration);
             }
             if ((object)this.SurveyPurpose != null)
             {
-                buff.AppendFormat(" surveyPurpose=\"{0}\"", this.SurveyPurpose);
+                buff.Append("surveyPurpose", this.SurveyPurpose);
             }
             if ((object)this.Type != null)
             {
-                buff.AppendFormat(" type=\"{0}\"", this.Type);
+                buff.Append("type", this.Type);
             }
             if ((object)this.Class != null)
             {
-                buff.AppendFormat(" class=\"{0}\"", this.Class);
+                buff.Append("class", this.Class);
             }
             if ((object)this.County != null)
             {
-                buff.AppendFormat(" county=\"{0}\"", this.County);
+                buff.Append("county", this.County);
             }
             if ((object)this.ApplyAtmosphericCorrection != null)
             {
-                buff.AppendFormat(" applyAtmosphericCorrection=\"{0}\"", this.ApplyAtmosphericCorrection);
+                buff.Append("applyAtmosphericCorrection", this.ApplyAtmosphericCorrection);
             }
             if ((object)this.Pressure != null)
             {
-                buff.AppendFormat(" pressure=\"{0}\"", this.Pressure);
+                buff.Append("pressure", this.Pressure);
             }
             if ((object)this.Temperature != null)
             {
-                buff.AppendFormat(" temperature=\"{0}\"", this.Temperature);
+                buff.Append("temperature", this.Temperature);
             }
             if ((object)this.ApplySeaLevelCorrection != null)
             {
-                buff.AppendFormat(" applySeaLevelCorrection=\"{0}\"", this.ApplySeaLevelCorrection);
+                buff.Append("applySeaLevelCorrection", this.ApplySeaLevelCorrection);
             }
             if ((object)this.ScaleFactor != null)
             {
-                buff.AppendFormat(" scaleFactor=\"{0}\"", this.ScaleFactor);
+                buff.Append("scaleFactor", this.ScaleFactor);
             }
             if ((object)this.SeaLevelCorrectionFactor != null)
             {
-                buff.AppendFormat(" seaLevelCorrectionFactor=\"{0}\"", this.SeaLevelCorrectionFactor);
+                buff.Append("seaLevelCorrectionFactor", this.SeaLevelCorrectionFactor);
             }
             if ((object)this.CombinedFactor != null)
             {
-                buff.AppendFormat(" combinedFactor=\"{0}\"", this.CombinedFactor);
+                buff.Append("combinedFactor", this.CombinedFactor);
             }
-
 
             return buff.ToString();
         }
@@ -348,6 +317,35 @@ namespace XmlSchemaProcessor.LandXml10
         public double? CombinedFactor;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("Personnel"))
+            {
+                return Tuple.Create("Personnel", this.NewReader<Personnel>());
+            }
+            if (name.EqualsIgnoreCase("MapPoint"))
+            {
+                return Tuple.Create("MapPoint", this.NewReader<PointType>());
+            }
+            if (name.EqualsIgnoreCase("Units"))
+            {
+                return Tuple.Create("Units", this.NewReader<Units>());
+            }
+            if (name.EqualsIgnoreCase("CoordinateSystem"))
+            {
+                return Tuple.Create("CoordinateSystem", this.NewReader<CoordinateSystem>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

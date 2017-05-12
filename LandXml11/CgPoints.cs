@@ -7,46 +7,43 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// A collection of COGO points. (Cg = COGO = Cordinate Geometry)
+    /// Sequence [1, 1]
+    ///     CgPoint [0, *]
+    ///     CgPoints [0, *]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class CgPoints : XsdBaseObject
+    public class CgPoints : XsdBaseReader
     {
+        public CgPoints(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
-
-
 
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             this.Code = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("code"));
 
-
-
             this.ZoneNumber = XsdConverter.Instance.Convert<uint?>(
                     attributes.GetSafe("zoneNumber"));
 
-
-
             this.DTMAttribute = XsdConverter.Instance.Convert<DTMAttributeType?>(
                     attributes.GetSafe("DTMAttribute"));
-
-
 
             return true;
         }
@@ -81,40 +78,37 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("DTMAttribute = {0}", this.DTMAttribute).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.Code != null)
             {
-                buff.AppendFormat(" code=\"{0}\"", this.Code);
+                buff.Append("code", this.Code);
             }
             if ((object)this.ZoneNumber != null)
             {
-                buff.AppendFormat(" zoneNumber=\"{0}\"", this.ZoneNumber);
+                buff.Append("zoneNumber", this.ZoneNumber);
             }
             if ((object)this.DTMAttribute != null)
             {
-                buff.AppendFormat(" DTMAttribute=\"{0}\"", this.DTMAttribute);
+                buff.Append("DTMAttribute", this.DTMAttribute);
             }
-
 
             return buff.ToString();
         }
@@ -132,6 +126,23 @@ namespace XmlSchemaProcessor.LandXml11
         public DTMAttributeType? DTMAttribute;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("CgPoints"))
+            {
+                return Tuple.Create("CgPoints", this.NewReader<CgPoints>());
+            }
+            if (name.EqualsIgnoreCase("CgPoint"))
+            {
+                return Tuple.Create("CgPoint", this.NewReader<CgPoint>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

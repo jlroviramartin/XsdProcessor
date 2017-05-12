@@ -7,21 +7,24 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : true
+    // includeContent : false
     /// <summary>
     /// Represents a 2D or 3D Address Point. The Address Point is the geocoded point with which to reference an address
     /// </summary>
 
     public class AddressPoint : PointType
     {
+        public AddressPoint(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.AddressPointType = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("addressPointType"));
-
-
 
             return true;
         }
@@ -36,20 +39,17 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("addressPointType = {0}", this.AddressPointType).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.AddressPointType != null)
             {
-                buff.AppendFormat(" addressPointType=\"{0}\"", this.AddressPointType);
+                buff.Append("addressPointType", this.AddressPointType);
             }
-
 
             return buff.ToString();
         }
@@ -61,6 +61,10 @@ namespace XmlSchemaProcessor.LandXml11
         public string AddressPointType;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

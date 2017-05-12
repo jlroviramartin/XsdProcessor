@@ -7,207 +7,142 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// This has been modified to include new fields such as accuracy, date, class and adoption. I've added in bearing (azimuth is in terms of true north whereas bearing is the projection north) 
     ///  - maybe this doesn't matter, may need to discuss
+    /// Sequence [1, 1]
+    ///     TargetPoint [0, 1]
+    ///     OffsetVals [0, 1]
+    ///     Choice [0, *]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
     /// </summary>
 
-    public class ReducedObservation : XsdBaseObject
+    public class ReducedObservation : XsdBaseReader
     {
+        public ReducedObservation(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
                     attributes.GetSafe("purpose"));
-
-
 
             this.SetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID"));
 
-
-
             this.TargetSetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("targetSetupID"));
-
-
 
             this.TargetSetup2ID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("targetSetup2ID"));
 
-
-
             this.SetID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setID"));
-
-
 
             this.TargetHeight = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("targetHeight"));
 
-
-
             this.Azimuth = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("azimuth"));
-
-
 
             this.HorizDistance = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("horizDistance"));
 
-
-
             this.VertDistance = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("vertDistance"));
-
-
 
             this.HorizAngle = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("horizAngle"));
 
-
-
             this.SlopeDistance = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("slopeDistance"));
-
-
 
             this.ZenithAngle = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("zenithAngle"));
 
-
-
             this.EquipmentUsed = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("equipmentUsed"));
-
-
 
             this.AzimuthAccuracy = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("azimuthAccuracy"));
 
-
-
             this.DistanceAccuracy = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("distanceAccuracy"));
-
-
 
             this.AngleAccuracy = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("angleAccuracy"));
 
-
-
             this.Date = XsdConverter.Instance.Convert<DateTime?>(
                     attributes.GetSafe("date"));
-
-
 
             this.DistanceType = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("distanceType"));
 
-
-
             this.AzimuthType = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("azimuthType"));
-
-
 
             this.AngleType = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("angleType"));
 
-
-
             this.AdoptedAzimuthSurvey = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("adoptedAzimuthSurvey"));
-
-
 
             this.AdoptedDistanceSurvey = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("adoptedDistanceSurvey"));
 
-
-
             this.AdoptedAngleSurvey = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("adoptedAngleSurvey"));
-
-
 
             this.DistanceAccClass = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("distanceAccClass"));
 
-
-
             this.AzimuthAccClass = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("azimuthAccClass"));
-
-
 
             this.AngleAccClass = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("angleAccClass"));
 
-
-
             this.AzimuthAdoptionFactor = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("azimuthAdoptionFactor"));
-
-
 
             this.DistanceAdoptionFactor = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("distanceAdoptionFactor"));
 
-
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             this.OID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("oID"));
 
-
-
             this.MSLDistance = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("MSLDistance"));
-
-
 
             this.SpherDistance = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("spherDistance"));
 
-
-
             this.CoordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("coordGeomRefs"));
-
-
 
             this.AlignRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("alignRef"));
 
-
-
             this.AlignStationName = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("alignStationName"));
 
-
-
             this.AlignOffset = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("alignOffset"));
-
-
 
             return true;
         }
@@ -370,168 +305,165 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("alignOffset = {0}", this.AlignOffset).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.SetupID != null)
             {
-                buff.AppendFormat(" setupID=\"{0}\"", this.SetupID);
+                buff.Append("setupID", this.SetupID);
             }
             if ((object)this.TargetSetupID != null)
             {
-                buff.AppendFormat(" targetSetupID=\"{0}\"", this.TargetSetupID);
+                buff.Append("targetSetupID", this.TargetSetupID);
             }
             if ((object)this.TargetSetup2ID != null)
             {
-                buff.AppendFormat(" targetSetup2ID=\"{0}\"", this.TargetSetup2ID);
+                buff.Append("targetSetup2ID", this.TargetSetup2ID);
             }
             if ((object)this.SetID != null)
             {
-                buff.AppendFormat(" setID=\"{0}\"", this.SetID);
+                buff.Append("setID", this.SetID);
             }
             if ((object)this.TargetHeight != null)
             {
-                buff.AppendFormat(" targetHeight=\"{0}\"", this.TargetHeight);
+                buff.Append("targetHeight", this.TargetHeight);
             }
             if ((object)this.Azimuth != null)
             {
-                buff.AppendFormat(" azimuth=\"{0}\"", this.Azimuth);
+                buff.Append("azimuth", this.Azimuth);
             }
             if ((object)this.HorizDistance != null)
             {
-                buff.AppendFormat(" horizDistance=\"{0}\"", this.HorizDistance);
+                buff.Append("horizDistance", this.HorizDistance);
             }
             if ((object)this.VertDistance != null)
             {
-                buff.AppendFormat(" vertDistance=\"{0}\"", this.VertDistance);
+                buff.Append("vertDistance", this.VertDistance);
             }
             if ((object)this.HorizAngle != null)
             {
-                buff.AppendFormat(" horizAngle=\"{0}\"", this.HorizAngle);
+                buff.Append("horizAngle", this.HorizAngle);
             }
             if ((object)this.SlopeDistance != null)
             {
-                buff.AppendFormat(" slopeDistance=\"{0}\"", this.SlopeDistance);
+                buff.Append("slopeDistance", this.SlopeDistance);
             }
             if ((object)this.ZenithAngle != null)
             {
-                buff.AppendFormat(" zenithAngle=\"{0}\"", this.ZenithAngle);
+                buff.Append("zenithAngle", this.ZenithAngle);
             }
             if ((object)this.EquipmentUsed != null)
             {
-                buff.AppendFormat(" equipmentUsed=\"{0}\"", this.EquipmentUsed);
+                buff.Append("equipmentUsed", this.EquipmentUsed);
             }
             if ((object)this.AzimuthAccuracy != null)
             {
-                buff.AppendFormat(" azimuthAccuracy=\"{0}\"", this.AzimuthAccuracy);
+                buff.Append("azimuthAccuracy", this.AzimuthAccuracy);
             }
             if ((object)this.DistanceAccuracy != null)
             {
-                buff.AppendFormat(" distanceAccuracy=\"{0}\"", this.DistanceAccuracy);
+                buff.Append("distanceAccuracy", this.DistanceAccuracy);
             }
             if ((object)this.AngleAccuracy != null)
             {
-                buff.AppendFormat(" angleAccuracy=\"{0}\"", this.AngleAccuracy);
+                buff.Append("angleAccuracy", this.AngleAccuracy);
             }
             if ((object)this.Date != null)
             {
-                buff.AppendFormat(" date=\"{0}\"", this.Date);
+                buff.Append("date", this.Date);
             }
             if ((object)this.DistanceType != null)
             {
-                buff.AppendFormat(" distanceType=\"{0}\"", this.DistanceType);
+                buff.Append("distanceType", this.DistanceType);
             }
             if ((object)this.AzimuthType != null)
             {
-                buff.AppendFormat(" azimuthType=\"{0}\"", this.AzimuthType);
+                buff.Append("azimuthType", this.AzimuthType);
             }
             if ((object)this.AngleType != null)
             {
-                buff.AppendFormat(" angleType=\"{0}\"", this.AngleType);
+                buff.Append("angleType", this.AngleType);
             }
             if ((object)this.AdoptedAzimuthSurvey != null)
             {
-                buff.AppendFormat(" adoptedAzimuthSurvey=\"{0}\"", this.AdoptedAzimuthSurvey);
+                buff.Append("adoptedAzimuthSurvey", this.AdoptedAzimuthSurvey);
             }
             if ((object)this.AdoptedDistanceSurvey != null)
             {
-                buff.AppendFormat(" adoptedDistanceSurvey=\"{0}\"", this.AdoptedDistanceSurvey);
+                buff.Append("adoptedDistanceSurvey", this.AdoptedDistanceSurvey);
             }
             if ((object)this.AdoptedAngleSurvey != null)
             {
-                buff.AppendFormat(" adoptedAngleSurvey=\"{0}\"", this.AdoptedAngleSurvey);
+                buff.Append("adoptedAngleSurvey", this.AdoptedAngleSurvey);
             }
             if ((object)this.DistanceAccClass != null)
             {
-                buff.AppendFormat(" distanceAccClass=\"{0}\"", this.DistanceAccClass);
+                buff.Append("distanceAccClass", this.DistanceAccClass);
             }
             if ((object)this.AzimuthAccClass != null)
             {
-                buff.AppendFormat(" azimuthAccClass=\"{0}\"", this.AzimuthAccClass);
+                buff.Append("azimuthAccClass", this.AzimuthAccClass);
             }
             if ((object)this.AngleAccClass != null)
             {
-                buff.AppendFormat(" angleAccClass=\"{0}\"", this.AngleAccClass);
+                buff.Append("angleAccClass", this.AngleAccClass);
             }
             if ((object)this.AzimuthAdoptionFactor != null)
             {
-                buff.AppendFormat(" azimuthAdoptionFactor=\"{0}\"", this.AzimuthAdoptionFactor);
+                buff.Append("azimuthAdoptionFactor", this.AzimuthAdoptionFactor);
             }
             if ((object)this.DistanceAdoptionFactor != null)
             {
-                buff.AppendFormat(" distanceAdoptionFactor=\"{0}\"", this.DistanceAdoptionFactor);
+                buff.Append("distanceAdoptionFactor", this.DistanceAdoptionFactor);
             }
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.OID != null)
             {
-                buff.AppendFormat(" oID=\"{0}\"", this.OID);
+                buff.Append("oID", this.OID);
             }
             if ((object)this.MSLDistance != null)
             {
-                buff.AppendFormat(" MSLDistance=\"{0}\"", this.MSLDistance);
+                buff.Append("MSLDistance", this.MSLDistance);
             }
             if ((object)this.SpherDistance != null)
             {
-                buff.AppendFormat(" spherDistance=\"{0}\"", this.SpherDistance);
+                buff.Append("spherDistance", this.SpherDistance);
             }
             if ((object)this.CoordGeomRefs != null)
             {
-                buff.AppendFormat(" coordGeomRefs=\"{0}\"", this.CoordGeomRefs);
+                buff.Append("coordGeomRefs", this.CoordGeomRefs);
             }
             if ((object)this.AlignRef != null)
             {
-                buff.AppendFormat(" alignRef=\"{0}\"", this.AlignRef);
+                buff.Append("alignRef", this.AlignRef);
             }
             if ((object)this.AlignStationName != null)
             {
-                buff.AppendFormat(" alignStationName=\"{0}\"", this.AlignStationName);
+                buff.Append("alignStationName", this.AlignStationName);
             }
             if ((object)this.AlignOffset != null)
             {
-                buff.AppendFormat(" alignOffset=\"{0}\"", this.AlignOffset);
+                buff.Append("alignOffset", this.AlignOffset);
             }
-
 
             return buff.ToString();
         }
@@ -649,6 +581,27 @@ namespace XmlSchemaProcessor.LandXml12
         public double? AlignOffset;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("OffsetVals"))
+            {
+                return Tuple.Create("OffsetVals", this.NewReader<OffsetVals>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

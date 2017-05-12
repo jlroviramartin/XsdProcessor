@@ -1,0 +1,18 @@
+﻿delimiters "$", "$"
+
+BuildEnum(namespace, enumType, enumValues) ::= <<
+$Pre(namespace)$
+    $enumType; format="NetDocumentation"$
+    public enum $enumType.Name; format="TypeName"$
+    {
+        $enumValues:{enumValue | $BuildValue(enumValue)$}$
+    }
+$Post()$
+
+>>
+
+BuildValue(enumValue) ::= <<
+[StringValue("$enumValue$")]
+$enumValue; format="EnumValueName"$,
+
+>>

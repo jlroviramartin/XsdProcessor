@@ -7,27 +7,26 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
-    public class AmendmentItem : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    public class AmendmentItem : XsdBaseReader
     {
+        public AmendmentItem(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.ElementName = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("elementName"));
-
-
 
             this.OldName = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("oldName"));
 
-
-
             this.NewName = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("newName"));
-
-
 
             return true;
         }
@@ -50,28 +49,25 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("newName = {0}", this.NewName).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.ElementName != null)
             {
-                buff.AppendFormat(" elementName=\"{0}\"", this.ElementName);
+                buff.Append("elementName", this.ElementName);
             }
             if ((object)this.OldName != null)
             {
-                buff.AppendFormat(" oldName=\"{0}\"", this.OldName);
+                buff.Append("oldName", this.OldName);
             }
             if ((object)this.NewName != null)
             {
-                buff.AppendFormat(" newName=\"{0}\"", this.NewName);
+                buff.Append("newName", this.NewName);
             }
-
 
             return buff.ToString();
         }
@@ -83,6 +79,10 @@ namespace XmlSchemaProcessor.LandXml11
         public string NewName;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

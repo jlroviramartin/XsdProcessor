@@ -7,6 +7,8 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : true
+    // includeContent : true
     /// <summary>
     /// A surface face. It contains a space delimited list of "id" references for 3 (TIN) or 4 (grid) surface "P" points. 
     /// The 3 or 4 numbers represent the vertices on the face. Each number is a reference to the ID value of a surface point "P" for the face coordinates.
@@ -26,25 +28,23 @@ namespace XmlSchemaProcessor.LandXml11
     /// neighbor between 20 and 30 and 3 is the neighbor index for 30 to 10. 
     /// </summary>
 
-    public class F : XsdBaseObject
+    public class F : XsdBaseReader
     {
+        public F(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.I = XsdConverter.Instance.Convert<int?>(
                     attributes.GetSafe("i"));
-
-
 
             this.N = XsdConverter.Instance.Convert<IList<int?>>(
                     attributes.GetSafe("n"));
 
-
-
             this.Content = XsdConverter.Instance.Convert<IList<int>>(text);
-
             return true;
         }
 
@@ -62,35 +62,30 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("n = {0}", this.N).AppendLine();
             }
 
-
             if ((object)this.Content != null)
             {
                 buff.AppendFormat("content = {0}", this.Content).AppendLine();
             }
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.I != null)
             {
-                buff.AppendFormat(" i=\"{0}\"", this.I);
+                buff.Append("i", this.I);
             }
             if ((object)this.N != null)
             {
-                buff.AppendFormat(" n=\"{0}\"", this.N);
+                buff.Append("n", this.N);
             }
-
 
             if ((object)this.Content != null)
             {
-                buff.AppendFormat(" content = \"{0}\"", this.Content);
+                buff.Append("content", this.Content);
             }
-
             return buff.ToString();
         }
 
@@ -99,7 +94,14 @@ namespace XmlSchemaProcessor.LandXml11
         public IList<int?> N;
 
 
+        protected override bool NeedContent { get { return true; } }
+
         public IList<int> Content;
+
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

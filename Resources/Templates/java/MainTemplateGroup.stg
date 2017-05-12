@@ -1,0 +1,41 @@
+﻿delimiters "$", "$"
+
+import "BuildEnum.stg"
+import "BuildType.stg"
+import "EventsImplementation.stg"
+import "EventsInterface.stg"
+import "EventsTest.stg"
+import "XmlReader.stg"
+
+MainTemplate(namespace, body) ::= <<
+#if !BUILD_LAND_XML
+using System;
+using System.IO;
+using System.Collections.Generic;
+using XmlSchemaProcessor.Processors;
+
+namespace $namespace$
+{
+    $body$
+}
+#endif
+
+>>
+
+Pre(namespace) ::= <<
+#if !BUILD_LAND_XML
+using System;
+using System.IO;
+using System.Collections.Generic;
+using XmlSchemaProcessor.Processors;
+
+namespace $namespace$
+{
+
+>>
+
+Post() ::= <<
+}
+#endif
+
+>>

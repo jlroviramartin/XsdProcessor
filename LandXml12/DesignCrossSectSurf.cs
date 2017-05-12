@@ -7,62 +7,53 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
-    public class DesignCrossSectSurf : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Sequence [1, 1]
+    ///     CrossSectPnt [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class DesignCrossSectSurf : XsdBaseReader
     {
+        public DesignCrossSectSurf(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             this.Side = XsdConverter.Instance.Convert<SideofRoadType?>(
                     attributes.GetSafe("side"));
 
-
-
             this.Material = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("material"));
-
-
 
             this.ClosedArea = XsdConverter.Instance.Convert<bool?>(
                     attributes.GetSafe("closedArea"));
 
-
-
             this.TypicalThickness = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("typicalThickness"));
-
-
 
             this.TypicalWidth = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("typicalWidth"));
 
-
-
             this.Area = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("area"));
 
-
-
             this.Volume = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("volume"));
-
-
 
             return true;
         }
@@ -113,56 +104,53 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("volume = {0}", this.Volume).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
             if ((object)this.Side != null)
             {
-                buff.AppendFormat(" side=\"{0}\"", this.Side);
+                buff.Append("side", this.Side);
             }
             if ((object)this.Material != null)
             {
-                buff.AppendFormat(" material=\"{0}\"", this.Material);
+                buff.Append("material", this.Material);
             }
             if ((object)this.ClosedArea != null)
             {
-                buff.AppendFormat(" closedArea=\"{0}\"", this.ClosedArea);
+                buff.Append("closedArea", this.ClosedArea);
             }
             if ((object)this.TypicalThickness != null)
             {
-                buff.AppendFormat(" typicalThickness=\"{0}\"", this.TypicalThickness);
+                buff.Append("typicalThickness", this.TypicalThickness);
             }
             if ((object)this.TypicalWidth != null)
             {
-                buff.AppendFormat(" typicalWidth=\"{0}\"", this.TypicalWidth);
+                buff.Append("typicalWidth", this.TypicalWidth);
             }
             if ((object)this.Area != null)
             {
-                buff.AppendFormat(" area=\"{0}\"", this.Area);
+                buff.Append("area", this.Area);
             }
             if ((object)this.Volume != null)
             {
-                buff.AppendFormat(" volume=\"{0}\"", this.Volume);
+                buff.Append("volume", this.Volume);
             }
-
 
             return buff.ToString();
         }
@@ -194,6 +182,19 @@ namespace XmlSchemaProcessor.LandXml12
         public double? Volume;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("CrossSectPnt"))
+            {
+                return Tuple.Create("CrossSectPnt", this.NewReader<CrossSectPnt>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

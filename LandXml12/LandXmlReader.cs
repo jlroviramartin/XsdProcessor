@@ -12,50 +12,6 @@ namespace XmlSchemaProcessor.LandXml12
         public LandXmlReader(ILandXmlEvents events)
             : base("http://www.landxml.org/schema/LandXML-1.2", "http://www.landxml.org/schema/LandXML-1.1", "http://www.landxml.org/schema/LandXML-1.0")
         {
-            this.Register<IList<double>>("PntList2D",
-                    events.BeginReadPntList2D,
-                    events.EndReadPntList2D,
-                    true);
-            this.Register<IList<double>>("PntList3D",
-                    events.BeginReadPntList3D,
-                    events.EndReadPntList3D,
-                    true);
-            this.Register<double>("BeginRunoutSta",
-                    events.BeginReadBeginRunoutSta,
-                    events.EndReadBeginRunoutSta,
-                    true);
-            this.Register<double>("BeginRunoffSta",
-                    events.BeginReadBeginRunoffSta,
-                    events.EndReadBeginRunoffSta,
-                    true);
-            this.Register<double>("FullSuperSta",
-                    events.BeginReadFullSuperSta,
-                    events.EndReadFullSuperSta,
-                    true);
-            this.Register<double>("FullSuperelev",
-                    events.BeginReadFullSuperelev,
-                    events.EndReadFullSuperelev,
-                    true);
-            this.Register<double>("RunoffSta",
-                    events.BeginReadRunoffSta,
-                    events.EndReadRunoffSta,
-                    true);
-            this.Register<double>("StartofRunoutSta",
-                    events.BeginReadStartofRunoutSta,
-                    events.EndReadStartofRunoutSta,
-                    true);
-            this.Register<double>("EndofRunoutSta",
-                    events.BeginReadEndofRunoutSta,
-                    events.EndReadEndofRunoutSta,
-                    true);
-            this.Register<AdverseSEType>("AdverseSE",
-                    events.BeginReadAdverseSE,
-                    events.EndReadAdverseSE,
-                    true);
-            this.Register<double>("Station",
-                    events.BeginReadStation,
-                    events.EndReadStation,
-                    true);
             this.Register<LandXML>("LandXML",
                     events.BeginReadLandXML,
                     events.EndReadLandXML,
@@ -84,6 +40,14 @@ namespace XmlSchemaProcessor.LandXml12
                     events.BeginReadFeatureDictionary,
                     events.EndReadFeatureDictionary,
                     false);
+            this.Register<IList<double>>("PntList2D",
+                    events.BeginReadPntList2D,
+                    events.EndReadPntList2D,
+                    true);
+            this.Register<IList<double>>("PntList3D",
+                    events.BeginReadPntList3D,
+                    events.EndReadPntList3D,
+                    true);
             this.Register<PointType>("Start",
                     events.BeginReadStart,
                     events.EndReadStart,
@@ -688,6 +652,38 @@ namespace XmlSchemaProcessor.LandXml12
                     events.BeginReadTrafficVolume,
                     events.EndReadTrafficVolume,
                     false);
+            this.Register<double>("BeginRunoutSta",
+                    events.BeginReadBeginRunoutSta,
+                    events.EndReadBeginRunoutSta,
+                    true);
+            this.Register<double>("BeginRunoffSta",
+                    events.BeginReadBeginRunoffSta,
+                    events.EndReadBeginRunoffSta,
+                    true);
+            this.Register<double>("FullSuperSta",
+                    events.BeginReadFullSuperSta,
+                    events.EndReadFullSuperSta,
+                    true);
+            this.Register<double>("FullSuperelev",
+                    events.BeginReadFullSuperelev,
+                    events.EndReadFullSuperelev,
+                    true);
+            this.Register<double>("RunoffSta",
+                    events.BeginReadRunoffSta,
+                    events.EndReadRunoffSta,
+                    true);
+            this.Register<double>("StartofRunoutSta",
+                    events.BeginReadStartofRunoutSta,
+                    events.EndReadStartofRunoutSta,
+                    true);
+            this.Register<double>("EndofRunoutSta",
+                    events.BeginReadEndofRunoutSta,
+                    events.EndReadEndofRunoutSta,
+                    true);
+            this.Register<AdverseSEType>("AdverseSE",
+                    events.BeginReadAdverseSE,
+                    events.EndReadAdverseSE,
+                    true);
             this.Register<Superelevation>("Superelevation",
                     events.BeginReadSuperelevation,
                     events.EndReadSuperelevation,
@@ -812,6 +808,10 @@ namespace XmlSchemaProcessor.LandXml12
                     events.BeginReadBridgeElement,
                     events.EndReadBridgeElement,
                     false);
+            this.Register<double>("Station",
+                    events.BeginReadStation,
+                    events.EndReadStation,
+                    true);
             this.Register<InSpiral>("InSpiral",
                     events.BeginReadInSpiral,
                     events.EndReadInSpiral,

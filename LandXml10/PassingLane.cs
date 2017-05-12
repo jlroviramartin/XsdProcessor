@@ -7,42 +7,40 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
-    public class PassingLane : XsdBaseObject
+    // needContent    : false
+    // includeContent : false
+    /// <summary>
+    /// Choice [0, *]
+    ///     Feature [0, *]
+    /// </summary>
+
+    public class PassingLane : XsdBaseReader
     {
+        public PassingLane(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.StaStart = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("staStart"));
-
-
 
             this.StaEnd = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("staEnd"));
 
-
-
             this.BeginFullWidthSta = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("beginFullWidthSta"));
-
-
 
             this.EndFullWidthSta = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("endFullWidthSta"));
 
-
-
             this.Width = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("width"));
 
-
-
             this.SideofRoad = XsdConverter.Instance.Convert<SideofRoadType?>(
                     attributes.GetSafe("sideofRoad"));
-
-
 
             return true;
         }
@@ -77,40 +75,37 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("sideofRoad = {0}", this.SideofRoad).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.StaStart != null)
             {
-                buff.AppendFormat(" staStart=\"{0}\"", this.StaStart);
+                buff.Append("staStart", this.StaStart);
             }
             if ((object)this.StaEnd != null)
             {
-                buff.AppendFormat(" staEnd=\"{0}\"", this.StaEnd);
+                buff.Append("staEnd", this.StaEnd);
             }
             if ((object)this.BeginFullWidthSta != null)
             {
-                buff.AppendFormat(" beginFullWidthSta=\"{0}\"", this.BeginFullWidthSta);
+                buff.Append("beginFullWidthSta", this.BeginFullWidthSta);
             }
             if ((object)this.EndFullWidthSta != null)
             {
-                buff.AppendFormat(" endFullWidthSta=\"{0}\"", this.EndFullWidthSta);
+                buff.Append("endFullWidthSta", this.EndFullWidthSta);
             }
             if ((object)this.Width != null)
             {
-                buff.AppendFormat(" width=\"{0}\"", this.Width);
+                buff.Append("width", this.Width);
             }
             if ((object)this.SideofRoad != null)
             {
-                buff.AppendFormat(" sideofRoad=\"{0}\"", this.SideofRoad);
+                buff.Append("sideofRoad", this.SideofRoad);
             }
-
 
             return buff.ToString();
         }
@@ -141,6 +136,15 @@ namespace XmlSchemaProcessor.LandXml10
         public SideofRoadType? SideofRoad;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

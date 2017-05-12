@@ -7,6 +7,8 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : true
+    // includeContent : false
     /// <summary>
     /// Identifies a drain point from the watershed with a space delimited "northing easting elevation" value.
     /// If it drains to another known watershed, then the name of that watershed is identified by the "refWs" attribute.
@@ -14,15 +16,16 @@ namespace XmlSchemaProcessor.LandXml10
 
     public class Outlet : PointType3dReq
     {
+        public Outlet(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.RefWS = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("refWS"));
-
-
 
             return true;
         }
@@ -37,20 +40,17 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("refWS = {0}", this.RefWS).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.RefWS != null)
             {
-                buff.AppendFormat(" refWS=\"{0}\"", this.RefWS);
+                buff.Append("refWS", this.RefWS);
             }
-
 
             return buff.ToString();
         }
@@ -62,6 +62,10 @@ namespace XmlSchemaProcessor.LandXml10
         public string RefWS;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

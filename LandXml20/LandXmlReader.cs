@@ -12,66 +12,6 @@ namespace XmlSchemaProcessor.LandXml20
         public LandXmlReader(ILandXmlEvents events)
             : base("http://www.landxml.org/schema/LandXML-2.0", "http://www.landxml.org/schema/LandXML-1.2", "http://www.landxml.org/schema/LandXML-1.1", "http://www.landxml.org/schema/LandXML-1.0")
         {
-            this.Register<IList<double>>("PntList2D",
-                    events.BeginReadPntList2D,
-                    events.EndReadPntList2D,
-                    true);
-            this.Register<IList<double>>("PntList3D",
-                    events.BeginReadPntList3D,
-                    events.EndReadPntList3D,
-                    true);
-            this.Register<byte[]>("TextureHexString",
-                    events.BeginReadTextureHexString,
-                    events.EndReadTextureHexString,
-                    true);
-            this.Register<byte[]>("SymbolHexString",
-                    events.BeginReadSymbolHexString,
-                    events.EndReadSymbolHexString,
-                    true);
-            this.Register<byte[]>("SymbolMtlHexString",
-                    events.BeginReadSymbolMtlHexString,
-                    events.EndReadSymbolMtlHexString,
-                    true);
-            this.Register<string>("TextureImageNameRef",
-                    events.BeginReadTextureImageNameRef,
-                    events.EndReadTextureImageNameRef,
-                    true);
-            this.Register<double>("BeginRunoutSta",
-                    events.BeginReadBeginRunoutSta,
-                    events.EndReadBeginRunoutSta,
-                    true);
-            this.Register<double>("BeginRunoffSta",
-                    events.BeginReadBeginRunoffSta,
-                    events.EndReadBeginRunoffSta,
-                    true);
-            this.Register<double>("FullSuperSta",
-                    events.BeginReadFullSuperSta,
-                    events.EndReadFullSuperSta,
-                    true);
-            this.Register<double>("FullSuperelev",
-                    events.BeginReadFullSuperelev,
-                    events.EndReadFullSuperelev,
-                    true);
-            this.Register<double>("RunoffSta",
-                    events.BeginReadRunoffSta,
-                    events.EndReadRunoffSta,
-                    true);
-            this.Register<double>("StartofRunoutSta",
-                    events.BeginReadStartofRunoutSta,
-                    events.EndReadStartofRunoutSta,
-                    true);
-            this.Register<double>("EndofRunoutSta",
-                    events.BeginReadEndofRunoutSta,
-                    events.EndReadEndofRunoutSta,
-                    true);
-            this.Register<AdverseSEType>("AdverseSE",
-                    events.BeginReadAdverseSE,
-                    events.EndReadAdverseSE,
-                    true);
-            this.Register<double>("Station",
-                    events.BeginReadStation,
-                    events.EndReadStation,
-                    true);
             this.Register<LandXML>("LandXML",
                     events.BeginReadLandXML,
                     events.EndReadLandXML,
@@ -100,6 +40,14 @@ namespace XmlSchemaProcessor.LandXml20
                     events.BeginReadFeatureDictionary,
                     events.EndReadFeatureDictionary,
                     false);
+            this.Register<IList<double>>("PntList2D",
+                    events.BeginReadPntList2D,
+                    events.EndReadPntList2D,
+                    true);
+            this.Register<IList<double>>("PntList3D",
+                    events.BeginReadPntList3D,
+                    events.EndReadPntList3D,
+                    true);
             this.Register<PointType>("Start",
                     events.BeginReadStart,
                     events.EndReadStart,
@@ -376,6 +324,22 @@ namespace XmlSchemaProcessor.LandXml20
                     events.BeginReadMonument,
                     events.EndReadMonument,
                     false);
+            this.Register<byte[]>("TextureHexString",
+                    events.BeginReadTextureHexString,
+                    events.EndReadTextureHexString,
+                    true);
+            this.Register<byte[]>("SymbolHexString",
+                    events.BeginReadSymbolHexString,
+                    events.EndReadSymbolHexString,
+                    true);
+            this.Register<byte[]>("SymbolMtlHexString",
+                    events.BeginReadSymbolMtlHexString,
+                    events.EndReadSymbolMtlHexString,
+                    true);
+            this.Register<string>("TextureImageNameRef",
+                    events.BeginReadTextureImageNameRef,
+                    events.EndReadTextureImageNameRef,
+                    true);
             this.Register<TextureImage>("TextureImage",
                     events.BeginReadTextureImage,
                     events.EndReadTextureImage,
@@ -740,6 +704,38 @@ namespace XmlSchemaProcessor.LandXml20
                     events.BeginReadTrafficVolume,
                     events.EndReadTrafficVolume,
                     false);
+            this.Register<double>("BeginRunoutSta",
+                    events.BeginReadBeginRunoutSta,
+                    events.EndReadBeginRunoutSta,
+                    true);
+            this.Register<double>("BeginRunoffSta",
+                    events.BeginReadBeginRunoffSta,
+                    events.EndReadBeginRunoffSta,
+                    true);
+            this.Register<double>("FullSuperSta",
+                    events.BeginReadFullSuperSta,
+                    events.EndReadFullSuperSta,
+                    true);
+            this.Register<double>("FullSuperelev",
+                    events.BeginReadFullSuperelev,
+                    events.EndReadFullSuperelev,
+                    true);
+            this.Register<double>("RunoffSta",
+                    events.BeginReadRunoffSta,
+                    events.EndReadRunoffSta,
+                    true);
+            this.Register<double>("StartofRunoutSta",
+                    events.BeginReadStartofRunoutSta,
+                    events.EndReadStartofRunoutSta,
+                    true);
+            this.Register<double>("EndofRunoutSta",
+                    events.BeginReadEndofRunoutSta,
+                    events.EndReadEndofRunoutSta,
+                    true);
+            this.Register<AdverseSEType>("AdverseSE",
+                    events.BeginReadAdverseSE,
+                    events.EndReadAdverseSE,
+                    true);
             this.Register<Superelevation>("Superelevation",
                     events.BeginReadSuperelevation,
                     events.EndReadSuperelevation,
@@ -864,6 +860,10 @@ namespace XmlSchemaProcessor.LandXml20
                     events.BeginReadBridgeElement,
                     events.EndReadBridgeElement,
                     false);
+            this.Register<double>("Station",
+                    events.BeginReadStation,
+                    events.EndReadStation,
+                    true);
             this.Register<InSpiral>("InSpiral",
                     events.BeginReadInSpiral,
                     events.EndReadInSpiral,

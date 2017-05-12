@@ -7,22 +7,28 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml20
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// The collection of boundaries that were used to define the surface.
     /// Use is optional.
+    /// Sequence [1, 1]
+    ///     Boundary [1, *]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class Boundaries : XsdBaseObject
+    public class Boundaries : XsdBaseReader
     {
+        public Boundaries(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.M = XsdConverter.Instance.Convert<IList<int?>>(
                     attributes.GetSafe("m"));
-
-
 
             return true;
         }
@@ -37,20 +43,17 @@ namespace XmlSchemaProcessor.LandXml20
                 buff.AppendFormat("m = {0}", this.M).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.M != null)
             {
-                buff.AppendFormat(" m=\"{0}\"", this.M);
+                buff.Append("m", this.M);
             }
-
 
             return buff.ToString();
         }
@@ -62,6 +65,19 @@ namespace XmlSchemaProcessor.LandXml20
         public IList<int?> M;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Boundary"))
+            {
+                return Tuple.Create("Boundary", this.NewReader<Boundary>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

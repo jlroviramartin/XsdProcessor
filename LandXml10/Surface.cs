@@ -7,38 +7,41 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml10
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// SourceData is an optional collection of the points, contours, breaklines and boundaries that were used to create the surface.
     /// Definition is a collection of points and faces that define the surface.
     /// Watersheds is a collection the watershed boundaries for the surface.
+    /// Sequence [1, 1]
+    ///     Choice [1, 3]
+    ///         SourceData [0, 1]
+    ///         Definition [0, 1]
+    ///         Watersheds [0, 1]
+    ///     Feature [0, *]
     /// </summary>
 
-    public class Surface : XsdBaseObject
+    public class Surface : XsdBaseReader
     {
+        public Surface(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Name = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("name"));
-
-
 
             this.Desc = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("desc"));
 
-
-
             this.OID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("OID"));
 
-
-
             this.State = XsdConverter.Instance.Convert<StateType?>(
                     attributes.GetSafe("state"));
-
-
 
             return true;
         }
@@ -65,32 +68,29 @@ namespace XmlSchemaProcessor.LandXml10
                 buff.AppendFormat("state = {0}", this.State).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
-                buff.AppendFormat(" name=\"{0}\"", this.Name);
+                buff.Append("name", this.Name);
             }
             if ((object)this.Desc != null)
             {
-                buff.AppendFormat(" desc=\"{0}\"", this.Desc);
+                buff.Append("desc", this.Desc);
             }
             if ((object)this.OID != null)
             {
-                buff.AppendFormat(" OID=\"{0}\"", this.OID);
+                buff.Append("OID", this.OID);
             }
             if ((object)this.State != null)
             {
-                buff.AppendFormat(" state=\"{0}\"", this.State);
+                buff.Append("state", this.State);
             }
-
 
             return buff.ToString();
         }
@@ -104,6 +104,27 @@ namespace XmlSchemaProcessor.LandXml10
         public StateType? State;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("Watersheds"))
+            {
+                return Tuple.Create("Watersheds", this.NewReader<Watersheds>());
+            }
+            if (name.EqualsIgnoreCase("Definition"))
+            {
+                return Tuple.Create("Definition", this.NewReader<Definition>());
+            }
+            if (name.EqualsIgnoreCase("SourceData"))
+            {
+                return Tuple.Create("SourceData", this.NewReader<SourceData>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

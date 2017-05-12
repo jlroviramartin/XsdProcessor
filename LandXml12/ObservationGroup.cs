@@ -7,61 +7,59 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml12
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// All observations to the same point in a group should be averaged together (they have consistant orientation)
+    /// Sequence [1, 1]
+    ///     TargetPoint [0, 1]
+    ///     Choice [0, *]
+    ///         Backsight [1, 1]
+    ///         RawObservation [1, *]
+    ///         ReducedObservation [1, 1]
+    ///         RedHorizontalPosition [0, 1]
+    ///         ReducedArcObservation [0, 1]
+    ///         RedVerticalObservation [0, 1]
+    ///         FieldNote [0, *]
+    ///         Feature [0, *]
     /// </summary>
 
-    public class ObservationGroup : XsdBaseObject
+    public class ObservationGroup : XsdBaseReader
     {
+        public ObservationGroup(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Id = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("id"));
-
-
 
             this.Purpose = XsdConverter.Instance.Convert<PurposeType?>(
                     attributes.GetSafe("purpose"));
 
-
-
             this.SetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setupID"));
-
-
 
             this.TargetSetupID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("targetSetupID"));
 
-
-
             this.SetID = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("setID"));
-
-
 
             this.CoordGeomRefs = XsdConverter.Instance.Convert<IList<string>>(
                     attributes.GetSafe("coordGeomRefs"));
 
-
-
             this.AlignRef = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("alignRef"));
-
-
 
             this.AlignStationName = XsdConverter.Instance.Convert<string>(
                     attributes.GetSafe("alignStationName"));
 
-
-
             this.AlignOffset = XsdConverter.Instance.Convert<double?>(
                     attributes.GetSafe("alignOffset"));
-
-
 
             return true;
         }
@@ -108,52 +106,49 @@ namespace XmlSchemaProcessor.LandXml12
                 buff.AppendFormat("alignOffset = {0}", this.AlignOffset).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Id != null)
             {
-                buff.AppendFormat(" id=\"{0}\"", this.Id);
+                buff.Append("id", this.Id);
             }
             if ((object)this.Purpose != null)
             {
-                buff.AppendFormat(" purpose=\"{0}\"", this.Purpose);
+                buff.Append("purpose", this.Purpose);
             }
             if ((object)this.SetupID != null)
             {
-                buff.AppendFormat(" setupID=\"{0}\"", this.SetupID);
+                buff.Append("setupID", this.SetupID);
             }
             if ((object)this.TargetSetupID != null)
             {
-                buff.AppendFormat(" targetSetupID=\"{0}\"", this.TargetSetupID);
+                buff.Append("targetSetupID", this.TargetSetupID);
             }
             if ((object)this.SetID != null)
             {
-                buff.AppendFormat(" setID=\"{0}\"", this.SetID);
+                buff.Append("setID", this.SetID);
             }
             if ((object)this.CoordGeomRefs != null)
             {
-                buff.AppendFormat(" coordGeomRefs=\"{0}\"", this.CoordGeomRefs);
+                buff.Append("coordGeomRefs", this.CoordGeomRefs);
             }
             if ((object)this.AlignRef != null)
             {
-                buff.AppendFormat(" alignRef=\"{0}\"", this.AlignRef);
+                buff.Append("alignRef", this.AlignRef);
             }
             if ((object)this.AlignStationName != null)
             {
-                buff.AppendFormat(" alignStationName=\"{0}\"", this.AlignStationName);
+                buff.Append("alignStationName", this.AlignStationName);
             }
             if ((object)this.AlignOffset != null)
             {
-                buff.AppendFormat(" alignOffset=\"{0}\"", this.AlignOffset);
+                buff.Append("alignOffset", this.AlignOffset);
             }
-
 
             return buff.ToString();
         }
@@ -189,6 +184,47 @@ namespace XmlSchemaProcessor.LandXml12
         public double? AlignOffset;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            if (name.EqualsIgnoreCase("Feature"))
+            {
+                return Tuple.Create("Feature", this.NewReader<Feature>());
+            }
+            if (name.EqualsIgnoreCase("FieldNote"))
+            {
+                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+            }
+            if (name.EqualsIgnoreCase("RedVerticalObservation"))
+            {
+                return Tuple.Create("RedVerticalObservation", this.NewReader<RedVerticalObservation>());
+            }
+            if (name.EqualsIgnoreCase("ReducedArcObservation"))
+            {
+                return Tuple.Create("ReducedArcObservation", this.NewReader<ReducedArcObservation>());
+            }
+            if (name.EqualsIgnoreCase("RedHorizontalPosition"))
+            {
+                return Tuple.Create("RedHorizontalPosition", this.NewReader<RedHorizontalPosition>());
+            }
+            if (name.EqualsIgnoreCase("ReducedObservation"))
+            {
+                return Tuple.Create("ReducedObservation", this.NewReader<ReducedObservation>());
+            }
+            if (name.EqualsIgnoreCase("RawObservation"))
+            {
+                return Tuple.Create("RawObservation", this.NewReader<RawObservation>());
+            }
+            if (name.EqualsIgnoreCase("Backsight"))
+            {
+                return Tuple.Create("Backsight", this.NewReader<Backsight>());
+            }
+            if (name.EqualsIgnoreCase("TargetPoint"))
+            {
+                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+            }
+
+            return null;
+        }
     }
 }
 #endif

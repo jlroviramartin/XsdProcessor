@@ -7,28 +7,29 @@ using XmlSchemaProcessor.Processors;
 namespace XmlSchemaProcessor.LandXml11
 {
 
+    // needContent    : false
+    // includeContent : false
     /// <summary>
     /// A cant speed-only station.
     ///             The “station” is a required double that is internal station value.
     ///  The “speed” is an optional double that is the design speed.  This value is in kmph or mph depending upon the units.
     /// </summary>
 
-    public class SpeedStation : XsdBaseObject
+    public class SpeedStation : XsdBaseReader
     {
+        public SpeedStation(System.Xml.XmlReader reader) : base(reader)
+        {
+        }
+
         public override bool Read(IDictionary<string, string> attributes, string text)
         {
             base.Read(attributes, text);
 
-
             this.Station = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("station"));
 
-
-
             this.Speed = XsdConverter.Instance.Convert<double>(
                     attributes.GetSafe("speed"));
-
-
 
             return true;
         }
@@ -47,24 +48,21 @@ namespace XmlSchemaProcessor.LandXml11
                 buff.AppendFormat("speed = {0}", this.Speed).AppendLine();
             }
 
-
             return buff.ToString();
         }
 
         public override string ToAttributes()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder();
-            buff.Append(base.ToAttributes());
+            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Station != null)
             {
-                buff.AppendFormat(" station=\"{0}\"", this.Station);
+                buff.Append("station", this.Station);
             }
             if ((object)this.Speed != null)
             {
-                buff.AppendFormat(" speed=\"{0}\"", this.Speed);
+                buff.Append("speed", this.Speed);
             }
-
 
             return buff.ToString();
         }
@@ -74,6 +72,10 @@ namespace XmlSchemaProcessor.LandXml11
         public double Speed;
 
 
+        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        {
+            return null;
+        }
     }
 }
 #endif

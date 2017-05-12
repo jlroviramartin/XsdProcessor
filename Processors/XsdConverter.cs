@@ -165,7 +165,7 @@ namespace XmlSchemaProcessor.Processors
                 }
                 else if (toType.IsGenericType && (toType.GetGenericTypeDefinition() == typeof(IList<>)))
                 {
-                    char[] separator = { ',' };
+                    char[] separator = { ' ' };
                     Type innerType = toType.GetGenericArguments()[0];
                     Type listType = typeof(List<>).MakeGenericType(innerType);
                     convert = v =>

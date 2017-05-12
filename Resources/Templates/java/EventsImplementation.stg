@@ -1,0 +1,17 @@
+﻿delimiters "$", "$"
+
+EventsImplementation(namespace, implementationTypeName, interfaceTypeName, events) ::= <<
+$Pre(namespace)$
+    public class $implementationTypeName$ : $interfaceTypeName$
+    {
+        $events:{x | $EventEmptyImplementation(x)$}$
+    }
+$Post()$
+
+>>
+
+EventEmptyImplementation(simpleEvent) ::= <<
+public virtual void BeginRead$simpleEvent.Name; format="FirstUpper"$( $simpleEvent.ArgType$ value ) { }
+public virtual void EndRead$simpleEvent.Name; format="FirstUpper"$() { }
+
+>>
