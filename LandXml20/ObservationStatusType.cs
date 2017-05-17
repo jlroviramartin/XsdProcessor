@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml20
 {

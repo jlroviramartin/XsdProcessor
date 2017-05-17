@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml11
 {
@@ -76,71 +77,87 @@ namespace XmlSchemaProcessor.LandXml11
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("FeatureDictionary"))
             {
-                return Tuple.Create("FeatureDictionary", this.NewReader<FeatureDictionary>());
+                this.SetCurrent("FeatureDictionary", this.NewReader<FeatureDictionary>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Survey"))
             {
-                return Tuple.Create("Survey", this.NewReader<Survey>());
+                this.SetCurrent("Survey", this.NewReader<Survey>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Surfaces"))
             {
-                return Tuple.Create("Surfaces", this.NewReader<Surfaces>());
+                this.SetCurrent("Surfaces", this.NewReader<Surfaces>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Roadways"))
             {
-                return Tuple.Create("Roadways", this.NewReader<Roadways>());
+                this.SetCurrent("Roadways", this.NewReader<Roadways>());
+                return true;
             }
             if (name.EqualsIgnoreCase("PipeNetworks"))
             {
-                return Tuple.Create("PipeNetworks", this.NewReader<PipeNetworks>());
+                this.SetCurrent("PipeNetworks", this.NewReader<PipeNetworks>());
+                return true;
             }
             if (name.EqualsIgnoreCase("PlanFeatures"))
             {
-                return Tuple.Create("PlanFeatures", this.NewReader<PlanFeatures>());
+                this.SetCurrent("PlanFeatures", this.NewReader<PlanFeatures>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Parcels"))
             {
-                return Tuple.Create("Parcels", this.NewReader<Parcels>());
+                this.SetCurrent("Parcels", this.NewReader<Parcels>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Monuments"))
             {
-                return Tuple.Create("Monuments", this.NewReader<Monuments>());
+                this.SetCurrent("Monuments", this.NewReader<Monuments>());
+                return true;
             }
             if (name.EqualsIgnoreCase("GradeModel"))
             {
-                return Tuple.Create("GradeModel", this.NewReader<GradeModel>());
+                this.SetCurrent("GradeModel", this.NewReader<GradeModel>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Amendment"))
             {
-                return Tuple.Create("Amendment", this.NewReader<Amendment>());
+                this.SetCurrent("Amendment", this.NewReader<Amendment>());
+                return true;
             }
             if (name.EqualsIgnoreCase("CgPoints"))
             {
-                return Tuple.Create("CgPoints", this.NewReader<CgPoints>());
+                this.SetCurrent("CgPoints", this.NewReader<CgPoints>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Alignments"))
             {
-                return Tuple.Create("Alignments", this.NewReader<Alignments>());
+                this.SetCurrent("Alignments", this.NewReader<Alignments>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Application"))
             {
-                return Tuple.Create("Application", this.NewReader<Application>());
+                this.SetCurrent("Application", this.NewReader<Application>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Project"))
             {
-                return Tuple.Create("Project", this.NewReader<Project>());
+                this.SetCurrent("Project", this.NewReader<Project>());
+                return true;
             }
             if (name.EqualsIgnoreCase("CoordinateSystem"))
             {
-                return Tuple.Create("CoordinateSystem", this.NewReader<CoordinateSystem>());
+                this.SetCurrent("CoordinateSystem", this.NewReader<CoordinateSystem>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Units"))
             {
-                return Tuple.Create("Units", this.NewReader<Units>());
+                this.SetCurrent("Units", this.NewReader<Units>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -180,7 +197,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Date != null)
             {
@@ -220,7 +237,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Date != null)
             {

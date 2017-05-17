@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Xml;
+using XmlSchemaProcessor.Common;
 using XmlSchemaProcessor.LandXml20;
 using XmlSchemaProcessor.Processors;
 
@@ -45,16 +46,15 @@ namespace XmlSchemaProcessor
                 while (toRead.Count > 0)
                 {
                     XsdBaseReader xsdReader = toRead.Pop();
-                    Tuple<string, object> tuple = xsdReader.NextChild();
-                    if (tuple != null)
+                    if (xsdReader.NextChild())
                     {
                         toRead.Push(xsdReader);
 
-                        XsdBaseReader aux = tuple.Item2 as XsdBaseReader;
+                        XsdBaseReader aux = xsdReader.CurrentElement as XsdBaseReader;
                         if (aux != null)
                         {
                             Debug.Write(Tabs(aux.Depth));
-                            Debug.WriteLine(aux.GetType().Name + " " + aux.ToAttributes());
+                            Debug.WriteLine(xsdReader.CurrentElementName + " " + aux.ToAttributes());
                             toRead.Push(aux);
                         }
                     }

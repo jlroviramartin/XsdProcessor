@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml12
 {
@@ -33,23 +34,27 @@ namespace XmlSchemaProcessor.LandXml12
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("PeakHour"))
             {
-                return Tuple.Create("PeakHour", this.NewReader<PeakHour>());
+                this.SetCurrent("PeakHour", this.NewReader<PeakHour>());
+                return true;
             }
             if (name.EqualsIgnoreCase("DesignHour"))
             {
-                return Tuple.Create("DesignHour", this.NewReader<DesignHour>());
+                this.SetCurrent("DesignHour", this.NewReader<DesignHour>());
+                return true;
             }
             if (name.EqualsIgnoreCase("DailyTrafficVolume"))
             {
-                return Tuple.Create("DailyTrafficVolume", this.NewReader<DailyTrafficVolume>());
+                this.SetCurrent("DailyTrafficVolume", this.NewReader<DailyTrafficVolume>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -68,7 +73,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             return buff.ToString();
         }
@@ -79,7 +84,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             return buff.ToString();
         }

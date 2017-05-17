@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml12
 {
@@ -62,23 +63,27 @@ namespace XmlSchemaProcessor.LandXml12
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("AddressPoint"))
             {
-                return Tuple.Create("AddressPoint", this.NewReader<AddressPoint>());
+                this.SetCurrent("AddressPoint", this.NewReader<AddressPoint>());
+                return true;
             }
             if (name.EqualsIgnoreCase("AdministrativeArea"))
             {
-                return Tuple.Create("AdministrativeArea", this.NewReader<AdministrativeArea>());
+                this.SetCurrent("AdministrativeArea", this.NewReader<AdministrativeArea>());
+                return true;
             }
             if (name.EqualsIgnoreCase("RoadName"))
             {
-                return Tuple.Create("RoadName", this.NewReader<RoadName>());
+                this.SetCurrent("RoadName", this.NewReader<RoadName>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ComplexName"))
             {
-                return Tuple.Create("ComplexName", this.NewReader<ComplexName>());
+                this.SetCurrent("ComplexName", this.NewReader<ComplexName>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -124,7 +129,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.AddressType != null)
             {
@@ -172,7 +177,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.AddressType != null)
             {

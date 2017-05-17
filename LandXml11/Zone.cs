@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml11
 {
@@ -67,31 +68,37 @@ namespace XmlSchemaProcessor.LandXml11
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ZoneCrossSectStructure"))
             {
-                return Tuple.Create("ZoneCrossSectStructure", this.NewReader<ZoneCrossSectStructure>());
+                this.SetCurrent("ZoneCrossSectStructure", this.NewReader<ZoneCrossSectStructure>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ZoneMaterial"))
             {
-                return Tuple.Create("ZoneMaterial", this.NewReader<ZoneMaterial>());
+                this.SetCurrent("ZoneMaterial", this.NewReader<ZoneMaterial>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ZoneCutFill"))
             {
-                return Tuple.Create("ZoneCutFill", this.NewReader<ZoneCutFill>());
+                this.SetCurrent("ZoneCutFill", this.NewReader<ZoneCutFill>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ZoneSlope"))
             {
-                return Tuple.Create("ZoneSlope", this.NewReader<ZoneSlope>());
+                this.SetCurrent("ZoneSlope", this.NewReader<ZoneSlope>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ZoneWidth"))
             {
-                return Tuple.Create("ZoneWidth", this.NewReader<ZoneWidth>());
+                this.SetCurrent("ZoneWidth", this.NewReader<ZoneWidth>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -149,7 +156,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
@@ -213,7 +220,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Desc != null)
             {

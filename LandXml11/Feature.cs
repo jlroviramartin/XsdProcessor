@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml11
 {
@@ -39,19 +40,22 @@ namespace XmlSchemaProcessor.LandXml11
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("DocFileRef"))
             {
-                return Tuple.Create("DocFileRef", this.NewReader<DocFileRef>());
+                this.SetCurrent("DocFileRef", this.NewReader<DocFileRef>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Property"))
             {
-                return Tuple.Create("Property", this.NewReader<Property>());
+                this.SetCurrent("Property", this.NewReader<Property>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -76,7 +80,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Code != null)
             {
@@ -96,7 +100,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Code != null)
             {

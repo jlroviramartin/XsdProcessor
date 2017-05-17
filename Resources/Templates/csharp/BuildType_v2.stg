@@ -34,7 +34,7 @@ $Pre(namespace)$
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             $events:{event | $Element(event)$}$
             return base.NewReader(namespaceURI, name);
@@ -61,7 +61,7 @@ $Pre(namespace)$
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             $properties:{property | $AttributeToAttributes(property)$}$
             $if(includeContent)$
@@ -79,7 +79,7 @@ $Pre(namespace)$
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             $properties:{property | $AttributeToString(property)$}$
             $if(includeContent)$
@@ -153,7 +153,8 @@ $endif$
 Element(event) ::= <<
 if (name.EqualsIgnoreCase("$event.Name$"))
 {
-    return Tuple.Create("$event.Name$", this.NewReader<$event.ArgType; format="NetType"$>());
+    this.SetCurrent("$event.Name$", this.NewReader<$event.ArgType; format="NetType"$>());
+    return true;
 }
 
 >>

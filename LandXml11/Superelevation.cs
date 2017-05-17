@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml11
 {
@@ -49,43 +50,52 @@ namespace XmlSchemaProcessor.LandXml11
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("AdverseSE"))
             {
-                return Tuple.Create("AdverseSE", this.NewReader<AdverseSEType>());
+                this.SetCurrent("AdverseSE", this.NewReader<AdverseSEType>());
+                return true;
             }
             if (name.EqualsIgnoreCase("EndofRunoutSta"))
             {
-                return Tuple.Create("EndofRunoutSta", this.NewReader<double>());
+                this.SetCurrent("EndofRunoutSta", this.NewReader<double>());
+                return true;
             }
             if (name.EqualsIgnoreCase("StartofRunoutSta"))
             {
-                return Tuple.Create("StartofRunoutSta", this.NewReader<double>());
+                this.SetCurrent("StartofRunoutSta", this.NewReader<double>());
+                return true;
             }
             if (name.EqualsIgnoreCase("RunoffSta"))
             {
-                return Tuple.Create("RunoffSta", this.NewReader<double>());
+                this.SetCurrent("RunoffSta", this.NewReader<double>());
+                return true;
             }
             if (name.EqualsIgnoreCase("FullSuperelev"))
             {
-                return Tuple.Create("FullSuperelev", this.NewReader<double>());
+                this.SetCurrent("FullSuperelev", this.NewReader<double>());
+                return true;
             }
             if (name.EqualsIgnoreCase("FullSuperSta"))
             {
-                return Tuple.Create("FullSuperSta", this.NewReader<double>());
+                this.SetCurrent("FullSuperSta", this.NewReader<double>());
+                return true;
             }
             if (name.EqualsIgnoreCase("BeginRunoffSta"))
             {
-                return Tuple.Create("BeginRunoffSta", this.NewReader<double>());
+                this.SetCurrent("BeginRunoffSta", this.NewReader<double>());
+                return true;
             }
             if (name.EqualsIgnoreCase("BeginRunoutSta"))
             {
-                return Tuple.Create("BeginRunoutSta", this.NewReader<double>());
+                this.SetCurrent("BeginRunoutSta", this.NewReader<double>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -110,7 +120,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.StaStart != null)
             {
@@ -130,7 +140,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.StaStart != null)
             {

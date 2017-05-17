@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml11
 {
@@ -55,43 +56,52 @@ namespace XmlSchemaProcessor.LandXml11
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("StructFlow"))
             {
-                return Tuple.Create("StructFlow", this.NewReader<StructFlow>());
+                this.SetCurrent("StructFlow", this.NewReader<StructFlow>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Invert"))
             {
-                return Tuple.Create("Invert", this.NewReader<Invert>());
+                this.SetCurrent("Invert", this.NewReader<Invert>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Connection"))
             {
-                return Tuple.Create("Connection", this.NewReader<Connection>());
+                this.SetCurrent("Connection", this.NewReader<Connection>());
+                return true;
             }
             if (name.EqualsIgnoreCase("OutletStruct"))
             {
-                return Tuple.Create("OutletStruct", this.NewReader<OutletStruct>());
+                this.SetCurrent("OutletStruct", this.NewReader<OutletStruct>());
+                return true;
             }
             if (name.EqualsIgnoreCase("InletStruct"))
             {
-                return Tuple.Create("InletStruct", this.NewReader<InletStruct>());
+                this.SetCurrent("InletStruct", this.NewReader<InletStruct>());
+                return true;
             }
             if (name.EqualsIgnoreCase("RectStruct"))
             {
-                return Tuple.Create("RectStruct", this.NewReader<RectStruct>());
+                this.SetCurrent("RectStruct", this.NewReader<RectStruct>());
+                return true;
             }
             if (name.EqualsIgnoreCase("CircStruct"))
             {
-                return Tuple.Create("CircStruct", this.NewReader<CircStruct>());
+                this.SetCurrent("CircStruct", this.NewReader<CircStruct>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Center"))
             {
-                return Tuple.Create("Center", this.NewReader<PointType>());
+                this.SetCurrent("Center", this.NewReader<PointType>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -128,7 +138,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
@@ -164,7 +174,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Name != null)
             {

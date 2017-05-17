@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml11
 {
@@ -73,51 +74,62 @@ namespace XmlSchemaProcessor.LandXml11
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("PlanFeature"))
             {
-                return Tuple.Create("PlanFeature", this.NewReader<PlanFeature>());
+                this.SetCurrent("PlanFeature", this.NewReader<PlanFeature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("BridgeElement"))
             {
-                return Tuple.Create("BridgeElement", this.NewReader<BridgeElement>());
+                this.SetCurrent("BridgeElement", this.NewReader<BridgeElement>());
+                return true;
             }
             if (name.EqualsIgnoreCase("DecisionSightDistance"))
             {
-                return Tuple.Create("DecisionSightDistance", this.NewReader<DecisionSightDistance>());
+                this.SetCurrent("DecisionSightDistance", this.NewReader<DecisionSightDistance>());
+                return true;
             }
             if (name.EqualsIgnoreCase("CrashData"))
             {
-                return Tuple.Create("CrashData", this.NewReader<CrashData>());
+                this.SetCurrent("CrashData", this.NewReader<CrashData>());
+                return true;
             }
             if (name.EqualsIgnoreCase("TrafficVolume"))
             {
-                return Tuple.Create("TrafficVolume", this.NewReader<TrafficVolume>());
+                this.SetCurrent("TrafficVolume", this.NewReader<TrafficVolume>());
+                return true;
             }
             if (name.EqualsIgnoreCase("NoPassingZone"))
             {
-                return Tuple.Create("NoPassingZone", this.NewReader<NoPassingZone>());
+                this.SetCurrent("NoPassingZone", this.NewReader<NoPassingZone>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Speeds"))
             {
-                return Tuple.Create("Speeds", this.NewReader<Speeds>());
+                this.SetCurrent("Speeds", this.NewReader<Speeds>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Roadside"))
             {
-                return Tuple.Create("Roadside", this.NewReader<Roadside>());
+                this.SetCurrent("Roadside", this.NewReader<Roadside>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Lanes"))
             {
-                return Tuple.Create("Lanes", this.NewReader<Lanes>());
+                this.SetCurrent("Lanes", this.NewReader<Lanes>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Classification"))
             {
-                return Tuple.Create("Classification", this.NewReader<Classification>());
+                this.SetCurrent("Classification", this.NewReader<Classification>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -163,7 +175,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
@@ -211,7 +223,7 @@ namespace XmlSchemaProcessor.LandXml11
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Name != null)
             {

@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml12
 {
@@ -37,39 +38,47 @@ namespace XmlSchemaProcessor.LandXml12
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("WideningLane"))
             {
-                return Tuple.Create("WideningLane", this.NewReader<WideningLane>());
+                this.SetCurrent("WideningLane", this.NewReader<WideningLane>());
+                return true;
             }
             if (name.EqualsIgnoreCase("OffsetLane"))
             {
-                return Tuple.Create("OffsetLane", this.NewReader<OffsetLane>());
+                this.SetCurrent("OffsetLane", this.NewReader<OffsetLane>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ClimbLane"))
             {
-                return Tuple.Create("ClimbLane", this.NewReader<ClimbLane>());
+                this.SetCurrent("ClimbLane", this.NewReader<ClimbLane>());
+                return true;
             }
             if (name.EqualsIgnoreCase("TwoWayLeftTurnLane"))
             {
-                return Tuple.Create("TwoWayLeftTurnLane", this.NewReader<TwoWayLeftTurnLane>());
+                this.SetCurrent("TwoWayLeftTurnLane", this.NewReader<TwoWayLeftTurnLane>());
+                return true;
             }
             if (name.EqualsIgnoreCase("TurnLane"))
             {
-                return Tuple.Create("TurnLane", this.NewReader<TurnLane>());
+                this.SetCurrent("TurnLane", this.NewReader<TurnLane>());
+                return true;
             }
             if (name.EqualsIgnoreCase("PassingLane"))
             {
-                return Tuple.Create("PassingLane", this.NewReader<PassingLane>());
+                this.SetCurrent("PassingLane", this.NewReader<PassingLane>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ThruLane"))
             {
-                return Tuple.Create("ThruLane", this.NewReader<ThruLane>());
+                this.SetCurrent("ThruLane", this.NewReader<ThruLane>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -88,7 +97,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             return buff.ToString();
         }
@@ -99,7 +108,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             return buff.ToString();
         }

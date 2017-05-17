@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml12
 {
@@ -36,35 +37,42 @@ namespace XmlSchemaProcessor.LandXml12
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Ditch"))
             {
-                return Tuple.Create("Ditch", this.NewReader<Ditch>());
+                this.SetCurrent("Ditch", this.NewReader<Ditch>());
+                return true;
             }
             if (name.EqualsIgnoreCase("HazardRating"))
             {
-                return Tuple.Create("HazardRating", this.NewReader<HazardRating>());
+                this.SetCurrent("HazardRating", this.NewReader<HazardRating>());
+                return true;
             }
             if (name.EqualsIgnoreCase("DrivewayDensity"))
             {
-                return Tuple.Create("DrivewayDensity", this.NewReader<DrivewayDensity>());
+                this.SetCurrent("DrivewayDensity", this.NewReader<DrivewayDensity>());
+                return true;
             }
             if (name.EqualsIgnoreCase("RoadSign"))
             {
-                return Tuple.Create("RoadSign", this.NewReader<RoadSign>());
+                this.SetCurrent("RoadSign", this.NewReader<RoadSign>());
+                return true;
             }
             if (name.EqualsIgnoreCase("BikeFacilities"))
             {
-                return Tuple.Create("BikeFacilities", this.NewReader<BikeFacilities>());
+                this.SetCurrent("BikeFacilities", this.NewReader<BikeFacilities>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ObstructionOffset"))
             {
-                return Tuple.Create("ObstructionOffset", this.NewReader<ObstructionOffset>());
+                this.SetCurrent("ObstructionOffset", this.NewReader<ObstructionOffset>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -83,7 +91,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             return buff.ToString();
         }
@@ -94,7 +102,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             return buff.ToString();
         }

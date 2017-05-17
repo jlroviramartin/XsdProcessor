@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml10
 {
@@ -59,19 +60,22 @@ namespace XmlSchemaProcessor.LandXml10
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("FieldNote"))
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                this.SetCurrent("FieldNote", this.NewReader<FieldNote>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Corrections"))
             {
-                return Tuple.Create("Corrections", this.NewReader<Corrections>());
+                this.SetCurrent("Corrections", this.NewReader<Corrections>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -129,7 +133,7 @@ namespace XmlSchemaProcessor.LandXml10
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Id != null)
             {
@@ -193,7 +197,7 @@ namespace XmlSchemaProcessor.LandXml10
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Id != null)
             {

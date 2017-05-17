@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildLandXML.cs" />
+    <Compile Include="Common\AttributesBuilder.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="LandXml10\AdverseSEType.cs" />
     <Compile Include="LandXml10\Alignment.cs" />
@@ -1122,15 +1123,15 @@
     <Compile Include="LandXml20\ZoneVertType.cs" />
     <Compile Include="LandXml20\ZoneWidth.cs" />
     <Compile Include="Processors\ProcessorUtils.cs" />
-    <Compile Include="Processors\SimpleReader.cs" />
+    <Compile Include="Common\SimpleReader.cs" />
     <Compile Include="Processors\Path.cs" />
     <Compile Include="Processors\IPropertyMap.cs" />
-    <Compile Include="Processors\XsdBaseReader.cs" />
+    <Compile Include="Common\XsdBaseReader.cs" />
     <Compile Include="Processors\XsdToNetProcess_v2.cs" />
     <Compile Include="Processors\XsdTypeNetRenderer.cs" />
-    <Compile Include="Processors\StringValueAttribute.cs" />
-    <Compile Include="Processors\XsdConverter.cs" />
-    <Compile Include="Processors\XsdBaseObject.cs" />
+    <Compile Include="Common\StringValueAttribute.cs" />
+    <Compile Include="Common\XsdConverter.cs" />
+    <Compile Include="Common\XsdBaseObject.cs" />
     <Compile Include="Processors\StringNetRenderer.cs" />
     <Compile Include="Processors\XsdTypeExtensions.cs" />
     <Compile Include="Processors\XsdToNetProcess.cs" />

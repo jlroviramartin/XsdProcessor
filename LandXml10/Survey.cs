@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml10
 {
@@ -60,63 +61,77 @@ namespace XmlSchemaProcessor.LandXml10
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("FieldNote"))
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                this.SetCurrent("FieldNote", this.NewReader<FieldNote>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ControlChecks"))
             {
-                return Tuple.Create("ControlChecks", this.NewReader<ControlChecks>());
+                this.SetCurrent("ControlChecks", this.NewReader<ControlChecks>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ObservationGroup"))
             {
-                return Tuple.Create("ObservationGroup", this.NewReader<ObservationGroup>());
+                this.SetCurrent("ObservationGroup", this.NewReader<ObservationGroup>());
+                return true;
             }
             if (name.EqualsIgnoreCase("GPSPosition"))
             {
-                return Tuple.Create("GPSPosition", this.NewReader<GPSPosition>());
+                this.SetCurrent("GPSPosition", this.NewReader<GPSPosition>());
+                return true;
             }
             if (name.EqualsIgnoreCase("GPSVector"))
             {
-                return Tuple.Create("GPSVector", this.NewReader<GPSVector>());
+                this.SetCurrent("GPSVector", this.NewReader<GPSVector>());
+                return true;
             }
             if (name.EqualsIgnoreCase("TargetSetup"))
             {
-                return Tuple.Create("TargetSetup", this.NewReader<TargetSetup>());
+                this.SetCurrent("TargetSetup", this.NewReader<TargetSetup>());
+                return true;
             }
             if (name.EqualsIgnoreCase("GPSSetup"))
             {
-                return Tuple.Create("GPSSetup", this.NewReader<GPSSetup>());
+                this.SetCurrent("GPSSetup", this.NewReader<GPSSetup>());
+                return true;
             }
             if (name.EqualsIgnoreCase("LaserSetup"))
             {
-                return Tuple.Create("LaserSetup", this.NewReader<LaserSetup>());
+                this.SetCurrent("LaserSetup", this.NewReader<LaserSetup>());
+                return true;
             }
             if (name.EqualsIgnoreCase("InstrumentSetup"))
             {
-                return Tuple.Create("InstrumentSetup", this.NewReader<InstrumentSetup>());
+                this.SetCurrent("InstrumentSetup", this.NewReader<InstrumentSetup>());
+                return true;
             }
             if (name.EqualsIgnoreCase("CgPoints"))
             {
-                return Tuple.Create("CgPoints", this.NewReader<CgPoints>());
+                this.SetCurrent("CgPoints", this.NewReader<CgPoints>());
+                return true;
             }
             if (name.EqualsIgnoreCase("SurveyMonument"))
             {
-                return Tuple.Create("SurveyMonument", this.NewReader<SurveyMonument>());
+                this.SetCurrent("SurveyMonument", this.NewReader<SurveyMonument>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Equipment"))
             {
-                return Tuple.Create("Equipment", this.NewReader<Equipment>());
+                this.SetCurrent("Equipment", this.NewReader<Equipment>());
+                return true;
             }
             if (name.EqualsIgnoreCase("SurveyHeader"))
             {
-                return Tuple.Create("SurveyHeader", this.NewReader<SurveyHeader>());
+                this.SetCurrent("SurveyHeader", this.NewReader<SurveyHeader>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -156,7 +171,7 @@ namespace XmlSchemaProcessor.LandXml10
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
@@ -196,7 +211,7 @@ namespace XmlSchemaProcessor.LandXml10
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Desc != null)
             {

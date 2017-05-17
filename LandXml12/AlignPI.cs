@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml12
 {
@@ -37,35 +38,42 @@ namespace XmlSchemaProcessor.LandXml12
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("OutSpiral"))
             {
-                return Tuple.Create("OutSpiral", this.NewReader<OutSpiral>());
+                this.SetCurrent("OutSpiral", this.NewReader<OutSpiral>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Curve2"))
             {
-                return Tuple.Create("Curve2", this.NewReader<Curve2>());
+                this.SetCurrent("Curve2", this.NewReader<Curve2>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ConnSpiral"))
             {
-                return Tuple.Create("ConnSpiral", this.NewReader<ConnSpiral>());
+                this.SetCurrent("ConnSpiral", this.NewReader<ConnSpiral>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Curve1"))
             {
-                return Tuple.Create("Curve1", this.NewReader<Curve1>());
+                this.SetCurrent("Curve1", this.NewReader<Curve1>());
+                return true;
             }
             if (name.EqualsIgnoreCase("InSpiral"))
             {
-                return Tuple.Create("InSpiral", this.NewReader<InSpiral>());
+                this.SetCurrent("InSpiral", this.NewReader<InSpiral>());
+                return true;
             }
             if (name.EqualsIgnoreCase("PI"))
             {
-                return Tuple.Create("PI", this.NewReader<PointType>());
+                this.SetCurrent("PI", this.NewReader<PointType>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Station"))
             {
-                return Tuple.Create("Station", this.NewReader<double>());
+                this.SetCurrent("Station", this.NewReader<double>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -84,7 +92,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             return buff.ToString();
         }
@@ -95,7 +103,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             return buff.ToString();
         }

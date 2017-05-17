@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml12
 {
@@ -70,43 +71,52 @@ namespace XmlSchemaProcessor.LandXml12
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("FieldNote"))
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                this.SetCurrent("FieldNote", this.NewReader<FieldNote>());
+                return true;
             }
             if (name.EqualsIgnoreCase("RedVerticalObservation"))
             {
-                return Tuple.Create("RedVerticalObservation", this.NewReader<RedVerticalObservation>());
+                this.SetCurrent("RedVerticalObservation", this.NewReader<RedVerticalObservation>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ReducedArcObservation"))
             {
-                return Tuple.Create("ReducedArcObservation", this.NewReader<ReducedArcObservation>());
+                this.SetCurrent("ReducedArcObservation", this.NewReader<ReducedArcObservation>());
+                return true;
             }
             if (name.EqualsIgnoreCase("RedHorizontalPosition"))
             {
-                return Tuple.Create("RedHorizontalPosition", this.NewReader<RedHorizontalPosition>());
+                this.SetCurrent("RedHorizontalPosition", this.NewReader<RedHorizontalPosition>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ReducedObservation"))
             {
-                return Tuple.Create("ReducedObservation", this.NewReader<ReducedObservation>());
+                this.SetCurrent("ReducedObservation", this.NewReader<ReducedObservation>());
+                return true;
             }
             if (name.EqualsIgnoreCase("RawObservation"))
             {
-                return Tuple.Create("RawObservation", this.NewReader<RawObservation>());
+                this.SetCurrent("RawObservation", this.NewReader<RawObservation>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Backsight"))
             {
-                return Tuple.Create("Backsight", this.NewReader<Backsight>());
+                this.SetCurrent("Backsight", this.NewReader<Backsight>());
+                return true;
             }
             if (name.EqualsIgnoreCase("TargetPoint"))
             {
-                return Tuple.Create("TargetPoint", this.NewReader<PointType>());
+                this.SetCurrent("TargetPoint", this.NewReader<PointType>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -152,7 +162,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Id != null)
             {
@@ -200,7 +210,7 @@ namespace XmlSchemaProcessor.LandXml12
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Id != null)
             {

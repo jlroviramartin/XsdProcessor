@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml20
 {
@@ -120,55 +121,67 @@ namespace XmlSchemaProcessor.LandXml20
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("HeadOfPower"))
             {
-                return Tuple.Create("HeadOfPower", this.NewReader<HeadOfPower>());
+                this.SetCurrent("HeadOfPower", this.NewReader<HeadOfPower>());
+                return true;
             }
             if (name.EqualsIgnoreCase("PurposeOfSurvey"))
             {
-                return Tuple.Create("PurposeOfSurvey", this.NewReader<PurposeOfSurvey>());
+                this.SetCurrent("PurposeOfSurvey", this.NewReader<PurposeOfSurvey>());
+                return true;
             }
             if (name.EqualsIgnoreCase("SurveyorCertificate"))
             {
-                return Tuple.Create("SurveyorCertificate", this.NewReader<SurveyorCertificate>());
+                this.SetCurrent("SurveyorCertificate", this.NewReader<SurveyorCertificate>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("FieldNote"))
             {
-                return Tuple.Create("FieldNote", this.NewReader<FieldNote>());
+                this.SetCurrent("FieldNote", this.NewReader<FieldNote>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Personnel"))
             {
-                return Tuple.Create("Personnel", this.NewReader<Personnel>());
+                this.SetCurrent("Personnel", this.NewReader<Personnel>());
+                return true;
             }
             if (name.EqualsIgnoreCase("MapPoint"))
             {
-                return Tuple.Create("MapPoint", this.NewReader<PointType>());
+                this.SetCurrent("MapPoint", this.NewReader<PointType>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Units"))
             {
-                return Tuple.Create("Units", this.NewReader<Units>());
+                this.SetCurrent("Units", this.NewReader<Units>());
+                return true;
             }
             if (name.EqualsIgnoreCase("CoordinateSystem"))
             {
-                return Tuple.Create("CoordinateSystem", this.NewReader<CoordinateSystem>());
+                this.SetCurrent("CoordinateSystem", this.NewReader<CoordinateSystem>());
+                return true;
             }
             if (name.EqualsIgnoreCase("AdministrativeDate"))
             {
-                return Tuple.Create("AdministrativeDate", this.NewReader<AdministrativeDate>());
+                this.SetCurrent("AdministrativeDate", this.NewReader<AdministrativeDate>());
+                return true;
             }
             if (name.EqualsIgnoreCase("AdministrativeArea"))
             {
-                return Tuple.Create("AdministrativeArea", this.NewReader<AdministrativeArea>());
+                this.SetCurrent("AdministrativeArea", this.NewReader<AdministrativeArea>());
+                return true;
             }
             if (name.EqualsIgnoreCase("Annotation"))
             {
-                return Tuple.Create("Annotation", this.NewReader<Annotation>());
+                this.SetCurrent("Annotation", this.NewReader<Annotation>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -277,7 +290,7 @@ namespace XmlSchemaProcessor.LandXml20
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Name != null)
             {
@@ -409,7 +422,7 @@ namespace XmlSchemaProcessor.LandXml20
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Name != null)
             {

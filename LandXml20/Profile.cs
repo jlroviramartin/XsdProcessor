@@ -11,8 +11,9 @@
 #if !BUILD_LAND_XML
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
-using XmlSchemaProcessor.Processors;
+using XmlSchemaProcessor.Common;
 
 namespace XmlSchemaProcessor.LandXml20
 {
@@ -42,19 +43,22 @@ namespace XmlSchemaProcessor.LandXml20
 
         #region XsdBaseReader
 
-        protected override Tuple<string, object> NewReader(string namespaceURI, string name)
+        protected override bool NewReader(string namespaceURI, string name)
         {
             if (name.EqualsIgnoreCase("Feature"))
             {
-                return Tuple.Create("Feature", this.NewReader<Feature>());
+                this.SetCurrent("Feature", this.NewReader<Feature>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ProfAlign"))
             {
-                return Tuple.Create("ProfAlign", this.NewReader<ProfAlign>());
+                this.SetCurrent("ProfAlign", this.NewReader<ProfAlign>());
+                return true;
             }
             if (name.EqualsIgnoreCase("ProfSurf"))
             {
-                return Tuple.Create("ProfSurf", this.NewReader<ProfSurf>());
+                this.SetCurrent("ProfSurf", this.NewReader<ProfSurf>());
+                return true;
             }
 
             return base.NewReader(namespaceURI, name);
@@ -85,7 +89,7 @@ namespace XmlSchemaProcessor.LandXml20
 
         public override string ToAttributes()
         {
-            XmlSchemaProcessor.Processors.AttributesBuilder buff = new XmlSchemaProcessor.Processors.AttributesBuilder(base.ToAttributes());
+            AttributesBuilder buff = new AttributesBuilder(base.ToAttributes());
 
             if ((object)this.Desc != null)
             {
@@ -113,7 +117,7 @@ namespace XmlSchemaProcessor.LandXml20
 
         public override string ToString()
         {
-            System.Text.StringBuilder buff = new System.Text.StringBuilder(base.ToString());
+            StringBuilder buff = new StringBuilder(base.ToString());
 
             if ((object)this.Desc != null)
             {
