@@ -19,7 +19,8 @@ namespace XmlSchemaProcessor
         private static void Main(string[] args)
         {
 #if BUILD_LAND_XML
-            BuildLandXML.Build();
+            //BuildLandXML.Build();
+            BuildGML.Build();
 #else
             TestLandXml();
 #endif

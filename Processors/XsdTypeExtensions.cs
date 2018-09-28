@@ -194,6 +194,11 @@ namespace XmlSchemaProcessor.Processors
             return ToNetType(xsdType.BaseType, optional);
         }
 
+        private static string ToNetType(XsdSimpleUnionType xsdType, bool optional)
+        {
+            return "UNION<" + xsdType.Name + ">";
+        }
+
         private static string ToNetType(XsdSimpleListType xsdType, bool optional)
         {
             return "IList<" + ToNetType(xsdType.ItemType, optional) + ">";

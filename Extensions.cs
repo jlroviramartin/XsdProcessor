@@ -17,8 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using XmlSchemaProcessor.Processors;
-using XmlSchemaProcessor.Xsd;
 
 namespace XmlSchemaProcessor
 {
@@ -178,7 +176,7 @@ namespace XmlSchemaProcessor
         public static Attribute[] GetCustomAttributes(this MemberInfo memberInfo, Type attributeType, bool inherit = true)
         {
             return memberInfo.GetCustomAttributes(inherit)
-                             .Where(attributeType.IsInstanceOfType)
+                             .Where(attributeType.GetTypeInfo().IsInstanceOfType)
                              .Cast<Attribute>()
                              .ToArray();
         }
@@ -243,26 +241,6 @@ namespace XmlSchemaProcessor
             buff.Append(close);
 
             return buff;
-        }
-
-        public static string ToNetType(this XsdElement xsdElement, bool optional)
-        {
-            if (xsdElement.TypeDefinition is XsdComplexType)
-            {
-                if (xsdElement.TypeDefinition.TopLevel)
-                {
-                    return xsdElement.TypeDefinition.ToNetType(optional);
-                }
-                else
-                {
-                    return xsdElement.Name.ToTypeName();
-                }
-            }
-            else if (xsdElement.TypeDefinition is XsdSimpleType)
-            {
-                return xsdElement.TypeDefinition.ToNetType(optional);
-            }
-            return "<Error>";
         }
 
         #region private

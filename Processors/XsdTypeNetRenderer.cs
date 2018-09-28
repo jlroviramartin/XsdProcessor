@@ -12,6 +12,10 @@ namespace XmlSchemaProcessor.Processors
         public string ToString(object obj, string formatString, CultureInfo culture)
         {
             XsdType xsdType = (XsdType)obj ?? XsdBuiltInType.String;
+            if (xsdType.Name == null)
+            {
+                return "<NO_NAME>";
+            }
             switch (formatString)
             {
                 case "NetDocumentation":

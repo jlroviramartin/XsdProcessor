@@ -42,16 +42,15 @@ namespace XmlSchemaProcessor
         {
             XmlSchema xmlSchema = ProcessXmlSchema.LoadXmlSchema(xsdFile);
 
-            XmlSchemaSet schemaSet = new XmlSchemaSet();
-            schemaSet.Add(xmlSchema);
-            schemaSet.Compile();
-
-            XsdSchema schema = new ProcessXmlSchema(xmlSchema).GetSchema();
+            //XmlSchemaSet schemaSet = new XmlSchemaSet();
+            //schemaSet.Add(xmlSchema);
+            //schemaSet.Compile();
+            XsdSchema schema = new ProcessXmlSchema(xmlSchema, System.IO.Path.GetFileName(path)).GetSchema();
             schema.ResolveAnonymousSimpleTypes();
 
             //XsdToNetProcess xsdToNetReader = new XsdToNetProcess(@namespace, path);
             XsdToNetProcess_v2 xsdToNetReader = new XsdToNetProcess_v2(@namespace, path);
-            xsdToNetReader.AddXsdRoot("LandXML");
+            //xsdToNetReader.AddXsdRoot("LandXML");
             xsdToNetReader.PropertyMap = new LandXmlPropertyMap();
             foreach (string uri in namespacesURI)
             {
@@ -107,6 +106,9 @@ namespace XmlSchemaProcessor
             Debug.WriteLine("Validation Error: {0}", args.Message);
         }
 
+        /// <summary>
+        /// To resolve an issue with the type RoadName and the property RoadName.
+        /// </summary>
         private class LandXmlPropertyMap : IPropertyMap
         {
             public string Map(XsdComplexType xsdComplexType, string typeName, string attributeName)

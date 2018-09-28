@@ -28,10 +28,10 @@ namespace XmlSchemaProcessor.Processors
 {
     public class XsdToNetProcess_v2 : XsdProcess
     {
-        public XsdToNetProcess_v2(string @namespace, string path)
+        public XsdToNetProcess_v2(string @namespace, string outputPath)
         {
             this.@namespace = @namespace;
-            this.path = path;
+            this.outputPath = outputPath;
 
             this.PropertyMap = IdentityPropertyMap.Instance;
         }
@@ -100,20 +100,23 @@ namespace XmlSchemaProcessor.Processors
                     stack.Push(xsdComplexType.GetParticle());
                     while (stack.Count > 0)
                     {
-                        XsdParticle partible = stack.Pop();
-                        if (partible is XsdParticleElement)
+                        XsdParticle particle = stack.Pop();
+                        if (particle is XsdParticleElement)
                         {
-                            XsdElement xsdElement = ((XsdParticleElement)partible).Element;
+                            XsdElement xsdElement = ((XsdParticleElement)particle).Element;
 
-                            bool needContent = xsdElement.TypeDefinition is XsdComplexType;
-                            events.Add(new SimpleEvent(xsdElement.Name,
-                                                       xsdElement.ToNetType(false),
-                                                       needContent,
-                                                       GetElementDocumentation(xsdElement)));
+                            if (xsdElement != null)
+                            {
+                                bool needContent = xsdElement.TypeDefinition is XsdComplexType;
+                                events.Add(new SimpleEvent(xsdElement.Name,
+                                                           xsdElement.ToNetType(false),
+                                                           needContent,
+                                                           GetElementDocumentation(xsdElement)));
+                            }
                         }
-                        else if (partible is XsdParticleGroup)
+                        else if (particle is XsdParticleGroup)
                         {
-                            stack.PushAll(((XsdParticleGroup)partible).Items);
+                            stack.PushAll(((XsdParticleGroup)particle).Items);
                         }
                     }
                 }
@@ -164,9 +167,9 @@ namespace XmlSchemaProcessor.Processors
 
         private void WriteInFile(string name, Action<TextWriterEx> toWrite)
         {
-            System.IO.Directory.CreateDirectory(this.path);
+            System.IO.Directory.CreateDirectory(this.outputPath);
 
-            using (FileStream fstream = new FileInfo(System.IO.Path.Combine(this.path, name + ".cs")).Open(FileMode.Create, FileAccess.Write))
+            using (FileStream fstream = new FileInfo(System.IO.Path.Combine(this.outputPath, name + ".cs")).Open(FileMode.Create, FileAccess.Write))
             using (StreamWriter stream = new StreamWriter(fstream))
             using (TextWriterEx writer = new TextWriterEx(stream))
             {
@@ -201,7 +204,7 @@ namespace XmlSchemaProcessor.Processors
 
         private readonly List<string> namespacesURI = new List<string>();
 
-        private readonly string path;
+        private readonly string outputPath;
         private readonly HashSet<string> xsdRoots = new HashSet<string>();
 
         #endregion

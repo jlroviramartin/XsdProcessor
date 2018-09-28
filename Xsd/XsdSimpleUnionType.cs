@@ -5,6 +5,11 @@ namespace XmlSchemaProcessor.Xsd
 {
     public sealed class XsdSimpleUnionType : XsdSimpleType
     {
+        public XsdSimpleUnionType()
+        {
+            this.MemberTypes = new List<XsdSimpleType>();
+        }
+
         public IList<XsdSimpleType> MemberTypes { get; set; }
 
         #region object

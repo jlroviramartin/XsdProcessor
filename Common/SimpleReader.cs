@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using BeginRead = System.Action<System.Collections.Generic.IDictionary<string, string>, string>;
@@ -16,7 +17,7 @@ namespace XmlSchemaProcessor.Common
 
         public void Read(string url)
         {
-            using (XmlReader xmlReader = new XmlTextReader(url))
+            using (XmlReader xmlReader = XmlReader.Create(url))
             {
                 this.Read(xmlReader);
             }
@@ -72,7 +73,7 @@ namespace XmlSchemaProcessor.Common
             this.map.Add(elementName, new ReadBeginEnd(
                              (attrs, text) =>
                              {
-                                 if (typeof(XsdBaseObject).IsAssignableFrom(typeof(T)))
+                                 if (typeof(XsdBaseObject).GetTypeInfo().IsAssignableFrom(typeof(T)))
                                  {
                                      T value = Activator.CreateInstance<T>();
                                      ((XsdBaseObject)(object)value).Read(attrs, text);

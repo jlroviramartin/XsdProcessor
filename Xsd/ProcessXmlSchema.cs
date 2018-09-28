@@ -13,20 +13,71 @@ namespace XmlSchemaProcessor.Xsd
 {
     public class ProcessXmlSchema
     {
-        public ProcessXmlSchema(XmlSchema xmlSchema)
+        public ProcessXmlSchema(XmlSchema xmlSchema, string file, IXmlSchemaResolver resolve = null)
         {
-            XmlSchemaSet schemaSet = new XmlSchemaSet();
-            schemaSet.Add(xmlSchema);
-            schemaSet.Compile();
+            //XmlSchemaSet xmlSchemaSet = new XmlSchemaSet();
+            //xmlSchemaSet.Add(xmlSchema);
+            //xmlSchemaSet.Compile();
 
             this.schema.NamespaceURI = xmlSchema.TargetNamespace;
 
-            this.Process(xmlSchema);
+            Dictionary<string, XmlSchema> processed = new Dictionary<string, XmlSchema>();
+
+            Stack<Tuple<string, XmlSchema>> toProcess = new Stack<Tuple<string, XmlSchema>>();
+            //toProcess.PushAll(xmlSchemaSet.Schemas().OfType<XmlSchema>());
+            toProcess.Push(Tuple.Create(file, xmlSchema));
+
+            while (toProcess.Count > 0)
+            {
+                Tuple<string, XmlSchema> current = toProcess.Pop();
+                if (!processed.ContainsKey(current.Item1))
+                {
+                    processed.Add(current.Item1, current.Item2);
+
+                    if (resolve != null)
+                    {
+                        foreach (XmlSchemaExternal xmlSchemaExternal in current.Item2.Includes.OfType<XmlSchemaExternal>())
+                        {
+                            if (xmlSchemaExternal.Schema != null)
+                            {
+                                //toProcess.Push(xmlSchemaExternal.Schema);
+                            }
+                            else if (xmlSchemaExternal.SchemaLocation != null)
+                            {
+                                Debug.WriteLine(string.Format("External SchemaLocation: {0}", xmlSchemaExternal.SchemaLocation));
+
+                                XmlSchema xmlSchema2 = resolve.Resolve(xmlSchemaExternal.SchemaLocation);
+                                if (xmlSchema2 != null)
+                                {
+                                    toProcess.Push(Tuple.Create(xmlSchemaExternal.SchemaLocation, xmlSchema2));
+                                }
+                                else
+                                {
+                                    Debug.WriteLine(string.Format("SchemaLocation {0} cannot be located.", xmlSchemaExternal.SchemaLocation));
+                                }
+                            }
+                        }
+                    }
+
+                    Debug.WriteLine(string.Format("Processing {0}", current.Item1));
+                    this.Process(current.Item2);
+                }
+            }
         }
 
         public XsdSchema GetSchema()
         {
             return this.schema;
+        }
+
+        public static XmlSchema LoadXmlSchema(FileInfo file)
+        {
+            using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read))
+            using (XmlTextReader xmlReader = new XmlTextReader(stream))
+            {
+                XmlSchema xmlSchema = XmlSchema.Read(xmlReader, Validation);
+                return xmlSchema;
+            }
         }
 
         public static XmlSchema LoadXmlSchema(string file)
@@ -76,7 +127,6 @@ namespace XmlSchemaProcessor.Xsd
         {
             // The collection of XmlSchemaAnnotation, XmlSchemaAttribute, XmlSchemaAttributeGroup, XmlSchemaComplexType, XmlSchemaSimpleType, XmlSchemaElement, XmlSchemaGroup, or XmlSchemaNotation.
             // xmlSchema.Items
-
             foreach (XmlSchemaObject schemaObject in xmlSchema.Items)
             {
                 // Se procesan los tipos simples.
@@ -186,6 +236,10 @@ namespace XmlSchemaProcessor.Xsd
             string name = xmlSchemaSimpleType.Name;
             XmlQualifiedName qualifiedName = xmlSchemaSimpleType.QualifiedName;
 
+            if (name == null)
+            {
+            }
+
             XmlTypeCode typeCode = xmlSchemaSimpleType.TypeCode;
             XmlSchemaDatatype datatype = xmlSchemaSimpleType.Datatype;
 
@@ -252,7 +306,44 @@ namespace XmlSchemaProcessor.Xsd
             {
                 XmlSchemaSimpleTypeUnion simpleTypeUnion = (XmlSchemaSimpleTypeUnion)content;
 
-                throw new NotImplementedException();
+                XsdSimpleUnionType _simpleType = new XsdSimpleUnionType();
+                _simpleType.Name = name;
+
+                if (simpleTypeUnion.BaseMemberTypes != null)
+                {
+                    _simpleType.MemberTypes.AddRange(simpleTypeUnion.BaseMemberTypes.Select(x => this.ProcessXmlSchemaSimpleType(x)));
+                }
+
+                if (simpleTypeUnion.MemberTypes != null && simpleTypeUnion.MemberTypes.Length > 0)
+                {
+                    // TODO: complete it.
+                }
+
+                if (simpleTypeUnion.BaseTypes != null && simpleTypeUnion.BaseTypes.Count > 0)
+                {
+                    foreach (XmlSchemaObject xmlSchemaObject in simpleTypeUnion.BaseTypes)
+                    {
+                        if (xmlSchemaObject is XmlSchemaSimpleType)
+                        {
+                            _simpleType.MemberTypes.Add(this.ProcessXmlSchemaSimpleType((XmlSchemaSimpleType)xmlSchemaObject));
+                        }
+                        else
+                        {
+                            // TODO: complete it.
+                            throw new Exception();
+                        }
+                    }
+                }
+
+                ret = _simpleType;
+
+                /*if (simpleTypeUnion.BaseTypes.Count > 0)
+                {
+                }
+
+                if (simpleTypeUnion.MemberTypes.Length > 0)
+                {
+                }*/
             }
 
             if (ret == null)
@@ -429,7 +520,8 @@ namespace XmlSchemaProcessor.Xsd
                             XsdComplexSimpleContentType _complexType = new XsdComplexSimpleContentType();
                             _complexType.Name = name;
                             _complexType.Derivation = DerivationMethod.Restriction;
-                            this.FindSimple(restriction.BaseTypeName, x => _complexType.BaseType = x);
+                            // -----> this.FindSimple(restriction.BaseTypeName, x => _complexType.BaseType = x);
+                            this.FindType(restriction.BaseTypeName, x => _complexType.BaseType = x);
                             _complexType.Attributes = this.ProcessXmlAttributes(restriction.Attributes, restriction.AnyAttribute);
 
                             ret = _complexType;
@@ -614,7 +706,9 @@ namespace XmlSchemaProcessor.Xsd
             {
                 XmlSchemaGroupRef groupRef = (XmlSchemaGroupRef)particle;
 
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
+                Debug.WriteLine(String.Format("XmlSchemaGroupRef : {0}", groupRef));
+                return null;
             }
 
             throw new Exception();
@@ -678,7 +772,8 @@ namespace XmlSchemaProcessor.Xsd
                 {
                     XmlSchemaAttributeGroupRef attributeGroupRef = (XmlSchemaAttributeGroupRef)schemaObject;
 
-                    throw new NotImplementedException();
+                    //throw new NotImplementedException();
+                    Debug.WriteLine(String.Format("XmlSchemaAttributeGroupRef : {0}", attributeGroupRef));
                 }
             }
             return _attributes;

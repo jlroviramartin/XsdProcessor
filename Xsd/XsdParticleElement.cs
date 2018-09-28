@@ -11,13 +11,19 @@ namespace XmlSchemaProcessor.Xsd
         public override string ToString()
         {
             StringBuilder buff = new StringBuilder();
-
-            buff.Append(this.Element.Name + " " + this.PrintOccurs());
-
-            if (!this.Element.TopLevel)
+            if (this.Element != null)
             {
-                buff.AppendLineSafe();
-                buff.AppendRegion(this.Element);
+                buff.Append(this.Element.Name + " " + this.PrintOccurs());
+
+                if (!this.Element.TopLevel)
+                {
+                    buff.AppendLineSafe();
+                    buff.AppendRegion(this.Element);
+                }
+            }
+            else
+            {
+                buff.Append("<NO_NAME> " + this.PrintOccurs());
             }
 
             return buff.ToString();

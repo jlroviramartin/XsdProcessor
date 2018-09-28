@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 
 namespace XmlSchemaProcessor.Common
@@ -90,7 +91,7 @@ namespace XmlSchemaProcessor.Common
             this.AddConverterValueType(v => XmlConvert.ToChar(v));
             this.AddConverterValueType(v => XmlConvert.ToBoolean(v));
 
-            this.AddConverterValueType(v => XmlConvert.ToDateTime(v));
+            this.AddConverterValueType(v => XmlConvert.ToDateTime(v, XmlDateTimeSerializationMode.Local));
             this.AddConverterValueType(v => XmlConvert.ToDateTimeOffset(v));
             this.AddConverterValueType(v => XmlConvert.ToTimeSpan(v));
 
@@ -121,7 +122,7 @@ namespace XmlSchemaProcessor.Common
             object def;
             if (!this.defValues.TryGetValue(toType, out def))
             {
-                if (toType.IsEnum)
+                if (toType.GetTypeInfo().IsEnum)
                 {
                     def = Enum.GetValues(toType).Cast<Enum>().First();
                     this.defValues.Add(toType, def);
@@ -135,7 +136,7 @@ namespace XmlSchemaProcessor.Common
             Func<string, object> convert = this.map.GetSafe(toType);
             if (convert == null)
             {
-                if (toType.IsEnum)
+                if (toType.GetTypeInfo().IsEnum)
                 {
                     Dictionary<string, object> enumMap = new Dictionary<string, object>();
                     foreach (Enum enumValue in Enum.GetValues(toType).Cast<Enum>())
@@ -147,10 +148,10 @@ namespace XmlSchemaProcessor.Common
                         return enumMap.GetSafe(v);
                     };
                 }
-                else if (toType.IsGenericType && (toType.GetGenericTypeDefinition() == typeof(Nullable<>)))
+                else if (toType.GetTypeInfo().IsGenericType && (toType.GetTypeInfo().GetGenericTypeDefinition() == typeof(Nullable<>)))
                 {
-                    Type innerType = toType.GetGenericArguments()[0];
-                    if (innerType.IsEnum)
+                    Type innerType = toType.GetTypeInfo().GetGenericArguments()[0];
+                    if (innerType.GetTypeInfo().IsEnum)
                     {
                         Dictionary<string, object> enumMap = new Dictionary<string, object>();
                         foreach (Enum enumValue in Enum.GetValues(innerType).Cast<Enum>())
@@ -163,10 +164,10 @@ namespace XmlSchemaProcessor.Common
                         };
                     }
                 }
-                else if (toType.IsGenericType && (toType.GetGenericTypeDefinition() == typeof(IList<>)))
+                else if (toType.GetTypeInfo().IsGenericType && (toType.GetTypeInfo().GetGenericTypeDefinition() == typeof(IList<>)))
                 {
                     char[] separator = { ' ' };
-                    Type innerType = toType.GetGenericArguments()[0];
+                    Type innerType = toType.GetTypeInfo().GetGenericArguments()[0];
                     Type listType = typeof(List<>).MakeGenericType(innerType);
                     convert = v =>
                     {
